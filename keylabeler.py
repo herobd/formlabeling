@@ -15,10 +15,12 @@ def clicker(event, x, y, flags, p):
             p.startX=x
             p.startY=y
     elif event == cv2.EVENT_LBUTTONUP:
-        if '-m' == p.mode[-2:]:
-            p.mode=p.mode[:-2]
-            if abs((p.startX-p.endX)*(p.startY-p.endY))>10:
-                didPair=None
+        if '-m' == p.mode[-2:]: #we dragged to make a box
+            p.mode=p.mode[:-2] #make state readable
+            if abs((p.startX-p.endX)*(p.startY-p.endY))>10: #the box is "big enough"
+                didPair=None #for storing auto-pair for undo/action stack
+
+                #auto-pair to selected
                 if 'text' in p.mode and 'field' in p.selected:
                     p.pairing.append((p.textBBsCurId,p.selectedId))
                     didPair=[(p.textBBsCurId,p.selectedId)]
@@ -27,39 +29,90 @@ def clicker(event, x, y, flags, p):
                     didPair=[(p.selectedId,p.fieldBBsCurId)]
 
                 if p.mode=='text':
-                    p.textBBs[p.textBBsCurId]=(p.startX,p.startY,p.endX,p.endY,0)
-                    p.actionStack.append(('add-text',p.textBBsCurId,p.startX,p.startY,p.endX,p.endY,0,didPair))
+                    p.textBBs[p.textBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),0)
+                    p.actionStack.append(('add-text',p.textBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),0,didPair))
                     p.undoStack=[]
                     p.selectedId=p.textBBsCurId
                     p.selected='text'
                     p.textBBsCurId+=1
                 elif p.mode=='textP':
-                    p.textBBs[p.textBBsCurId]=(p.startX,p.startY,p.endX,p.endY,1)
-                    p.actionStack.append(('add-text',p.textBBsCurId,p.startX,p.startY,p.endX,p.endY,1,didPair))
+                    p.textBBs[p.textBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),1)
+                    p.actionStack.append(('add-text',p.textBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),1,didPair))
                     p.undoStack=[]
                     p.selectedId=p.textBBsCurId
                     p.selected='text'
                     p.textBBsCurId+=1
                 elif p.mode=='field':
-                    p.fieldBBs[p.fieldBBsCurId]=(p.startX,p.startY,p.endX,p.endY,0)
-                    p.actionStack.append(('add-field',p.fieldBBsCurId,p.startX,p.startY,p.endX,p.endY,0,didPair))
+                    p.fieldBBs[p.fieldBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),0)
+                    p.actionStack.append(('add-field',p.fieldBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),0,didPair))
                     p.undoStack=[]
                     p.selectedId=p.fieldBBsCurId
                     p.selected='field'
                     p.fieldBBsCurId+=1
                 elif p.mode=='fieldP':
-                    p.fieldBBs[p.fieldBBsCurId]=(p.startX,p.startY,p.endX,p.endY,1)
-                    p.actionStack.append(('add-field',p.fieldBBsCurId,p.startX,p.startY,p.endX,p.endY,1,didPair))
+                    p.fieldBBs[p.fieldBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),1)
+                    p.actionStack.append(('add-field',p.fieldBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),1,didPair))
+                    p.undoStack=[]
+                    p.selectedId=p.fieldBBsCurId
+                    p.selected='field'
+                    p.fieldBBsCurId+=1
+                elif p.mode=='fieldCheckBox':
+                    p.fieldBBs[p.fieldBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),2)
+                    p.actionStack.append(('add-field',p.fieldBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),2,didPair))
                     p.undoStack=[]
                     p.selectedId=p.fieldBBsCurId
                     p.selected='field'
                     p.fieldBBsCurId+=1
             draw(p)
+        elif '-tl' == p.mode[-3:]:#we dragged the top-left corner to resize the selected box
+            p.mode=p.mode[:-3]
+            bbs = None
+            if p.selected=='field':
+                bbs = p.fieldBBs
+            elif p.selected=='text':
+                bbs = p.textBBs
+            if bbs is not None:
+                p.actionStack.append(('drag-'+p.selected,p.selectedId,bbs[p.selectedId][0],bbs[p.selectedId][1],bbs[p.selectedId][2],bbs[p.selectedId][3]))
+                bbs[p.selectedId] = (p.endX,p.endY,bbs[p.selectedId][2],bbs[p.selectedId][3],bbs[p.selectedId][4])
+                draw(p)
+        elif '-bl' == p.mode[-3:]:#we dragged the top-left corner to resize the selected box
+            p.mode=p.mode[:-3]
+            bbs = None
+            if p.selected=='field':
+                bbs = p.fieldBBs
+            elif p.selected=='text':
+                bbs = p.textBBs
+            if bbs is not None:
+                p.actionStack.append(('drag-'+p.selected,p.selectedId,bbs[p.selectedId][0],bbs[p.selectedId][1],bbs[p.selectedId][2],bbs[p.selectedId][3]))
+                bbs[p.selectedId] = (p.endX,bbs[p.selectedId][1],bbs[p.selectedId][2],p.endY,bbs[p.selectedId][4])
+                draw(p)
+        elif '-tr' == p.mode[-3:]:#we dragged the top-left corner to resize the selected box
+            p.mode=p.mode[:-3]
+            bbs = None
+            if p.selected=='field':
+                bbs = p.fieldBBs
+            elif p.selected=='text':
+                bbs = p.textBBs
+            if bbs is not None:
+                p.actionStack.append(('drag-'+p.selected,p.selectedId,bbs[p.selectedId][0],bbs[p.selectedId][1],bbs[p.selectedId][2],bbs[p.selectedId][3]))
+                bbs[p.selectedId] = (bbs[p.selectedId][0],p.endY,p.endX,bbs[p.selectedId][3],bbs[p.selectedId][4])
+                draw(p)
+        elif '-br' == p.mode[-3:]:#we dragged the top-left corner to resize the selected box
+            p.mode=p.mode[:-3]
+            bbs = None
+            if p.selected=='field':
+                bbs = p.fieldBBs
+            elif p.selected=='text':
+                bbs = p.textBBs
+            if bbs is not None:
+                p.actionStack.append(('drag-'+p.selected,p.selectedId,bbs[p.selectedId][0],bbs[p.selectedId][1],bbs[p.selectedId][2],bbs[p.selectedId][3]))
+                bbs[p.selectedId] = (bbs[p.selectedId][0],bbs[p.selectedId][1],p.endX,p.endY,bbs[p.selectedId][4])
+                draw(p)
         else:
             if '-d' == p.mode[-2:]:
                 p.mode=p.mode[:-2]
 
-            if p.mode=='delete':
+            if p.mode=='delete': #first check for pairing lines (we can only delete them)
                 for index,(text,field) in enumerate(p.pairing):
                     #if within bounds of line and within distance from it
                     x1=(p.textBBs[text][0]+p.textBBs[text][2])/2
@@ -68,15 +121,17 @@ def clicker(event, x, y, flags, p):
                     y2=(p.fieldBBs[field][1]+p.fieldBBs[field][3])/2
 
                     if x>=min(x1,x2) and x<=max(x1,x2) and y>=min(y1,y2) and y<=max(y1,y2) and abs((y2-y1)*x - (x2-x1)*y + x2*y1 - y2*x1)/math.sqrt(pow(y2-y1,2.0) + pow(x2-x1,2.0)) < 3.5:
+                        #delete the pairing
                         p.actionStack.append(('remove-pairing',text,field))
                         p.undoStack=[]
                         del p.pairing[index]
                         draw(p)
                         return
-
+            #then bbs
             for id, (startX,startY,endX,endY,para) in p.textBBs.iteritems():
                 if x>=startX and x<=endX and y>=startY and y<=endY:
                     if p.mode=='delete':
+                        #delete the text BB
                         pairs=[]#pairs this BB is part of
                         for pair in p.pairing:
                             if id==pair[0]:
@@ -89,10 +144,12 @@ def clicker(event, x, y, flags, p):
                         if p.selected=='text' and p.selectedId==id:
                             p.selected='none'
                     else:
+                        #pair to prev selected?
                         if p.selected=='field' and (id,p.selectedId) not in p.pairing:
                             p.pairing.append((id,p.selectedId))
                             p.actionStack.append(('add-pairing',id,p.selectedId))
                             p.undoStack=[]
+                        #select the text BB
                         p.selectedId=id
                         p.selected='text'
                     draw(p)
@@ -101,6 +158,7 @@ def clicker(event, x, y, flags, p):
             for id, (startX,startY,endX,endY,para) in p.fieldBBs.iteritems():
                 if x>=startX and x<=endX and y>=startY and y<=endY:
                     if p.mode=='delete':
+                        #delete the field BB
                         pairs=[]#pairs this BB is part of
                         for pair in p.pairing:
                             if id==pair[1]:
@@ -113,24 +171,70 @@ def clicker(event, x, y, flags, p):
                         if p.selected=='field' and p.selectedId==id:
                             p.selected='none'
                     else:
+                        #pair to prev selected?
                         if p.selected=='text' and (p.selectedId,id) not in p.pairing:
                             p.pairing.append((p.selectedId,id))
                             p.actionStack.append(('add-pairing',p.selectedId,id))
                             p.undoStack=[]
+                        #select the field BB
                         p.selectedId=id
                         p.selected='field'
                     draw(p)
                     return
 
             if p.selected!='none':
+                #print 'deselected'
                 p.selected='none'
                 draw(p)
 
             
     elif event == cv2.EVENT_MOUSEMOVE:
+        #moving only matters if the button is down and we've moved "enough"
+        bbs = None
+        if p.selected == 'field':
+            bbs = p.fieldBBs
+        elif p.selected == 'text':
+            bbs = p.textBBs
         if '-d' == p.mode[-2:] and math.sqrt(pow(x-p.startX,2)+pow(y-p.startY,2))>2:
-            p.mode = p.mode[:-1]+'m'
+            if bbs is not None and p.startX>bbs[p.selectedId][0] and p.startX<bbs[p.selectedId][2] and p.startY>bbs[p.selectedId][1] and p.startY<bbs[p.selectedId][3]:
+                #we are going to adjust the selected BB, but how?
+                w=bbs[p.selectedId][2]-bbs[p.selectedId][0] +1
+                h=bbs[p.selectedId][3]-bbs[p.selectedId][1] +1
+                leftBoundary = bbs[p.selectedId][0] + 0.333*w
+                rightBoundary = bbs[p.selectedId][0] + 0.666*w
+                topBoundary = bbs[p.selectedId][1] + 0.333*h
+                bottomBoundary = bbs[p.selectedId][1] + 0.666*h
+                
+                if p.startX<leftBoundary and p.startY<topBoundary:#top-left corner
+                    p.mode = p.mode[:-1]+'tl'
+                elif p.startX<leftBoundary and p.startY>bottomBoundary:#bot-left corner
+                    p.mode = p.mode[:-1]+'bl'
+                elif p.startX>rightBoundary and p.startY<topBoundary:#top-right corner
+                    p.mode = p.mode[:-1]+'tr'
+                elif p.startX>rightBoundary and p.startY>bottomBoundary:#bot-right corner
+                    p.mode = p.mode[:-1]+'br'
+                #elif p.startX<leftBoundary:#left
+                #    p.mode = p.mode[:-1]+'l'
+                #elif p.startX>rightBoundary:#right
+                #    p.mode = p.mode[:-1]+'r'
+                #elif p.startY<topBoundary:#top
+                #    p.mode = p.mode[:-1]+'t'
+                #elif p.startY<bottomBoundary:#bot
+                #    p.mode = p.mode[:-1]+'b'
+            else:
+                p.mode = p.mode[:-1]+'m'
         if '-m' == p.mode[-2:]:
+            p.endX=x
+            p.endY=y
+            draw(p)
+        elif (('-tl' == p.mode[-3:] and  x<bbs[p.selectedId][2] and y<bbs[p.selectedId][3]) or
+              ('-bl' == p.mode[-3:] and  x<bbs[p.selectedId][2] and y>bbs[p.selectedId][1]) or
+              ('-tr' == p.mode[-3:] and  x>bbs[p.selectedId][0] and y<bbs[p.selectedId][3]) or
+              ('-br' == p.mode[-3:] and  x>bbs[p.selectedId][0] and y>bbs[p.selectedId][1]) or
+              ('-l' == p.mode[-3:] and  x<bbs[p.selectedId][2]) or
+              ('-r' == p.mode[-3:] and  x>bbs[p.selectedId][0]) or
+              ('-t' == p.mode[-3:] and  y<bbs[p.selectedId][3]) or
+              ('-b' == p.mode[-3:] and  y>bbs[p.selectedId][1])):
             p.endX=x
             p.endY=y
             draw(p)
@@ -208,21 +312,35 @@ def undoAction(p,action):
             for pair in pairs:
                 p.pairing.append(pair)
         return ('add-field',id,startX,startY,endX,endY,para,pairs)
+    elif action[0] == 'drag-field':
+        label,id,startX,startY,endX,endY = action
+        toRet = (label,id,p.fieldBBs[id][0],p.fieldBBs[id][1],p.fieldBBs[id][2],p.fieldBBs[id][3])
+        p.fieldBBs[id] = (startX,startY,endX,endY,p.fieldBBs[id][4])
+        return toRet
+    elif action[0] == 'drag-text':
+        label,id,startX,startY,endX,endY = action
+        toRet = (label,id,p.textBBs[id][0],p.textBBs[id][1],p.textBBs[id][2],p.textBBs[id][3])
+        p.textBBs[id] = (startX,startY,endX,endY,p.textBBs[id][4])
+        return toRet
     else:
         print 'Unimplemented action: '+action[0]
 
 def draw(p):
     p.displayImage[0:p.image.shape[0], 0:p.image.shape[1]] = p.image
     for id, (startX,startY,endX,endY,para) in p.textBBs.iteritems():
-        if para:
+        if para==1:
             g=150
+        elif para==2:
+            g=240
         else:
             g=0
         cv2.rectangle(p.displayImage,(startX,startY),(endX,endY),(255,g,0),1)
 
     for id, (startX,startY,endX,endY,para) in p.fieldBBs.iteritems():
-        if para:
+        if para==1:
             g=120
+        elif para==2:
+            g=240
         else:
             g=0
         cv2.rectangle(p.displayImage,(startX,startY),(endX,endY),(0,g,255),1)
@@ -236,9 +354,25 @@ def draw(p):
 
     if p.selected == 'text':
         startX,startY,endX,endY,para = p.textBBs[p.selectedId]
+        if p.mode[-3:]=='-tl':
+            cv2.rectangle(p.displayImage,(p.endX,p.endY),(max(startX,endX),max(startY,endY)),(255,240,100),1)
+        elif p.mode[-3:]=='-tr':
+            cv2.rectangle(p.displayImage,(startX,p.endY),(p.endX,endY),(255,240,100),1)
+        elif p.mode[-3:]=='-bl':
+            cv2.rectangle(p.displayImage,(p.endX,startY),(endX,p.endY),(255,240,100),1)
+        elif p.mode[-3:]=='-br':
+            cv2.rectangle(p.displayImage,(startX,startY),(p.endX,p.endY),(255,240,100),1)
         cv2.rectangle(p.displayImage,(min(startX,endX)-2,min(startY,endY)-2),(max(startX,endX)+2,max(startY,endY)+2),(255,0,255),1)
     elif p.selected == 'field':
         startX,startY,endX,endY,para = p.fieldBBs[p.selectedId]
+        if p.mode[-3:]=='-tl':
+            cv2.rectangle(p.displayImage,(p.endX,p.endY),(max(startX,endX),max(startY,endY)),(120,255,255),1)
+        elif p.mode[-3:]=='-tr':
+            cv2.rectangle(p.displayImage,(startX,p.endY),(p.endX,endY),(120,255,255),1)
+        elif p.mode[-3:]=='-bl':
+            cv2.rectangle(p.displayImage,(p.endX,startY),(endX,p.endY),(120,255,255),1)
+        elif p.mode[-3:]=='-br':
+            cv2.rectangle(p.displayImage,(startX,startY),(p.endX,p.endY),(120,255,255),1)
         cv2.rectangle(p.displayImage,(min(startX,endX)-2,min(startY,endY)-2),(max(startX,endX)+2,max(startY,endY)+2),(255,0,255),1)
 
     if p.mode[-2:]=='-m':
@@ -248,6 +382,8 @@ def draw(p):
             color=(255,0,0)
         elif 'fieldP' in p.mode:
             color=(0,120,255)
+        elif 'fieldCheckBox' in p.mode:
+            color=(0,200,255)
         elif 'field' in p.mode:
             color=(0,0,255)
         cv2.rectangle(p.displayImage,(p.startX,p.startY),(p.endX,p.endY),color,1)
@@ -280,28 +416,35 @@ def drawToolbar(p):
     cv2.putText(p.displayImage,'3:field',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
     y+=toolH+1
 
-    #field
+    #fieldP
     p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(0,120,255)
     if p.mode=='fieldP':
         cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
     cv2.putText(p.displayImage,'4:field para',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
     y+=toolH+1
 
+    #fieldCheckBox
+    p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(0,220,255)
+    if p.mode=='fieldCheckBox':
+        cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
+    cv2.putText(p.displayImage,'5:check-box',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
+    y+=toolH+1
+
     #delete
     p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(240,240,240)
     if p.mode=='delete':
         cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
-    cv2.putText(p.displayImage,'5:delete',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
+    cv2.putText(p.displayImage,'6:delete',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
     y+=toolH+1
 
     #undo
     p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(160,160,160)
-    cv2.putText(p.displayImage,'6:undo',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
+    cv2.putText(p.displayImage,'7:undo',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
     y+=toolH+1
 
-    #reundo
+    #redo
     p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(190,190,190)
-    cv2.putText(p.displayImage,'7:reundo',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
+    cv2.putText(p.displayImage,'8:redo',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
     y+=toolH+1
 
     cv2.imshow("labeler",p.displayImage)
@@ -345,12 +488,16 @@ def labelImage(imagePath,displayH,displayW):
                 p.mode='fieldP'
                 drawToolbar(p)
         elif key==53: #5
+            if p.mode != 'fieldCheckBox':
+                p.mode='fieldCheckBox'
+                drawToolbar(p)
+        elif key==54: #6
             if p.mode != 'delete':
                 p.mode='delete'
                 drawToolbar(p)
-        elif key==54: #6 undo
+        elif key==55 or key==65: #7 or ~ undo
             undo(p)
-        elif key==55: #7 undo
+        elif key==56: #8 undo
             redo(p)
 
 
