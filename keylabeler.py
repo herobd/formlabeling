@@ -5,6 +5,23 @@ import math
 
 TOOL_WIDTH=240
 toolH=40
+colorMap = {'text':(255,0,0), 'textP':(255,150,0), 'textMinor':(205,190,100), 'textInst':(255,210,190), 'textNumber':(100,160,0), 'fieldCircle':(210,190,255), 'field':(0,0,255), 'fieldP':(0,120,255), 'fieldCheckBox':(0,220,255), 'graphic':(250,105,255)}
+codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9}
+RcodeMap = {v: k for k, v in codeMap.iteritems()}
+keyMap = {'text':49,#1
+          'textP':50,#2
+          'textMinor':51,#3
+          'textInst':52,#4
+          'textNumber':53,#5
+          'field':113,#Q
+          'fieldP':119,#W
+          'fieldCheckBox':101,#E
+          'fieldCircle':114,#R
+          'graphic':116 #T
+          }
+RkeyMap = {v: k for k, v in keyMap.iteritems()}
+toolMap = {'text':'1:text/label', 'textP':'2:text para', 'textMinor':'3:minor label', 'textInst':'4:instructions', 'textNumber':'5:enumeration (#)', 'fieldCircle':'R:to be circled', 'field':'Q:field', 'fieldP':'W:field para', 'fieldCheckBox':'E:check-box', 'graphic':'T:graphic'}
+modes = ['text', 'textP', 'textMinor', 'textInst', 'textNumber', 'field', 'fieldP', 'fieldCheckBox', 'fieldCircle', 'graphic']
 
 def clicker(event, x, y, flags, p):
     #image,displayImage,mode,textBBs,fieldBBs,pairing = param
@@ -28,37 +45,17 @@ def clicker(event, x, y, flags, p):
                     p.pairing.append((p.selectedId,p.fieldBBsCurId))
                     didPair=[(p.selectedId,p.fieldBBsCurId)]
 
-                if p.mode=='text':
-                    p.textBBs[p.textBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),0)
-                    p.actionStack.append(('add-text',p.textBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),0,didPair))
+                code = codeMap[p.mode]
+                if p.mode[:4]=='text':
+                    p.textBBs[p.textBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),code)
+                    p.actionStack.append(('add-text',p.textBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),code,didPair))
                     p.undoStack=[]
                     p.selectedId=p.textBBsCurId
                     p.selected='text'
                     p.textBBsCurId+=1
-                elif p.mode=='textP':
-                    p.textBBs[p.textBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),1)
-                    p.actionStack.append(('add-text',p.textBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),1,didPair))
-                    p.undoStack=[]
-                    p.selectedId=p.textBBsCurId
-                    p.selected='text'
-                    p.textBBsCurId+=1
-                elif p.mode=='field':
-                    p.fieldBBs[p.fieldBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),0)
-                    p.actionStack.append(('add-field',p.fieldBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),0,didPair))
-                    p.undoStack=[]
-                    p.selectedId=p.fieldBBsCurId
-                    p.selected='field'
-                    p.fieldBBsCurId+=1
-                elif p.mode=='fieldP':
-                    p.fieldBBs[p.fieldBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),1)
-                    p.actionStack.append(('add-field',p.fieldBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),1,didPair))
-                    p.undoStack=[]
-                    p.selectedId=p.fieldBBsCurId
-                    p.selected='field'
-                    p.fieldBBsCurId+=1
-                elif p.mode=='fieldCheckBox':
-                    p.fieldBBs[p.fieldBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),2)
-                    p.actionStack.append(('add-field',p.fieldBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),2,didPair))
+                else: #p.mode[:5]=='field':
+                    p.fieldBBs[p.fieldBBsCurId]=(min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),code)
+                    p.actionStack.append(('add-field',p.fieldBBsCurId,min(p.startX,p.endX),min(p.startY,p.endY),max(p.startX,p.endX),max(p.startY,p.endY),code,didPair))
                     p.undoStack=[]
                     p.selectedId=p.fieldBBsCurId
                     p.selected='field'
@@ -200,10 +197,10 @@ def clicker(event, x, y, flags, p):
                 #we are going to adjust the selected BB, but how?
                 w=bbs[p.selectedId][2]-bbs[p.selectedId][0] +1
                 h=bbs[p.selectedId][3]-bbs[p.selectedId][1] +1
-                leftBoundary = bbs[p.selectedId][0] + 0.333*w
-                rightBoundary = bbs[p.selectedId][0] + 0.666*w
-                topBoundary = bbs[p.selectedId][1] + 0.333*h
-                bottomBoundary = bbs[p.selectedId][1] + 0.666*h
+                leftBoundary = bbs[p.selectedId][0] + 0.5*w
+                rightBoundary = bbs[p.selectedId][0] + 0.5*w
+                topBoundary = bbs[p.selectedId][1] + 0.5*h
+                bottomBoundary = bbs[p.selectedId][1] + 0.5*h
                 
                 if p.startX<leftBoundary and p.startY<topBoundary:#top-left corner
                     p.mode = p.mode[:-1]+'tl'
@@ -322,28 +319,44 @@ def undoAction(p,action):
         toRet = (label,id,p.textBBs[id][0],p.textBBs[id][1],p.textBBs[id][2],p.textBBs[id][3])
         p.textBBs[id] = (startX,startY,endX,endY,p.textBBs[id][4])
         return toRet
+    elif action[0] == 'change-text':
+        label,id,code = action
+        toRet = (label,id,p.textBBs[id][4])
+        p.textBBs[id] = (p.textBBs[id][0],p.textBBs[id][1],p.textBBs[id][2],p.textBBs[id][3],code)
+        return toRet
+    elif action[0] == 'change-field':
+        label,id,code = action
+        toRet = (label,id,p.fieldBBs[id][4])
+        p.fieldBBs[id] = (p.fieldBBs[id][0],p.fieldBBs[id][1],p.fieldBBs[id][2],p.fieldBBs[id][3],code)
+        return toRet
     else:
         print 'Unimplemented action: '+action[0]
 
+def change(p):
+        tmpMode = p.mode
+        p.mode='change'
+        drawToolbar(p)
+        key = cv2.waitKey() & 0xFF
+        for mode in keyMap:
+            if key==keyMap[mode] and p.selected[:4]==mode[:4]:
+                if p.selected=='text':
+                    p.actionStack.append(('change-text',p.selectedId,p.textBBs[p.selectedId][4]))
+                    p.textBBs[p.selectedId]=(p.textBBs[p.selectedId][0],p.textBBs[p.selectedId][1],p.textBBs[p.selectedId][2],p.textBBs[p.selectedId][3],codeMap[mode])
+                elif p.selected=='field':
+                    p.actionStack.append(('change-field',p.selectedId,p.fieldBBs[p.selectedId][4]))
+                    p.fieldBBs[p.selectedId]=(p.fieldBBs[p.selectedId][0],p.fieldBBs[p.selectedId][1],p.fieldBBs[p.selectedId][2],p.fieldBBs[p.selectedId][3],codeMap[mode])
+                draw(p)
+
+        p.mode=tmpMode
+        drawToolbar(p)
+
 def draw(p):
     p.displayImage[0:p.image.shape[0], 0:p.image.shape[1]] = p.image
-    for id, (startX,startY,endX,endY,para) in p.textBBs.iteritems():
-        if para==1:
-            g=150
-        elif para==2:
-            g=240
-        else:
-            g=0
-        cv2.rectangle(p.displayImage,(startX,startY),(endX,endY),(255,g,0),1)
+    for id, (startX,startY,endX,endY,code) in p.textBBs.iteritems():
+        cv2.rectangle(p.displayImage,(startX,startY),(endX,endY),colorMap[RcodeMap[code]],1)
 
-    for id, (startX,startY,endX,endY,para) in p.fieldBBs.iteritems():
-        if para==1:
-            g=120
-        elif para==2:
-            g=240
-        else:
-            g=0
-        cv2.rectangle(p.displayImage,(startX,startY),(endX,endY),(0,g,255),1)
+    for id, (startX,startY,endX,endY,code) in p.fieldBBs.iteritems():
+        cv2.rectangle(p.displayImage,(startX,startY),(endX,endY),colorMap[RcodeMap[code]],1)
 
     for text,field in p.pairing:
         x1=(p.textBBs[text][0]+p.textBBs[text][2])/2
@@ -376,17 +389,7 @@ def draw(p):
         cv2.rectangle(p.displayImage,(min(startX,endX)-2,min(startY,endY)-2),(max(startX,endX)+2,max(startY,endY)+2),(255,0,255),1)
 
     if p.mode[-2:]=='-m':
-        if 'textP' in p.mode:
-            color=(255,150,0)
-        elif 'text' in p.mode:
-            color=(255,0,0)
-        elif 'fieldP' in p.mode:
-            color=(0,120,255)
-        elif 'fieldCheckBox' in p.mode:
-            color=(0,200,255)
-        elif 'field' in p.mode:
-            color=(0,0,255)
-        cv2.rectangle(p.displayImage,(p.startX,p.startY),(p.endX,p.endY),color,1)
+        cv2.rectangle(p.displayImage,(p.startX,p.startY),(p.endX,p.endY),colorMap[p.mode[:-2]],1)
 
     cv2.imshow("labeler",p.displayImage)
 
@@ -395,57 +398,37 @@ def drawToolbar(p):
 
     y=0
 
-    #text
-    p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(255,0,0)
-    if p.mode=='text':
-        cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
-    cv2.putText(p.displayImage,'1:text',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
-    y+=toolH+1
-
-    #textP
-    p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(255,150,0)
-    if p.mode=='textP':
-        cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
-    cv2.putText(p.displayImage,'2:text para',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
-    y+=toolH+1
-
-    #field
-    p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(0,0,255)
-    if p.mode=='field':
-        cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
-    cv2.putText(p.displayImage,'3:field',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
-    y+=toolH+1
-
-    #fieldP
-    p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(0,120,255)
-    if p.mode=='fieldP':
-        cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
-    cv2.putText(p.displayImage,'4:field para',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
-    y+=toolH+1
-
-    #fieldCheckBox
-    p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(0,220,255)
-    if p.mode=='fieldCheckBox':
-        cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
-    cv2.putText(p.displayImage,'5:check-box',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
-    y+=toolH+1
-
-    #delete
-    p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(240,240,240)
-    if p.mode=='delete':
-        cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
-    cv2.putText(p.displayImage,'6:delete',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
-    y+=toolH+1
+    for mode in modes:
+        p.displayImage[y:y+toolH,-TOOL_WIDTH:]=colorMap[mode]
+        if p.mode==mode:
+            cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
+        cv2.putText(p.displayImage,toolMap[mode],(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
+        y+=toolH+1
 
     #undo
     p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(160,160,160)
-    cv2.putText(p.displayImage,'7:undo',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
+    cv2.putText(p.displayImage,'A:undo',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
     y+=toolH+1
 
     #redo
     p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(190,190,190)
-    cv2.putText(p.displayImage,'8:redo',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
+    cv2.putText(p.displayImage,'S:redo',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
     y+=toolH+1
+
+    #change
+    p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(230,230,230)
+    if p.mode=='change':
+        cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
+    cv2.putText(p.displayImage,'D:switch type',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
+    y+=toolH+1
+
+    #delete
+    p.displayImage[y:y+toolH,-TOOL_WIDTH:]=(250,250,250)
+    if p.mode=='delete':
+        cv2.rectangle(p.displayImage,(p.displayImage.shape[0]-TOOL_WIDTH+1,y),(p.displayImage.shape[0]-1,y+toolH),(255,0,255),2)
+    cv2.putText(p.displayImage,'F:delete',(p.displayImage.shape[0]-TOOL_WIDTH+3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
+    y+=toolH+1
+
 
     cv2.imshow("labeler",p.displayImage)
 
@@ -466,39 +449,25 @@ def labelImage(imagePath,displayH,displayW):
     draw(p)
     drawToolbar(p)
     #cv2.imshow('labeler',p.displayImage)
-
     while True:
         key = cv2.waitKey(33) & 0xFF
-        if key==27: #esc
+        if key in RkeyMap:
+            newMode = RkeyMap[key]
+            if p.mode != newMode:
+                p.mode = newMode
+                drawToolbar(p)
+        elif key==27: #esc
             break
-        elif key==49: #1
-            if p.mode != 'text':
-                p.mode='text'
-                drawToolbar(p)
-        elif key==50: #2
-            if p.mode != 'textP':
-                p.mode='textP'
-                drawToolbar(p)
-        elif key==51: #3
-            if p.mode != 'field':
-                p.mode='field'
-                drawToolbar(p)
-        elif key==52: #4
-            if p.mode != 'fieldP':
-                p.mode='fieldP'
-                drawToolbar(p)
-        elif key==53: #5
-            if p.mode != 'fieldCheckBox':
-                p.mode='fieldCheckBox'
-                drawToolbar(p)
-        elif key==54: #6
+        elif key==102: #F
             if p.mode != 'delete':
                 p.mode='delete'
                 drawToolbar(p)
-        elif key==55 or key==65: #7 or ~ undo
+        elif key==97: #A undo
             undo(p)
-        elif key==56: #8 undo
+        elif key==115: #S redo
             redo(p)
+        elif key==100: #D change
+            change(p)
 
 
     idToIdxText={}

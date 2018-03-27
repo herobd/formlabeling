@@ -13,3 +13,8 @@ T# F#
 
 HW Boxes output:
 same
+
+
+TODO
+All should read in an images regestration (read original image and register)
+imagelabeler should allow re-registration
