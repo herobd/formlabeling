@@ -9,6 +9,7 @@ import math
 import json
 
 #Globals
+mouse_button=3
 TOOL_WIDTH=240
 toolH=40
 colorMap = {'text':(0/255.0,0/255.0,255/255.0), 'textP':(0/255.0,150/255.0,255/255.0), 'textMinor':(100/255.0,190/255.0,205/255.0), 'textInst':(190/255.0,210/255.0,255/255.0), 'textNumber':(0/255.0,160/255.0,100/255.0), 'fieldCircle':(255/255.0,190/255.0,210/255.0), 'field':(255/255.0,0/255.0,0/255.0), 'fieldP':(255/255.0,120/255.0,0/255.0), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0), 'graphic':(255/255.0,105/255.0,250/255.0)}
@@ -130,22 +131,49 @@ class Control:
         #self.ax_im.figure.canvas.draw()
         self.draw()
 
+    def transAll(self,trans):
+        for id in self.textBBs:
+            startX,startY,endX,endY,para,blank = self.textBBs[id]
+            old_corners = np.array([[startX,endX,endX,startX], #tl, tr, br, bl
+                                    [startY,startY,endY,endY],
+                                    [1,1,1,1]])
+            new_points = np.matmul(trans,old_corners)
+            new_points/=new_points[2,:] #bring back to standard homogeneous form
+            startX = (new_points[0,0]+new_points[0,3])/2.0 #average x of new tl and bl
+            startY = (new_points[1,0]+new_points[1,1])/2.0 #average y of new tl and tr
+            endX = (new_points[0,1]+new_points[0,2])/2.0 #average x of new tr and br
+            endY = (new_points[1,2]+new_points[1,3])/2.0 #average y of new br and bl
+            self.textBBs[id] = (int(round(startX)),int(round(startY)),int(round(endX)),int(round(endY)),para,0)
+        for id in self.fieldBBs:
+            startX,startY,endX,endY,para,blank = self.fieldBBs[id]
+            old_corners = np.array([[startX,endX,endX,startX], #tl, tr, br, bl
+                                    [startY,startY,endY,endY],
+                                    [1,1,1,1]])
+            new_points = np.matmul(trans,old_corners)
+            new_points/=new_points[2,:]
+            startX = (new_points[0,0]+new_points[0,3])/2.0 #average x of new tl and bl
+            startY = (new_points[1,0]+new_points[1,1])/2.0 #average y of new tl and tr
+            endX = (new_points[0,1]+new_points[0,2])/2.0 #average x of new tr and br
+            endY = (new_points[1,2]+new_points[1,3])/2.0 #average y of new br and bl
+            self.fieldBBs[id] = (int(round(startX)),int(round(startY)),int(round(endX)),int(round(endY)),para,blank)
+        self.draw()
+
     def clickerDown(self,event):
         #image,displayImage,mode,textBBs,fieldBBs,pairing = param
-        if event.inaxes!=self.ax_im.axes or event.button!=3: return
+        if event.inaxes!=self.ax_im.axes or event.button!=mouse_button: return
         if self.mode!='delete' and self.mode!='corners':
             self.mode+='-d'
             self.startX=event.xdata
             self.startY=event.ydata
 
     def clickerUp(self,event):
-        if event.button!=3: return
+        if event.button!=mouse_button: return
         x=event.xdata
         y=event.ydata
         if '-m' == self.mode[-2:]: #we dragged to make a box
+            self.drawRect.set_bounds(0,0,1,1)
             self.mode=self.mode[:-2] #make state readable
             if abs((self.startX-self.endX)*(self.startY-self.endY))>10: #the box is "big enough"
-                self.drawRect.set_bounds(0,0,1,1)
                 didPair=None #for storing auto-pair for undo/action stack
 
                 #auto-pair to selected
@@ -266,6 +294,8 @@ class Control:
                 self.mode=self.mode[:-2]
 
             if self.mode == 'corners':
+                self.ax_im.set_xlim(0,self.imageW)
+                self.ax_im.set_ylim(self.imageH,0)
                 if x<=self.imageW/2 and y<=self.imageH/2:
                     self.corners['tl']=(x,y)
                     if self.corners_draw['tl'] is not None:
@@ -369,7 +399,7 @@ class Control:
                             #del self.pairLines[i]
                         self.actionStack.append(('remove-text',id,startX,startY,endX,endY,para,blank,pairs))
                         self.undoStack=[]
-                        self.textRects[id].remove()
+                        #self.textRects[id].remove()
                         #del self.textRects[id]
                         del self.textBBs[id]
                         if self.selected=='text' and self.selectedId==id:
@@ -541,14 +571,20 @@ class Control:
                     elif self.selected=='field':
                         self.actionStack.append(('change-field',self.selectedId,self.fieldBBs[self.selectedId][4]))
                         self.fieldBBs[self.selectedId]=(self.fieldBBs[self.selectedId][0],self.fieldBBs[self.selectedId][1],self.fieldBBs[self.selectedId][2],self.fieldBBs[self.selectedId][3],codeMap[mode],self.textBBs[self.selectedId][5])
-                    #draw(p)
+                    self.draw()
 
             self.mode=self.tmpMode
             self.modeRect.set_y(toolYMap[self.mode])
             self.ax_tool.figure.canvas.draw()
             #drawToolbar(p)
         elif self.mode[:6] == 'corner':
-            if event.key=='backspace':
+            if event.key=='escape': #quit
+                self.textBBs={}
+                self.fieldBBs={}
+                self.pairing=[]
+                self.corners={}
+                plt.close('all')
+            elif event.key=='backspace':
                 self.corners['tl']=None
                 if self.corners_draw['tl'] is not None:
                     self.corners_draw['tl'].remove()
@@ -597,6 +633,44 @@ class Control:
                 self.change()
             elif key=='z': #Z blank
                 self.flipBlank()
+            elif key=='up':
+                trans = np.array([[1,0,0],
+                                  [0,1,-2],
+                                  [0,0,1]])
+                self.transAll(trans)
+            elif key=='down':
+                trans = np.array([[1,0,0],
+                                  [0,1,2],
+                                  [0,0,1]])
+                self.transAll(trans)
+            elif key=='left':
+                trans = np.array([[1,0,-2],
+                                  [0,1,0],
+                                  [0,0,1]])
+                self.transAll(trans)
+            elif key=='right':
+                trans = np.array([[1,0,2],
+                                  [0,1,0],
+                                  [0,0,1]])
+                self.transAll(trans)
+            elif key==',':
+                t=0.01
+                x=self.imageW/2.0
+                y=self.imageH/2.0
+                trans = np.array([[math.cos(t),-math.sin(t),-x*math.cos(t)+y*math.sin(t)+x],
+                                  [math.sin(t),math.cos(t),-x*math.sin(t)-y*math.cos(t)+y],
+                                  [0,0,1]])
+                self.transAll(trans)
+            elif key=='.':
+                t=-0.01
+                x=self.imageW/2.0
+                y=self.imageH/2.0
+                trans = np.array([[math.cos(t),-math.sin(t),-x*math.cos(t)+y*math.sin(t)+x],
+                                  [math.sin(t),math.cos(t),-x*math.sin(t)-y*math.cos(t)+y],
+                                  [0,0,1]])
+                self.transAll(trans)
+            elif key=='backspace':
+                self.draw()
 
     #def updatePairLines(self):
     #    for i, pair in enumerate(self.pairing):
@@ -683,12 +757,14 @@ class Control:
         elif action[0] == 'drag-text':
             label,id,startX,startY,endX,endY = action
             toRet = (label,id,self.textBBs[id][0],self.textBBs[id][1],self.textBBs[id][2],self.textBBs[id][3])
-            self.textBBs[id] = (startX,startY,endX,endY,self.textBBs[id][4],self.fieldBBs[id][5])
+            code = self.textBBs[id][4]
+            em = self.textBBs[id][5]
+            self.textBBs[id] = (startX,startY,endX,endY,code,em)
             return toRet
         elif action[0] == 'change-text':
             label,id,code = action
             toRet = (label,id,self.textBBs[id][4])
-            self.textBBs[id] = (self.textBBs[id][0],self.textBBs[id][1],self.textBBs[id][2],self.textBBs[id][3],code,self.fieldBBs[id][5])
+            self.textBBs[id] = (self.textBBs[id][0],self.textBBs[id][1],self.textBBs[id][2],self.textBBs[id][3],code,self.textBBs[id][5])
             return toRet
         elif action[0] == 'change-field':
             label,id,code = action
@@ -720,6 +796,13 @@ class Control:
 
 
     def draw(self):
+        self.drawRect.set_bounds(0,0,1,1)
+        if self.selected=='field':
+            self.selectedRect.set_bounds(self.fieldBBs[self.selectedId][0]-4,self.fieldBBs[self.selectedId][1]-4,self.fieldBBs[self.selectedId][2]-self.fieldBBs[self.selectedId][0]+8,self.fieldBBs[self.selectedId][3]-self.fieldBBs[self.selectedId][1]+8)
+        elif self.selected=='text':
+            self.selectedRect.set_bounds(self.textBBs[self.selectedId][0]-4,self.textBBs[self.selectedId][1]-4,self.textBBs[self.selectedId][2]-self.textBBs[self.selectedId][0]+8,self.textBBs[self.selectedId][3]-self.textBBs[self.selectedId][1]+8)
+        else:
+            self.selectedRect.set_bounds(0,0,1,1)
         #clear all
         #print self.textRects
         #print self.textBBs
@@ -914,5 +997,6 @@ if len(sys.argv)>4:
 
 texts,fields,pairs,corners = labelImage(sys.argv[1],int(sys.argv[2]),int(sys.argv[3]),texts,fields,pairs,page_corners)
 outFile='test.json'
-with open(outFile,'w') as out:
-    out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "page_corners":corners}))
+if len(texts)+len(fields)+len(corners)>0:
+    with open(outFile,'w') as out:
+        out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "page_corners":corners}))
