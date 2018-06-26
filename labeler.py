@@ -12,9 +12,9 @@ import json
 mouse_button=3
 TOOL_WIDTH=240
 toolH=40
-colorMap = {'text':(0/255.0,0/255.0,255/255.0), 'textP':(0/255.0,150/255.0,255/255.0), 'textMinor':(100/255.0,190/255.0,205/255.0), 'textInst':(190/255.0,210/255.0,255/255.0), 'textNumber':(0/255.0,160/255.0,100/255.0), 'fieldCircle':(255/255.0,190/255.0,210/255.0), 'field':(255/255.0,0/255.0,0/255.0), 'fieldP':(255/255.0,120/255.0,0/255.0), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0), 'graphic':(255/255.0,105/255.0,250/255.0)}
+colorMap = {'text':(0/255.0,0/255.0,255/255.0), 'textP':(0/255.0,150/255.0,255/255.0), 'textMinor':(100/255.0,190/255.0,205/255.0), 'textInst':(190/255.0,210/255.0,255/255.0), 'textNumber':(0/255.0,160/255.0,100/255.0), 'fieldCircle':(255/255.0,190/255.0,210/255.0), 'field':(255/255.0,0/255.0,0/255.0), 'fieldP':(255/255.0,120/255.0,0/255.0), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0), 'graphic':(255/255.0,105/255.0,250/255.0), 'comment':(165/255.0,10/255.0,15/255.0)}
 DRAW_COLOR=(1,0.7,1)
-codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9}
+codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10}
 RcodeMap = {v: k for k, v in codeMap.iteritems()}
 keyMap = {'text':'1',
           'textP':'2',
@@ -26,12 +26,13 @@ keyMap = {'text':'1',
           'fieldCheckBox':'e',
           'fieldCircle':'r',
           'graphic':'t',
+          'comment':'y',
           }
 RkeyMap = {v: k for k, v in keyMap.iteritems()}
-toolMap = {'text':'1:text/label', 'textP':'2:text para', 'textMinor':'3:minor label', 'textInst':'4:instructions', 'textNumber':'5:enumeration (#)', 'fieldCircle':'R:to be circled', 'field':'Q:field', 'fieldP':'W:field para', 'fieldCheckBox':'E:check-box', 'graphic':'T:graphic'}
+toolMap = {'text':'1:text/label', 'textP':'2:text para', 'textMinor':'3:minor label', 'textInst':'4:instructions', 'textNumber':'5:enumeration (#)', 'fieldCircle':'R:to be circled', 'field':'Q:field', 'fieldP':'W:field para', 'fieldCheckBox':'E:check-box', 'graphic':'T:graphic', 'comment':'Y:comment'}
 toolYMap = {}
-modes = ['text', 'textP', 'textMinor', 'textInst', 'textNumber', 'field', 'fieldP', 'fieldCheckBox', 'fieldCircle', 'graphic']
-ftypeMap = {'text':0, 'handwriting':1, 'print':2, 'blank':3}
+modes = ['text', 'textP', 'textMinor', 'textInst', 'textNumber', 'field', 'fieldP', 'fieldCheckBox', 'fieldCircle', 'graphic', 'comment']
+ftypeMap = {'text':0, 'handwriting':1, 'print':2, 'blank':3} #print:typewriter or stamp
 RftypeMap = {v: k for k, v in ftypeMap.iteritems()}
 
 def get_side(a, b):
@@ -654,7 +655,7 @@ class Control:
                                   [0,1,0],
                                   [0,0,1]])
                 self.transAll(trans)
-            elif key==',':
+            elif key==',':#rotate
                 t=-0.01
                 x=self.imageW/2.0
                 y=self.imageH/2.0
@@ -662,12 +663,28 @@ class Control:
                                   [math.sin(t),math.cos(t),-x*math.sin(t)-y*math.cos(t)+y],
                                   [0,0,1]])
                 self.transAll(trans)
-            elif key=='.':
+            elif key=='.':#rotate
                 t=0.01
                 x=self.imageW/2.0
                 y=self.imageH/2.0
                 trans = np.array([[math.cos(t),-math.sin(t),-x*math.cos(t)+y*math.sin(t)+x],
                                   [math.sin(t),math.cos(t),-x*math.sin(t)-y*math.cos(t)+y],
+                                  [0,0,1]])
+                self.transAll(trans)
+            elif key=='-':#scale
+                t=0.97
+                x=self.imageW/2.0
+                y=self.imageH/2.0
+                trans = np.array([[t,0,x-t*x],
+                                  [0,t,y-t*y],
+                                  [0,0,1]])
+                self.transAll(trans)
+            elif key=='=':#scale
+                t=1.03
+                x=self.imageW/2.0
+                y=self.imageH/2.0
+                trans = np.array([[t,0,x-t*x],
+                                  [0,t,y-t*y],
                                   [0,0,1]])
                 self.transAll(trans)
             elif key=='backspace':
@@ -927,76 +944,83 @@ class Control:
 def drawToolbar(ax):
     #im[0:,-TOOL_WIDTH:]=(140,140,140)
     im = np.zeros(((toolH+1)*(len(modes)+9),TOOL_WIDTH,3),dtype=np.uint8)
-    im[:,:,:] = 140
+    im[:,:] = (140,140,140)
 
     y=0
 
     for mode in modes:
-        im[y:y+toolH,TOOL_WIDTH:]=colorMap[mode]
+        im[y:y+toolH,:]=(255*colorMap[mode][0],255*colorMap[mode][1],255*colorMap[mode][2])
         #if self.mode==mode:
         #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-1,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
         #cv2.putText(im,toolMap[mode],(im.shape[1]TOOL_WIDTH-3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
-        ax.text(1,y+toolH-1,toolMap[mode])
+        #patches.Polygon((,linewidth=2,edgecolor=colorMap[mode],facecolor=fill)
+        ax.text(1,y+toolH-10,toolMap[mode])
         toolYMap[mode]=y
         y+=toolH+1
 
     #undo
-    im[y:y+toolH,TOOL_WIDTH:]=(160,160,160)
-    ax.text(1,y+toolH-1,'A:undo')
+    im[y:y+toolH,:]=(160,160,160)
+    ax.text(1,y+toolH-10,'A:undo')
     y+=toolH+1
 
     #redo
-    im[y:y+toolH,TOOL_WIDTH:]=(190,190,190)
-    ax.text(1,y+toolH-1,'S:redo')
+    im[y:y+toolH,:]=(190,190,190)
+    ax.text(1,y+toolH-10,'S:redo')
     y+=toolH+1
 
     #change
-    im[y:y+toolH,TOOL_WIDTH:]=(230,230,230)
+    im[y:y+toolH,:]=(230,230,230)
     #if self.mode=='change':
-    #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-1,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
-    ax.text(1,y+toolH-1,'D:switch type')
+    #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-10,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
+    ax.text(1,y+toolH-10,'D:switch type')
     toolYMap['change']=y
     y+=toolH+1
 
     #delete
-    im[y:y+toolH,TOOL_WIDTH:]=(250,250,250)
+    im[y:y+toolH,:]=(250,250,250)
     #if self.mode=='delete':
-    #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-1,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
-    ax.text(1,y+toolH-1,'F:delete')
+    #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-10,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
+    ax.text(1,y+toolH-10,'F:delete')
     toolYMap['delete']=y
     y+=toolH+1
 
     #print
-    im[y:y+toolH,TOOL_WIDTH:]=(30,30,30)
-    ax.text(1,y+toolH-1,'Z:mark field as print')
+    im[y:y+toolH,:]=(255, 230, 242)
+    ax.text(1,y+toolH-10,'Z:mark field as print')
     toolYMap['print']=y
     y+=toolH+1
 
     #blank
-    im[y:y+toolH,TOOL_WIDTH:]=(30,30,30)
+    im[y:y+toolH,:]=(250,250,250)
     #if self.mode=='blank':
-    #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-1,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
+    #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-10,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
     #cv2.putText(im,'Z:mark blank',(im.shape[1]TOOL_WIDTH-3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(240,240,240))
-    ax.text(1,y+toolH-1,'X:mark field as blank')
+    ax.text(1,y+toolH-10,'X:mark field as blank')
     toolYMap['blank']=y
     y+=toolH+1
 
     #handwriting
-    im[y:y+toolH,TOOL_WIDTH:]=(30,30,30)
-    ax.text(1,y+toolH-1,'C:mark field as handwriting')
+    im[y:y+toolH,:]=(190,190,190)
+    ax.text(1,y+toolH-10,'C:mark field as handwriting')
     toolYMap['handwriting']=y
     y+=toolH+1
 
     #move
-    im[y:y+toolH,TOOL_WIDTH:]=(30,30,30)
-    ax.text(1,y+toolH-1,'Arrow keys:move all labels')
+    im[y:y+toolH,:]=(30,30,30)
+    ax.text(1,y+toolH-10,'Arrow keys:move all labels', color=(1,1,1))
     toolYMap['move']=y
     y+=toolH+1
 
     #rotate
-    im[y:y+toolH,TOOL_WIDTH:]=(30,30,30)
-    ax.text(1,y+toolH-1,'<,>:rotate all labels')
+    im[y:y+toolH,:]=(30,30,30)
+    ax.text(1,y+toolH-10,'<,>:rotate all labels', color=(1,1,1))
     toolYMap['rotate']=y
+    y+=toolH+1
+
+    #scale
+    im[y:y+toolH,:]=(30,30,30)
+    ax.text(1,y+toolH-10,'-,+:scale all labels', color=(1,1,1))
+    toolYMap['scale']=y
     y+=toolH+1
 
     return im
@@ -1004,7 +1028,7 @@ def drawToolbar(ax):
     #cv2.imshow("labeler",self.displayImage)
         
 
-def labelImage(imagePath,displayH,displayW,texts,fields,pairs,page_corners):
+def labelImage(imagePath,texts,fields,pairs,page_corners):
     #p = Params()
     image = mpimg.imread(sys.argv[1])
     #if p.image is None:
@@ -1065,7 +1089,7 @@ if len(sys.argv)>4:
         pairs=read['pairs']
         page_corners=read['page_corners']
 
-texts,fields,pairs,corners = labelImage(sys.argv[1],int(sys.argv[2]),int(sys.argv[3]),texts,fields,pairs,page_corners)
+texts,fields,pairs,corners = labelImage(sys.argv[1],texts,fields,pairs,page_corners)
 outFile='test.json'
 if len(texts)+len(fields)+len(corners)>0:
     with open(outFile,'w') as out:
