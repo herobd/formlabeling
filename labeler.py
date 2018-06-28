@@ -12,7 +12,7 @@ import json
 mouse_button=3
 TOOL_WIDTH=240
 toolH=40
-colorMap = {'text':(0/255.0,0/255.0,255/255.0), 'textP':(0/255.0,150/255.0,255/255.0), 'textMinor':(100/255.0,190/255.0,205/255.0), 'textInst':(190/255.0,210/255.0,255/255.0), 'textNumber':(0/255.0,160/255.0,100/255.0), 'fieldCircle':(255/255.0,190/255.0,210/255.0), 'field':(255/255.0,0/255.0,0/255.0), 'fieldP':(255/255.0,120/255.0,0/255.0), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0), 'graphic':(255/255.0,105/255.0,250/255.0), 'comment':(165/255.0,10/255.0,15/255.0), 'pair':(15/255.0,150/255.0,15/255.0), 'col':(5/255.0,50/255.0,5/255.0), 'row':(45/255.0,45/255.0,5/255.0), 'fieldRegion':(15/255.0,15/255.0,65/255.0)}
+colorMap = {'text':(0/255.0,0/255.0,255/255.0), 'textP':(0/255.0,150/255.0,255/255.0), 'textMinor':(100/255.0,190/255.0,205/255.0), 'textInst':(190/255.0,210/255.0,255/255.0), 'textNumber':(0/255.0,160/255.0,100/255.0), 'fieldCircle':(255/255.0,190/255.0,210/255.0), 'field':(255/255.0,0/255.0,0/255.0), 'fieldP':(255/255.0,120/255.0,0/255.0), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0), 'graphic':(255/255.0,105/255.0,250/255.0), 'comment':(165/255.0,10/255.0,15/255.0), 'pair':(15/255.0,150/255.0,15/255.0), 'col':(5/255.0,70/255.0,5/255.0), 'row':(75/255.0,65/255.0,5/255.0), 'fieldRegion':(15/255.0,15/255.0,75/255.0)}
 DRAW_COLOR=(1,0.7,1)
 codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11}
 RcodeMap = {v: k for k, v in codeMap.iteritems()}
@@ -126,10 +126,10 @@ class Group:
 
         for idx in self.elements:
             if idx in bbs: #check in case element was deleted
-                maxX = max(maxX,bbs[idx][0],bbs[idx][2])
-                minX = min(minX,bbs[idx][0],bbs[idx][2])
-                maxY = max(maxY,bbs[idx][1],bbs[idx][3])
-                minY = min(minY,bbs[idx][1],bbs[idx][3])
+                maxX = max(maxX,bbs[idx][0],bbs[idx][2],bbs[idx][4],bbs[idx][6])
+                minX = min(minX,bbs[idx][0],bbs[idx][2],bbs[idx][4],bbs[idx][6])
+                maxY = max(maxY,bbs[idx][1],bbs[idx][3],bbs[idx][5],bbs[idx][7])
+                minY = min(minY,bbs[idx][1],bbs[idx][3],bbs[idx][5],bbs[idx][7])
 
         minX-=3
         minY-=3
@@ -147,10 +147,11 @@ class Group:
         y=0
         
         for idx in self.elements:
-            x+=bbs[idx][0]+bbs[idx][2]
-            y+=bbs[idx][1]+bbs[idx][3]
+            if idx in bbs: #check in case element was deleted
+                x+=bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6]
+                y+=bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7]
 
-        return x/(2*len(elements)), y/(2*len(elements))
+        return x/(4*len(self.elements)), y/(4*len(self.elements))
 
 
 class Control:
@@ -206,8 +207,8 @@ class Control:
 
         if groups is not None:
             for group in groups:
-                self.groups[groupCurId] = Group(json=group)
-                groupCurId+=1
+                self.groups[self.groupCurId] = Group(json=group)
+                self.groupCurId+=1
 
 
     def init(self):
@@ -337,7 +338,7 @@ class Control:
                 if self.secondaryMode=='row' or self.secondaryMode=='col':
                     if self.mode[:4] in self.selected:
                         #add to group
-                        groups[self.selectedId].add(newId)
+                        self.groups[self.selectedId].add(newId)
                         self.actionStack.append(('added-to-group',self.selectedId,newId))
                     else:
                         #new group!
@@ -346,10 +347,10 @@ class Control:
                         self.actionStack.append(('add-group',self.groupCurId,self.groups[self.groupCurId]))
                         self.selected=self.secondaryMode
                         self.selectedId=self.groupCurId
+                        #self.setSelectedPoly(self.groups[self.groupCurId].getPoly(self))
                         self.groupCurId+=1
-
-                #self.selectedRect.set_xy(np.array([[sv[0]-4,sv[1]-4],[sv[2]+4,sv[3]-4],[sv[4]+4,sv[5]+4],[sv[6]-4,sv[7]+4]]))
-                self.setSelectedRect(sv)
+                #else:
+                   #self.setSelectedRect(sv)
                 self.draw()
 
         elif '-tl' == self.mode[-3:]:#we dragged the top-left corner to resize the selected box
@@ -362,7 +363,7 @@ class Control:
             if bbs is not None:
                 self.actionStack.append(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
                 bbs[self.selectedId] = (self.endX,self.endY)+bbs[self.selectedId][2:]
-                self.setSelectedRect(bbs[self.selectedId])
+                #self.setSelectedRect(bbs[self.selectedId])
                 self.draw()
         elif '-bl' == self.mode[-3:]:#we dragged the top-left corner to resize the selected box
             self.mode=self.mode[:-3]
@@ -374,7 +375,7 @@ class Control:
             if bbs is not None:
                 self.actionStack.append(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
                 bbs[self.selectedId] = bbs[self.selectedId][0:6]+(self.endX,self.endY)+bbs[self.selectedId][8:]
-                self.setSelectedRect(bbs[self.selectedId])
+                #self.setSelectedRect(bbs[self.selectedId])
                 self.draw()
         elif '-tr' == self.mode[-3:]:#we dragged the top-left corner to resize the selected box
             self.mode=self.mode[:-3]
@@ -386,7 +387,7 @@ class Control:
             if bbs is not None:
                 self.actionStack.append(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
                 bbs[self.selectedId] = bbs[self.selectedId][0:2]+(self.endX,self.endY)+bbs[self.selectedId][4:]
-                self.setSelectedRect(bbs[self.selectedId])
+                #self.setSelectedRect(bbs[self.selectedId])
                 self.draw()
         elif '-br' == self.mode[-3:]:#we dragged the top-left corner to resize the selected box
             self.mode=self.mode[:-3]
@@ -398,7 +399,7 @@ class Control:
             if bbs is not None:
                 self.actionStack.append(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
                 bbs[self.selectedId] = bbs[self.selectedId][0:4]+(self.endX,self.endY)+bbs[self.selectedId][6:]
-                self.setSelectedRect(bbs[self.selectedId])
+                #self.setSelectedRect(bbs[self.selectedId])
                 self.draw()
         elif '-mv' == self.mode[-3:]:#we're just moving the box
             self.mode=self.mode[:-3]
@@ -415,7 +416,7 @@ class Control:
                                         bbs[self.selectedId][2]+shiftX,bbs[self.selectedId][3]+shiftY,
                                         bbs[self.selectedId][4]+shiftX,bbs[self.selectedId][5]+shiftY,
                                         bbs[self.selectedId][6]+shiftX,bbs[self.selectedId][7]+shiftY)+bbs[self.selectedId][8:]
-                self.setSelectedRect(bbs[self.selectedId])
+                #self.setSelectedRect(bbs[self.selectedId])
                 self.draw()
         else:
             if '-d' == self.mode[-2:]:
@@ -536,39 +537,40 @@ class Control:
                             return
                 elif self.secondaryMode=='row' or self.secondaryMode=='col':
                     #again, first check for linesitems
-                    for id, group in groups.iteritems():
-                        x1,y1 = group.getCentriod(self)
-                        if group.holdsFields:
-                            bbs=self.fieldBBs
-                        else:
-                            bbs=self.textBBs
-                        for b in group.pairings:
-                            if b in bbs:
-                                x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
-                                y2=(bbs[b][1]+bbs[b][3]+bbs[b][5]+bbs[b][7])/4
+                    for id, group in self.groups.iteritems():
+                        if group.typeStr==self.secondaryMode:
+                            x1,y1 = group.getCentroid(self)
+                            if not group.holdsFields:
+                                bbs=self.fieldBBs
+                            else:
+                                bbs=self.textBBs
+                            for b in group.pairings:
+                                if b in bbs:
+                                    x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
+                                    y2=(bbs[b][1]+bbs[b][3]+bbs[b][5]+bbs[b][7])/4
 
-                                if onLine(x,y,x1,y1,x2,y2):
-                                    self.actionStack.append(('remove-group-pairing',id,b))
-                                    self.undoStack=[]
-                                    group.unpair(b,True)
-                                    self.draw()
-                                    return
+                                    if onLine(x,y,x1,y1,x2,y2):
+                                        self.actionStack.append(('remove-group-pairing',id,b))
+                                        self.undoStack=[]
+                                        group.unpair(b,True)
+                                        self.draw()
+                                        return
 
-                        if group.holdsFields:
-                            bbs=self.textBBs
-                        else:
-                            bbs=self.fieldBBs
-                        for b in group.samePairings:
-                            if b in bbs:
-                                x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
-                                y2=(bbs[b][1]+bbs[b][3]+bbs[b][5]+bbs[b][7])/4
+                            if not group.holdsFields:
+                                bbs=self.textBBs
+                            else:
+                                bbs=self.fieldBBs
+                            for b in group.samePairings:
+                                if b in bbs:
+                                    x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
+                                    y2=(bbs[b][1]+bbs[b][3]+bbs[b][5]+bbs[b][7])/4
 
-                                if onLine(x,y,x1,y1,x2,y2):
-                                    self.actionStack.append(('remove-group-samePairing',id,b))
-                                    self.undoStack=[]
-                                    group.unpair(b,False)
-                                    self.draw()
-                                    return
+                                    if onLine(x,y,x1,y1,x2,y2):
+                                        self.actionStack.append(('remove-group-samePairing',id,b))
+                                        self.undoStack=[]
+                                        group.unpair(b,False)
+                                        self.draw()
+                                        return
             #then bbs
             if self.secondaryMode is None:
                 for id in self.textBBs:
@@ -615,7 +617,7 @@ class Control:
                             #select the text BB
                             self.selectedId=id
                             self.selected='text'
-                            self.setSelectedRect(self.textBBs[id])
+                            #self.setSelectedRect(self.textBBs[id])
                         self.draw()
                         return
 
@@ -666,61 +668,100 @@ class Control:
 
             elif self.secondaryMode=='row' or self.secondaryMode=='col':
                 if self.mode!='delete':
-                    print 'lcick happeingin'
                     for id in self.textBBs:
                         if self.checkInside(x,y,self.textBBs[id]):
                             if self.selected=='none':
-                                self.groups[self.groupCurId] = Group(typeStr=self.secondaryMode, holdsFields=False)
-                                self.groups[self.groupCurId].add(id)
-                                self.actionStack.append(('add-group',self.groupCurId,self.groups[self.groupCurId]))
-                                self.selected=self.secondaryMode
-                                self.selectedId=self.groupCurId
-                                self.groupCurId+=1
+                                skip=False
+                                for gId,group in self.groups.iteritems():
+                                    if not group.holdsFields and group.contains(id):
+                                        skip=True
+                                        break
+                                if not skip:
+                                    self.groups[self.groupCurId] = Group(typeStr=self.secondaryMode, holdsFields=False)
+                                    self.groups[self.groupCurId].add(id)
+                                    self.actionStack.append(('add-group',self.groupCurId,self.groups[self.groupCurId]))
+                                    self.selected=self.secondaryMode
+                                    self.selectedId=self.groupCurId
+                                    self.groupCurId+=1
+                                    self.draw()
+                                    return
                             elif self.groups[self.selectedId].holdsFields:
                                 self.actionStack.append(('add-group-pairing',self.selectedId,id))
                                 self.groups[self.selectedId].pair(id,True)
+                                self.draw()
+                                return
                             elif self.groups[self.selectedId].contains(id):
                                 self.actionStack.append(('removed-from-group',self.selectedId,id))
                                 self.groups[self.selectedId].remove(id)
+                                self.setSelectedPoly(self.groups[self.selectedId].getPoly(self))
+                                self.draw()
+                                return
                             elif self.mode=='pair':
-                                self.actionStack.append(('add-group-samePairing',self.selectedId,id))
-                                self.groups[self.selectedId].pair(id,False)
+                                if not self.groups[self.selectedId].contains(id):
+                                    self.actionStack.append(('add-group-samePairing',self.selectedId,id))
+                                    self.groups[self.selectedId].pair(id,False)
+                                    self.draw()
+                                    return
                             else:
                                 self.actionStack.append(('added-to-group',self.selectedId,id))
                                 self.groups[self.selectedId].add(id)
-                            return
+                                self.setSelectedPoly(self.groups[self.selectedId].getPoly(self))
+                                self.draw()
+                                return
                     for id in self.fieldBBs:
                         if self.checkInside(x,y,self.fieldBBs[id]):
-                            print 'hit field'
-                            print self.selected
                             if self.selected=='none':
-                                self.groups[self.groupCurId] = Group(typeStr=self.secondaryMode, holdsFields=True)
-                                self.groups[self.groupCurId].add(id)
-                                self.actionStack.append(('add-group',self.groupCurId,self.groups[self.groupCurId]))
-                                self.selected=self.secondaryMode
-                                self.selectedId=self.groupCurId
-                                self.groupCurId+=1
+                                skip=False
+                                for gId,group in self.groups.iteritems():
+                                    if group.holdsFields and group.contains(id):
+                                        skip=True
+                                        break
+                                if not skip:
+                                    self.groups[self.groupCurId] = Group(typeStr=self.secondaryMode, holdsFields=True)
+                                    self.groups[self.groupCurId].add(id)
+                                    self.actionStack.append(('add-group',self.groupCurId,self.groups[self.groupCurId]))
+                                    self.selected=self.secondaryMode
+                                    self.selectedId=self.groupCurId
+                                    self.groupCurId+=1
+                                    self.draw()
+                                    return
                             elif not self.groups[self.selectedId].holdsFields:
                                 self.actionStack.append(('add-group-pairing',self.selectedId,id))
                                 self.groups[self.selectedId].pair(id,True)
+                                self.draw()
+                                return
                             elif self.groups[self.selectedId].contains(id):
                                 self.actionStack.append(('removed-from-group',self.selectedId,id))
                                 self.groups[self.selectedId].remove(id)
+                                self.setSelectedPoly(self.groups[self.selectedId].getPoly(self))
+                                self.draw()
+                                return
                             elif self.mode=='pair':
-                                self.actionStack.append(('add-group-samePairing',self.selectedId,id))
-                                self.groups[self.selectedId].pair(id,False)
+                                if not self.groups[self.selectedId].contains(id):
+                                    self.actionStack.append(('add-group-samePairing',self.selectedId,id))
+                                    self.groups[self.selectedId].pair(id,False)
+                                    self.draw()
+                                    return
                             else:
                                 self.actionStack.append(('added-to-group',self.selectedId,id))
                                 self.groups[self.selectedId].add(id)
-                            return
+                                self.setSelectedPoly(self.groups[self.selectedId].getPoly(self))
+                                self.draw()
+                                return
                 for id, group in self.groups.iteritems():
-                    if group.typeStr==self.secondaryMore and checkInsidePoly(x,y,group.getPoly(self)):
+                    if group.typeStr==self.secondaryMode and checkInsidePoly(x,y,group.getPoly(self)):
                         if self.mode=='delete':
                             self.actionStack.append(('remove-group',id,group))
                             del self.groups[id]
+                            if self.selectedId==id:
+                                self.setSelectedRectOff()
+                                self.selected='none'
+                                self.selectedId=None
                         else:
                             self.selectedId=id
                             self.selected=group.typeStr
+                            self.setSelectedPoly(group.getPoly(self))
+                            
                         self.draw()
                         return
 
@@ -1085,7 +1126,10 @@ class Control:
         elif action[0] == 'add-group':
             id = action[1]
             group = action[2]
-            self.groups.remove(id)
+            del self.groups[id]
+            if self.selected==group.typeStr and self.selectedId==id:
+                self.selected='none'
+                self.setSelectedRectOff()
             return ('remove-group',id,group)
         elif action[0] == 'remove-group':
             id = action[1]
@@ -1166,6 +1210,7 @@ class Control:
     def setSecondaryMode(self,mode):
         self.selected='none'
         self.selectedId=None
+        self.setSelectedRectOff()
         if self.secondaryMode==mode:
             self.secondaryMode=None;
             self.secondaryModeRect.set_visible(False)
@@ -1181,10 +1226,23 @@ class Control:
             self.fieldBBs[self.selectedId] = self.fieldBBs[self.selectedId][:9]+(ftype,)
             self.draw()
 
-    def setSelectedRect(self,bb):
+    def setSelectedPoly(self,poly):
+        minX=9999999
+        maxX=-1
+        minY=9999999
+        maxY=-1
+        for (x,y) in poly:
+            minX=min(minX,x)
+            maxX=max(maxX,x)
+            minY=min(minY,y)
+            maxY=max(maxY,y)
+        #print (minX,minY,maxX,minY,maxX,maxY,minX,maxY)
+        self.setSelectedRect((minX,minY,maxX,minY,maxX,maxY,minX,maxY),size=30)
+
+    def setSelectedRect(self,bb,size=15):
         xc=(bb[0]+bb[2]+bb[4]+bb[6])/4.0
         yc=(bb[1]+bb[3]+bb[5]+bb[7])/4.0
-        size=12
+        
         tld = size/math.sqrt((xc-bb[0])**2 + (yc-bb[1])**2)
         tlX = bb[0]+(bb[0]-xc)*tld
         tlY = bb[1]+(bb[1]-yc)*tld
@@ -1200,6 +1258,7 @@ class Control:
         bld = size/math.sqrt((xc-bb[6])**2 + (yc-bb[7])**2)
         blX = bb[6]+(bb[6]-xc)*bld
         blY = bb[7]+(bb[7]-yc)*bld
+
 
         self.selectedRect.set_xy(np.array([[tlX,tlY],[trX,trY],[brX,brY],[blX,blY]]))
 
@@ -1217,6 +1276,8 @@ class Control:
             self.setSelectedRect(self.fieldBBs[self.selectedId])
         elif self.selected=='text':
             self.setSelectedRect(self.textBBs[self.selectedId])
+        elif self.selected=='row' or self.selected=='col':
+            self.setSelectedPoly(self.groups[self.selectedId].getPoly(self))
         else:
             self.setSelectedRectOff()
 
@@ -1238,18 +1299,17 @@ class Control:
         for id, group in self.groups.iteritems():
             vertices = group.getPoly(self)
             ar = []
-            for tuple in vertices:
-                ar.append([ar[0],ar[1]])
-                self.groupPolys[id] = patches.Polygon(np.array(ar),linewidth=4,edgecolor=colorMap[group.typeStr],facecolor='none')
-                self.ax_im.add_patch(self.groupPolys[id])
-                print 'drew poly'
+            for tup in vertices:
+                ar.append([tup[0],tup[1]])
+            self.groupPolys[id] = patches.Polygon(np.array(ar),linewidth=4,edgecolor=colorMap[group.typeStr],facecolor='none')
+            self.ax_im.add_patch(self.groupPolys[id])
 
             for idx in group.pairings:
                 if group.holdsFields:
                     bbs=self.textBBs
                 else:
                     bbs=self.fieldBBs
-                x1,x2 = group.getCentriod(self)
+                x1,y1 = group.getCentroid(self)
                 x2=(bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6])/4
                 y2=(bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7])/4
                 self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='limegreen',facecolor='none')
@@ -1260,7 +1320,7 @@ class Control:
                     bbs=self.fieldBBs
                 else:
                     bbs=self.textBBs
-                x1,x2 = group.getCentriod(self)
+                x1,y1 = group.getCentroid(self)
                 x2=(bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6])/4
                 y2=(bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7])/4
                 self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='torquoise',facecolor='none')
@@ -1517,25 +1577,26 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,page_corners):
         for eleId in group.elements:
             if eleId in idToIdx:
                 elements.append(idToIdx[eleId])
-        samePairings=[]
-        for eleId in group.samePairings:
-            if eleId in idToIdx:
-                samePairings.append(idToIdx[eleId])
-        pairings=[]
-        if not group.holdsFields:
-            idToIdx = idToIdxField
-        else:
-            idToIdx = idToIdxText
-        for eleId in group.pairings:
-            if eleId in idToIdx:
-                pairings.append(idToIdx[eleId])
-        newGroup= { 'type':group.typeStr,
-                    'holds': ('field' if group.holdsFields else 'text'),
-                    'elements': elements,
-                    'pairings': pairings,
-                    'samePairings': samePairings,
-                  }
-        groups.append(newGroup)
+        if len(elements)>0:
+            samePairings=[]
+            for eleId in group.samePairings:
+                if eleId in idToIdx:
+                    samePairings.append(idToIdx[eleId])
+            pairings=[]
+            if not group.holdsFields:
+                idToIdx = idToIdxField
+            else:
+                idToIdx = idToIdxText
+            for eleId in group.pairings:
+                if eleId in idToIdx:
+                    pairings.append(idToIdx[eleId])
+            newGroup= { 'type':group.typeStr,
+                        'holds': ('field' if group.holdsFields else 'text'),
+                        'elements': elements,
+                        'pairings': pairings,
+                        'samePairings': samePairings,
+                      }
+            groups.append(newGroup)
 
 
     return textBBs, fieldBBs, pairing, samePairing, groups, control.corners
