@@ -12,9 +12,9 @@ import json
 mouse_button=3
 TOOL_WIDTH=240
 toolH=40
-colorMap = {'text':(0/255.0,0/255.0,255/255.0), 'textP':(0/255.0,150/255.0,255/255.0), 'textMinor':(100/255.0,190/255.0,205/255.0), 'textInst':(190/255.0,210/255.0,255/255.0), 'textNumber':(0/255.0,160/255.0,100/255.0), 'fieldCircle':(255/255.0,190/255.0,210/255.0), 'field':(255/255.0,0/255.0,0/255.0), 'fieldP':(255/255.0,120/255.0,0/255.0), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0), 'graphic':(255/255.0,105/255.0,250/255.0), 'comment':(165/255.0,10/255.0,15/255.0)}
+colorMap = {'text':(0/255.0,0/255.0,255/255.0), 'textP':(0/255.0,150/255.0,255/255.0), 'textMinor':(100/255.0,190/255.0,205/255.0), 'textInst':(190/255.0,210/255.0,255/255.0), 'textNumber':(0/255.0,160/255.0,100/255.0), 'fieldCircle':(255/255.0,190/255.0,210/255.0), 'field':(255/255.0,0/255.0,0/255.0), 'fieldP':(255/255.0,120/255.0,0/255.0), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0), 'graphic':(255/255.0,105/255.0,250/255.0), 'comment':(165/255.0,10/255.0,15/255.0), 'pair':(15/255.0,150/255.0,15/255.0), 'col':(5/255.0,50/255.0,5/255.0), 'row':(45/255.0,45/255.0,5/255.0), 'fieldRegion':(15/255.0,15/255.0,65/255.0)}
 DRAW_COLOR=(1,0.7,1)
-codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10}
+codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11}
 RcodeMap = {v: k for k, v in codeMap.iteritems()}
 keyMap = {'text':'1',
           'textP':'2',
@@ -27,11 +27,14 @@ keyMap = {'text':'1',
           'fieldCircle':'r',
           'graphic':'t',
           'comment':'y',
+          'fieldRegion':'`',
+          #'col':'6',
+          #'row':'7',
           }
 RkeyMap = {v: k for k, v in keyMap.iteritems()}
-toolMap = {'text':'1:text/label', 'textP':'2:text para', 'textMinor':'3:minor label', 'textInst':'4:instructions', 'textNumber':'5:enumeration (#)', 'fieldCircle':'R:to be circled', 'field':'Q:field', 'fieldP':'W:field para', 'fieldCheckBox':'E:check-box', 'graphic':'T:graphic', 'comment':'Y:comment'}
+toolMap = {'text':'1:text/label', 'textP':'2:text para', 'textMinor':'3:minor label', 'textInst':'4:instructions', 'textNumber':'5:enumeration (#)', 'fieldCircle':'R:to be circled', 'field':'Q:field', 'fieldP':'W:field para', 'fieldCheckBox':'E:check-box', 'graphic':'T:graphic', 'comment':'Y:comment', 'fieldRegion':'~:Partitioned region'}
 toolYMap = {}
-modes = ['text', 'textP', 'textMinor', 'textInst', 'textNumber', 'field', 'fieldP', 'fieldCheckBox', 'fieldCircle', 'graphic', 'comment']
+modes = ['text', 'textP', 'textMinor', 'textInst', 'textNumber', 'field', 'fieldP', 'fieldCheckBox', 'fieldCircle', 'graphic', 'comment', 'fieldRegion']
 ftypeMap = {'text':0, 'handwriting':1, 'print':2, 'blank':3} #print:typewriter or stamp
 RftypeMap = {v: k for k, v in ftypeMap.iteritems()}
 
@@ -50,9 +53,108 @@ def v_sub(a, b):
 def x_product(a, b):
     return a[0]*b[1]-a[1]*b[0]
 
+def onLine(x,y,x1,y1,x2,y2):
+     return x>=min(x1,x2) and x<=max(x1,x2) and y>=min(y1,y2) and y<=max(y1,y2) and abs((y2-y1)*x - (x2-x1)*y + x2*y1 - y2*x1)/math.sqrt(pow(y2-y1,2.0) + pow(x2-x1,2.0)) < 9.5
+
+def checkInsidePoly(x,y,vertices):
+    point=(x,y)
+    previous_side = None
+    n_vertices = len(vertices)
+    for n in xrange(n_vertices):
+        a, b = vertices[n], vertices[(n+1)%n_vertices]
+        affine_segment = v_sub(b, a)
+        affine_point = v_sub(point, a)
+        current_side = get_side(affine_segment, affine_point)
+        if current_side is None:
+            return False #outside or over an edge
+        elif previous_side is None: #first segment
+            previous_side = current_side
+        elif previous_side != current_side:
+            return False
+    return True
+
+class Group:
+    def __init__(self,typeStr=None,holdsFields=None,json=None):
+        self.typeStr=typeStr
+        self.holdsFields=holdsFields
+        self.elements=set()
+        self.pairings=set()
+        self.samePairings=set()
+
+        if json is not None:
+            self.typeStr=json['type']
+            self.holdsFields=json['holds']=='field'
+            self.elements=set(json['elements'])
+            self.pairings=set(json['pairings'])
+            self.samePairings=set(json['samePairings'])
+
+    def contains(self,index):
+        return index in self.elements
+
+    def add(self,index):
+        self.elements.add(index)
+
+    def remove(self,index):
+        if index in self.elements:
+            self.elements.remove(index)
+            return True
+        else:
+            return False
+
+    def pair(self,index,normal):
+        if normal:
+            self.pairings.add(index)
+        else:
+            self.samePairings.add(index)
+
+    def unpair(self,index,normal):
+        if normal:
+            self.pairings.remove(index)
+        else:
+            self.samePairings.remove(index)
+
+    def getPoly(self,control):
+        if not self.holdsFields:
+            bbs=control.textBBs
+        else:
+            bbs=control.fieldBBs
+
+        minX=9999999
+        maxX=-1
+        minY=9999999
+        maxY=-1
+
+        for idx in self.elements:
+            if idx in bbs: #check in case element was deleted
+                maxX = max(maxX,bbs[idx][0],bbs[idx][2])
+                minX = min(minX,bbs[idx][0],bbs[idx][2])
+                maxY = max(maxY,bbs[idx][1],bbs[idx][3])
+                minY = min(minY,bbs[idx][1],bbs[idx][3])
+
+        minX-=3
+        minY-=3
+        maxX+=3
+        maxY+=3
+
+        return [(minX,minY), (minX,maxY), (maxX,maxY), (maxX,minY)]
+
+    def getCentroid(self,control):
+        if not self.holdsFields:
+            bbs=control.textBBs
+        else:
+            bbs=control.fieldBBs
+        x=0
+        y=0
+        
+        for idx in self.elements:
+            x+=bbs[idx][0]+bbs[idx][2]
+            y+=bbs[idx][1]+bbs[idx][3]
+
+        return x/(2*len(elements)), y/(2*len(elements))
+
 
 class Control:
-    def __init__(self,ax_im,ax_tool,W,H,texts,fields,pairs,page_corners):
+    def __init__(self,ax_im,ax_tool,W,H,texts,fields,pairs,samePairs,groups,page_corners):
         self.ax_im=ax_im
         self.ax_tool=ax_tool
         self.down_cid = self.ax_im.figure.canvas.mpl_connect(
@@ -64,14 +166,19 @@ class Control:
         self.key_cid = self.ax_im.figure.canvas.mpl_connect(
                             'key_press_event', self.doKey)
         self.mode='corners' #this indicates the 'state'
+        self.secondaryMode=None
         self.textBBs={} #this holds each text box as (x1,y1,x2,y2,type_code,blank). x1,y1<x2,y2 and blank is always 0
         self.textRects={} #this holds the drawing patches
-        self.textBBsCurId=0
         self.fieldBBs={} #this holds each field box as (x1,y1,x2,y2,type_code,blank). x1,y1<x2,y2 blank is 0/1
         self.fieldRects={} #this holds the drawing patches
-        self.fieldBBsCurId=0
+        self.textBBCurId=0
+        self.fieldBBCurId=0
         self.pairing=[] #this holds each pairing as a tuple (textId,fieldId)
-        self.pairLines={} #this holds drawing patches
+        self.pairLines={} #this holds drawing patches for ALL pairlines (samePairs and group pairings)
+        self.samePairing=[] #this holds each pairing between two of the same type as a tuple (Id,Id,bool_field)
+        self.groups={} #groups are rows or columns
+        self.groupCurId=0
+        self.groupPolys={} #for drawing
         self.corners={'tl':None, 'tr':None, 'br':None, 'bl':None}
         self.corners_draw={'tl':None, 'tr':None, 'br':None, 'bl':None}
         #self.image=None
@@ -90,10 +197,17 @@ class Control:
         self.preCorners=page_corners
         if pairs is not None:
             self.pairing=pairs
+        if samePairs is not None:
+            self.samePairing=samePairs
         self.corners_text = ax_im.text(W/2,H/2,'Mark the page corners, then press ENTER.\n(outer corners if two pages).\nIf odd position, press BACKSPACE for corner by corner query.',horizontalalignment='center',verticalalignment='center')
         self.ax_im.figure.canvas.draw()
         self.imageW=W
         self.imageH=H
+
+        if groups is not None:
+            for group in groups:
+                self.groups[groupCurId] = Group(json=group)
+                groupCurId+=1
 
 
     def init(self):
@@ -123,21 +237,24 @@ class Control:
                 #startY = (new_points[1,0]+new_points[1,1])/2.0 #average y of new tl and tr
                 #endX = (new_points[0,1]+new_points[0,2])/2.0 #average x of new tr and br
                 #endY = (new_points[1,2]+new_points[1,3])/2.0 #average y of new br and bl
-                #self.textBBs[self.textBBsCurId] = (int(round(startX)),int(round(startY)),int(round(endX)),int(round(endY)),para,0)
-                self.textBBs[self.textBBsCurId] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,0)
-                self.textBBsCurId+=1
+                #self.textBBs[self.bbCurId] = (int(round(startX)),int(round(startY)),int(round(endX)),int(round(endY)),para,0)
+                self.textBBs[self.textBBCurId] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,0)
+                self.textBBCurId+=1
             for (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in self.preFields:
                 old_corners = np.array([[tlX,trX,brX,blX],
                                         [tlY,trY,brY,blY],
                                         [1,1,1,1]])
                 new_points = np.matmul(trans,old_corners)
                 new_points/=new_points[2,:]
-                self.fieldBBs[self.fieldBBsCurId] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,blank)
-                self.fieldBBsCurId+=1
+                self.fieldBBs[self.fieldBBCurId] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,blank)
+                self.fieldBBCurId+=1
             #self.pairing=pairs
         self.mode='text'
         self.modeRect = patches.Rectangle((0,0),TOOL_WIDTH,toolH,linewidth=2,edgecolor=(1,0,1),facecolor='none')
         self.ax_tool.add_patch(self.modeRect)
+        self.secondaryModeRect = patches.Rectangle((0,0),TOOL_WIDTH,toolH,linewidth=2,edgecolor=(1,1,0),facecolor='none')
+        self.secondaryModeRect.set_visible(False)
+        self.ax_tool.add_patch(self.secondaryModeRect)
         self.ax_tool.figure.canvas.draw()
         self.selectedRect = patches.Polygon(np.array([[0,0],[0.1,0],[0,0.1]]),linewidth=2,edgecolor=(1,0,1),facecolor='none')
         self.ax_im.add_patch(self.selectedRect)
@@ -185,36 +302,56 @@ class Control:
 
                 #auto-pair to selected
                 if 'text' in self.mode and 'field' in self.selected:
-                    self.pairing.append((self.textBBsCurId,self.selectedId))
-                    didPair=[(self.textBBsCurId,self.selectedId)]
+                    self.pairing.append((self.textBBCurId,self.selectedId))
+                    didPair=[(self.textBBCurId,self.selectedId)]
                 elif 'field' in self.mode and 'text' in self.selected:
-                    self.pairing.append((self.selectedId,self.fieldBBsCurId))
-                    didPair=[(self.selectedId,self.fieldBBsCurId)]
+                    self.pairing.append((self.selectedId,self.fieldBBCurId))
+                    didPair=[(self.selectedId,self.fieldBBCurId)]
 
                 code = codeMap[self.mode]
-                selX=None
-                selY=None
-                selH=None
-                selW=None
+                #selX=None
+                #selY=None
+                #selH=None
+                #selW=None
                 sv=(min(self.startX,self.endX),min(self.startY,self.endY),max(self.startX,self.endX),min(self.startY,self.endY),max(self.startX,self.endX),max(self.startY,self.endY),min(self.startX,self.endX),max(self.startY,self.endY),code)
+                
                 if self.mode[:4]=='text':
-                    self.textBBs[self.textBBsCurId]=sv+(0,)
-                    self.actionStack.append(('add-text',self.textBBsCurId,)+sv+(0,didPair,))
+                    self.textBBs[self.textBBCurId]=sv+(0,)
+                    newId=self.textBBCurId
+                    self.actionStack.append(('add-text',self.textBBCurId,)+sv+(0,didPair,None,))
                     self.undoStack=[]
-                    self.selectedId=self.textBBsCurId
-                    self.selected='text'
-                    self.textBBsCurId+=1
+                    if self.secondaryMode is None:
+                        self.selectedId=self.textBBCurId
+                        self.selected='text'
+                    self.textBBCurId+=1
                 else: #self.mode[:5]=='field':
-                    self.fieldBBs[self.fieldBBsCurId]=sv+(1,)
-                    self.actionStack.append(('add-field',self.fieldBBsCurId,)+sv+(1,didPair,))
+                    self.fieldBBs[self.fieldBBCurId]=sv+(1,)
+                    newId=self.fieldBBCurId
+                    self.actionStack.append(('add-field',self.fieldBBCurId,)+sv+(1,didPair,None,))
                     self.undoStack=[]
-                    self.selectedId=self.fieldBBsCurId
-                    self.selected='field'
-                    self.fieldBBsCurId+=1
+                    if self.secondaryMode is None:
+                        self.selectedId=self.fieldBBCurId
+                        self.selected='field'
+                    self.fieldBBCurId+=1
+
+                if self.secondaryMode=='row' or self.secondaryMode=='col':
+                    if self.mode[:4] in self.selected:
+                        #add to group
+                        groups[self.selectedId].add(newId)
+                        self.actionStack.append(('added-to-group',self.selectedId,newId))
+                    else:
+                        #new group!
+                        self.groups[self.groupCurId] = Group(typeStr=self.secondaryMode, holdsFields=self.mode[:4]!='text')
+                        self.groups[self.groupCurId].add(newId)
+                        self.actionStack.append(('add-group',self.groupCurId,self.groups[self.groupCurId]))
+                        self.selected=self.secondaryMode
+                        self.selectedId=self.groupCurId
+                        self.groupCurId+=1
+
                 #self.selectedRect.set_xy(np.array([[sv[0]-4,sv[1]-4],[sv[2]+4,sv[3]-4],[sv[4]+4,sv[5]+4],[sv[6]-4,sv[7]+4]]))
                 self.setSelectedRect(sv)
                 self.draw()
-           # draw(self)
+
         elif '-tl' == self.mode[-3:]:#we dragged the top-left corner to resize the selected box
             self.mode=self.mode[:-3]
             bbs = None
@@ -354,90 +491,238 @@ class Control:
                 self.ax_im.figure.canvas.draw()
                 return
 
-            if self.mode=='delete': #first check for pairing lines (we can only delete them)
-                for index,(text,field) in enumerate(self.pairing):
-                    #if within bounds of line and within distance from it
-                    x1=(self.textBBs[text][0]+self.textBBs[text][2]+self.textBBs[text][4]+self.textBBs[text][6])/4
-                    y1=(self.textBBs[text][1]+self.textBBs[text][3]+self.textBBs[text][5]+self.textBBs[text][7])/4
-                    x2=(self.fieldBBs[field][0]+self.fieldBBs[field][2]+self.fieldBBs[field][4]+self.fieldBBs[field][6])/4
-                    y2=(self.fieldBBs[field][1]+self.fieldBBs[field][3]+self.fieldBBs[field][5]+self.fieldBBs[field][7])/4
+            if self.mode=='delete':
+                if self.secondaryMode is None:
+                    #first check for pairing lines (we can only delete them)
+                    for index,(text,field) in enumerate(self.pairing):
+                        #if within bounds of line and within distance from it
+                        x1=(self.textBBs[text][0]+self.textBBs[text][2]+self.textBBs[text][4]+self.textBBs[text][6])/4
+                        y1=(self.textBBs[text][1]+self.textBBs[text][3]+self.textBBs[text][5]+self.textBBs[text][7])/4
+                        x2=(self.fieldBBs[field][0]+self.fieldBBs[field][2]+self.fieldBBs[field][4]+self.fieldBBs[field][6])/4
+                        y2=(self.fieldBBs[field][1]+self.fieldBBs[field][3]+self.fieldBBs[field][5]+self.fieldBBs[field][7])/4
 
-                    if x>=min(x1,x2) and x<=max(x1,x2) and y>=min(y1,y2) and y<=max(y1,y2) and abs((y2-y1)*x - (x2-x1)*y + x2*y1 - y2*x1)/math.sqrt(pow(y2-y1,2.0) + pow(x2-x1,2.0)) < 9.5:
-                        #delete the pairing
-                        self.actionStack.append(('remove-pairing',text,field))
-                        self.undoStack=[]
-                        #self.pairLines[index].remove()
-                        #self.ax_im.figure.canvas.draw()
-                        #del self.pairLines[index]
-                        del self.pairing[index]
+                        if onLine(x,y,x1,y1,x2,y2):
+                            #delete the pairing
+                            self.actionStack.append(('remove-pairing',text,field))
+                            self.undoStack=[]
+                            #self.pairLines[index].remove()
+                            #self.ax_im.figure.canvas.draw()
+                            #del self.pairLines[index]
+                            del self.pairing[index]
+                            self.draw()
+                            return
+
+                    for index,(a,b,field) in enumerate(self.samePairing):
+                        #if within bounds of line and within distance from it
+                        bbs=None
+                        if field:
+                            bbs=self.fieldBBs
+                        else:
+                            bbs=self.textBBs
+                        x1=(bbs[a][0]+bbs[a][2]+bbs[a][4]+bbs[a][6])/4
+                        y1=(bbs[a][1]+bbs[a][3]+bbs[a][5]+bbs[a][7])/4
+                        x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
+                        y2=(bbs[b][1]+bbs[b][3]+bbs[b][5]+bbs[b][7])/4
+
+                        if onLine(x,y,x1,y1,x2,y2):
+                            #delete the pairing
+                            self.actionStack.append(('remove-samePairing',a,b,field))
+                            self.undoStack=[]
+                            #self.pairLines[index].remove()
+                            #self.ax_im.figure.canvas.draw()
+                            #del self.pairLines[index]
+                            del self.samePairing[index]
+                            self.draw()
+                            return
+                elif self.secondaryMode=='row' or self.secondaryMode=='col':
+                    #again, first check for linesitems
+                    for id, group in groups.iteritems():
+                        x1,y1 = group.getCentriod(self)
+                        if group.holdsFields:
+                            bbs=self.fieldBBs
+                        else:
+                            bbs=self.textBBs
+                        for b in group.pairings:
+                            if b in bbs:
+                                x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
+                                y2=(bbs[b][1]+bbs[b][3]+bbs[b][5]+bbs[b][7])/4
+
+                                if onLine(x,y,x1,y1,x2,y2):
+                                    self.actionStack.append(('remove-group-pairing',id,b))
+                                    self.undoStack=[]
+                                    group.unpair(b,True)
+                                    self.draw()
+                                    return
+
+                        if group.holdsFields:
+                            bbs=self.textBBs
+                        else:
+                            bbs=self.fieldBBs
+                        for b in group.samePairings:
+                            if b in bbs:
+                                x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
+                                y2=(bbs[b][1]+bbs[b][3]+bbs[b][5]+bbs[b][7])/4
+
+                                if onLine(x,y,x1,y1,x2,y2):
+                                    self.actionStack.append(('remove-group-samePairing',id,b))
+                                    self.undoStack=[]
+                                    group.unpair(b,False)
+                                    self.draw()
+                                    return
+            #then bbs
+            if self.secondaryMode is None:
+                for id in self.textBBs:
+                    if self.checkInside(x,y,self.textBBs[id]):
+                        #print 'click on text b'
+                        if self.mode=='delete':
+                            #delete the text BB
+                            pairs=[]#pairs this BB is part of
+                            pairIds=[]
+                            for i,pair in enumerate(self.pairing):
+                                if id==pair[0]:
+                                    pairIds.append(i)
+                                    pairs.append(pair)
+                            print id
+                            print self.pairing
+                            print pairIds
+                            for i in sorted(pairIds, reverse=True):
+                                del self.pairing[i]
+                            samePairs=[]#pairs this BB is part of
+                            samePairIds=[]
+                            for i,pair in enumerate(self.samePairing):
+                                if id==pair[0] or id==pair[1]:
+                                    samePairIds.append(i)
+                                    samePairs.append(pair)
+                            for i in sorted(samePairIds, reverse=True):
+                                del self.samePairing[i]
+                            self.actionStack.append(('remove-text',id)+self.textBBs[id]+(pairs,samePairs,))
+                            self.undoStack=[]
+                            del self.textBBs[id]
+                            if self.selected=='text' and self.selectedId==id:
+                                self.selected='none'
+                                self.setSelectedRectOff()
+
+                        else:
+                            #pair to prev selected?
+                            if self.selected=='field' and (id,self.selectedId) not in self.pairing:
+                                self.pairing.append((id,self.selectedId))
+                                self.actionStack.append(('add-pairing',id,self.selectedId))
+                                self.undoStack=[]
+                            elif self.mode=='pair' and self.selected=='text' and (id,self.selectedId) not in self.samePairing and (self.selectedId,id) not in self.samePairing:
+                                self.samePairing.append((id,self.selectedId,0))
+                                self.actionStack.append(('add-samePairing',id,self.selectedId,0))
+                                self.undoStack=[]
+                            #select the text BB
+                            self.selectedId=id
+                            self.selected='text'
+                            self.setSelectedRect(self.textBBs[id])
                         self.draw()
                         return
-            #then bbs
-            for id in self.textBBs:
-                if self.checkInside(x,y,self.textBBs[id]):
-                    #print 'click on text b'
-                    if self.mode=='delete':
-                        #delete the text BB
-                        pairs=[]#pairs this BB is part of
-                        pairIds=[]
-                        for i,pair in enumerate(self.pairing):
-                            if id==pair[0]:
-                                pairIds.append(i)
-                                pairs.append(pair)
-                        for i in pairIds:
-                            del self.pairing[i]
-                        self.actionStack.append(('remove-text',id)+self.textBBs[id]+(pairs,))
-                        self.undoStack=[]
-                        del self.textBBs[id]
-                        if self.selected=='text' and self.selectedId==id:
-                            self.selected='none'
-                            self.setSelectedRectOff()
 
-                    else:
-                        #pair to prev selected?
-                        if self.selected=='field' and (id,self.selectedId) not in self.pairing:
-                            self.pairing.append((id,self.selectedId))
-                            self.actionStack.append(('add-pairing',id,self.selectedId))
+                for id in self.fieldBBs:
+                    if self.checkInside(x,y,self.fieldBBs[id]):
+                        #print 'click on field b'
+                        if self.mode=='delete':
+                            #delete the field BB
+                            pairs=[]#pairs this BB is part of
+                            pairIds=[]
+                            for i,pair in enumerate(self.pairing):
+                                if id==pair[1]:
+                                    pairIds.append(i)
+                                    pairs.append(pair)
+                            for i in sorted(pairIds, reverse=True):
+                                del self.pairing[i]
+                            samePairs=[]#pairs this BB is part of
+                            samePairIds=[]
+                            for i,pair in enumerate(self.samePairing):
+                                if id==pair[0] or id==pair[1]:
+                                    samePairIds.append(i)
+                                    samePairs.append(pair)
+                            for i in sorted(samePairIds, reverse=True):
+                                del self.samePairing[i]
+                            self.actionStack.append(('remove-field',id)+self.fieldBBs[id]+(pairs,samePairs,))
                             self.undoStack=[]
-                        #select the text BB
-                        self.selectedId=id
-                        self.selected='text'
-                        self.setSelectedRect(self.textBBs[id])
-                    self.draw()
-                    return
+                            del self.fieldBBs[id]
+                            if self.selected=='field' and self.selectedId==id:
+                                self.selected='none'
+                                self.setSelectedRectOff()
 
-            for id in self.fieldBBs:
-                if self.checkInside(x,y,self.fieldBBs[id]):
-                    #print 'click on field b'
-                    if self.mode=='delete':
-                        #delete the field BB
-                        pairs=[]#pairs this BB is part of
-                        pairIds=[]
-                        for i,pair in enumerate(self.pairing):
-                            if id==pair[1]:
-                                pairIds.append(i)
-                                pairs.append(pair)
-                        for i in pairIds:
-                            del self.pairing[i]
-                        self.actionStack.append(('remove-field',id)+self.fieldBBs[id]+(pairs,))
-                        self.undoStack=[]
-                        del self.fieldBBs[id]
-                        if self.selected=='field' and self.selectedId==id:
-                            self.selected='none'
-                            self.setSelectedRectOff()
+                        else:
+                            #pair to prev selected?
+                            if self.selected=='text' and (self.selectedId,id) not in self.pairing:
+                                self.pairing.append((self.selectedId,id))
+                                self.actionStack.append(('add-pairing',self.selectedId,id))
+                                self.undoStack=[]
+                            elif self.mode=='pair' and self.selected=='field' and (id,self.selectedId) not in self.samePairing and (self.selectedId,id) not in self.samePairing:
+                                self.samePairing.append((id,self.selectedId,1))
+                                self.actionStack.append(('add-samePairing',id,self.selectedId,1))
+                                self.undoStack=[]
+                            #select the field BB
+                            self.selectedId=id
+                            self.selected='field'
+                            self.setSelectedRect(self.fieldBBs[id])
+                        self.draw()
+                        return
 
-                    else:
-                        #pair to prev selected?
-                        if self.selected=='text' and (self.selectedId,id) not in self.pairing:
-                            self.pairing.append((self.selectedId,id))
-                            self.actionStack.append(('add-pairing',self.selectedId,id))
-                            self.undoStack=[]
-                        #select the field BB
-                        self.selectedId=id
-                        self.selected='field'
-                        self.setSelectedRect(self.fieldBBs[id])
-                    self.draw()
-                    return
+            elif self.secondaryMode=='row' or self.secondaryMode=='col':
+                if self.mode!='delete':
+                    print 'lcick happeingin'
+                    for id in self.textBBs:
+                        if self.checkInside(x,y,self.textBBs[id]):
+                            if self.selected=='none':
+                                self.groups[self.groupCurId] = Group(typeStr=self.secondaryMode, holdsFields=False)
+                                self.groups[self.groupCurId].add(id)
+                                self.actionStack.append(('add-group',self.groupCurId,self.groups[self.groupCurId]))
+                                self.selected=self.secondaryMode
+                                self.selectedId=self.groupCurId
+                                self.groupCurId+=1
+                            elif self.groups[self.selectedId].holdsFields:
+                                self.actionStack.append(('add-group-pairing',self.selectedId,id))
+                                self.groups[self.selectedId].pair(id,True)
+                            elif self.groups[self.selectedId].contains(id):
+                                self.actionStack.append(('removed-from-group',self.selectedId,id))
+                                self.groups[self.selectedId].remove(id)
+                            elif self.mode=='pair':
+                                self.actionStack.append(('add-group-samePairing',self.selectedId,id))
+                                self.groups[self.selectedId].pair(id,False)
+                            else:
+                                self.actionStack.append(('added-to-group',self.selectedId,id))
+                                self.groups[self.selectedId].add(id)
+                            return
+                    for id in self.fieldBBs:
+                        if self.checkInside(x,y,self.fieldBBs[id]):
+                            print 'hit field'
+                            print self.selected
+                            if self.selected=='none':
+                                self.groups[self.groupCurId] = Group(typeStr=self.secondaryMode, holdsFields=True)
+                                self.groups[self.groupCurId].add(id)
+                                self.actionStack.append(('add-group',self.groupCurId,self.groups[self.groupCurId]))
+                                self.selected=self.secondaryMode
+                                self.selectedId=self.groupCurId
+                                self.groupCurId+=1
+                            elif not self.groups[self.selectedId].holdsFields:
+                                self.actionStack.append(('add-group-pairing',self.selectedId,id))
+                                self.groups[self.selectedId].pair(id,True)
+                            elif self.groups[self.selectedId].contains(id):
+                                self.actionStack.append(('removed-from-group',self.selectedId,id))
+                                self.groups[self.selectedId].remove(id)
+                            elif self.mode=='pair':
+                                self.actionStack.append(('add-group-samePairing',self.selectedId,id))
+                                self.groups[self.selectedId].pair(id,False)
+                            else:
+                                self.actionStack.append(('added-to-group',self.selectedId,id))
+                                self.groups[self.selectedId].add(id)
+                            return
+                for id, group in self.groups.iteritems():
+                    if group.typeStr==self.secondaryMore and checkInsidePoly(x,y,group.getPoly(self)):
+                        if self.mode=='delete':
+                            self.actionStack.append(('remove-group',id,group))
+                            del self.groups[id]
+                        else:
+                            self.selectedId=id
+                            self.selected=group.typeStr
+                        self.draw()
+                        return
 
             if self.selected!='none':
                 #print 'deselected'
@@ -445,7 +730,6 @@ class Control:
 
                 self.setSelectedRectOff()
                 self.ax_im.figure.canvas.draw()
-                #draw(self)
 
     def clickerMove(self,event):           
         #moving only matters if the button is down and we've moved "enough"
@@ -496,7 +780,7 @@ class Control:
                 #elif self.startY<bottomBoundary:#bot
                 #    self.mode = self.mode[:-1]+'b'
                 self.drawRect.set_edgecolor(col)
-            elif 'none' not in self.mode and 'delete' not in self.mode:
+            elif 'none' not in self.mode and 'delete' not in self.mode and 'change' not in self.mode and 'pair' not in self.mode:
                 col=DRAW_COLOR
                 if self.mode[:-2] in colorMap:
                     col=colorMap[self.mode[:-2]]
@@ -510,7 +794,6 @@ class Control:
             self.endY=event.ydata
             self.drawRect.set_xy(np.array([[self.startX,self.startY],[self.startX,event.ydata],[event.xdata,event.ydata],[event.xdata,self.startY]]))
             self.ax_im.figure.canvas.draw()
-            #draw(self)
         elif (self.mode[:6]!='corner' and
              (('-tl' == self.mode[-3:])or # and  event.xdata<bbs[self.selectedId][2] and event.ydata<bbs[self.selectedId][3]) or
               ('-bl' == self.mode[-3:])or # and  event.xdata<bbs[self.selectedId][2] and event.ydata>bbs[self.selectedId][1]) or
@@ -556,13 +839,12 @@ class Control:
                 brY+=shiftY
             self.drawRect.set_xy(np.array([[tlX,tlY],[trX,trY],[brX,brY],[blX,blY]]))
             self.ax_im.figure.canvas.draw()
-            #draw(self)
 
     def doKey(self,event):
         if self.mode=='change':
             key = event.key
             for mode in keyMap:
-                if key==keyMap[mode] and self.selected[:4]==mode[:4]:
+                if key==keyMap[mode] and self.selected[:4]==mode[:4] or (mode=='comment' and self.selected=='field'):
                     if self.selected=='text':
                         self.actionStack.append(('change-text',self.selectedId,self.textBBs[self.selectedId][4]))
                         self.textBBs[self.selectedId]=self.textBBs[self.selectedId][0:8]+(codeMap[mode],)+self.textBBs[self.selectedId][9:]
@@ -580,6 +862,7 @@ class Control:
                 self.textBBs={}
                 self.fieldBBs={}
                 self.pairing=[]
+                self.samePairing=[]
                 self.corners={}
                 plt.close('all')
             elif event.key=='backspace':
@@ -635,23 +918,29 @@ class Control:
                 self.setFieldType(ftypeMap['blank'])
             elif key=='c': # set field to handwriting (default)
                 self.setFieldType(ftypeMap['handwriting'])
+            elif key=='v': #V pair
+                self.pairMode()
+            elif key=="'": #row
+                self.setSecondaryMode('row')
+            elif key==';': #col
+                self.setSecondaryMode('col')
             elif key=='up':
                 trans = np.array([[1,0,0],
-                                  [0,1,-2],
+                                  [0,1,-4],
                                   [0,0,1]])
                 self.transAll(trans)
             elif key=='down':
                 trans = np.array([[1,0,0],
-                                  [0,1,2],
+                                  [0,1,4],
                                   [0,0,1]])
                 self.transAll(trans)
             elif key=='left':
-                trans = np.array([[1,0,-2],
+                trans = np.array([[1,0,-4],
                                   [0,1,0],
                                   [0,0,1]])
                 self.transAll(trans)
             elif key=='right':
-                trans = np.array([[1,0,2],
+                trans = np.array([[1,0,4],
                                   [0,1,0],
                                   [0,0,1]])
                 self.transAll(trans)
@@ -735,42 +1024,104 @@ class Control:
             self.pairing.append((action[1],action[2]))
             #self.pairLines[len(self.pairing)-1] = 
             return ('add-pairing',action[1],action[2])
+        elif action[0] == 'add-samePairing':
+            self.samePairing.remove(action[1:])
+            return ('remove-samePairing',)+action[1:]
+        elif action[0] == 'remove-samePairing':
+            self.samePairing.append(action[1:])
+            return ('add-samePairing',)+action[1:]
         elif action[0] == 'add-text':
             id = action[1]
-            pairs = action[-1]
+            pairs = action[-2]
+            samePairs = action[-1]
             del self.textBBs[id]
             if pairs is not None:
                 for pair in pairs:
                     self.pairing.remove(pair)
+            if samePairs is not None:
+                for samePair in samePairs:
+                    self.samePairing.remove(samePair)
             if self.selected=='text' and self.selectedId==id:
                 self.selected='none'
             return ('remove-text',)+action[1:]
         elif action[0] == 'remove-text':
             id = action[1]
-            pairs = action[-1]
-            self.textBBs[id]=action[2:-1]
+            pairs = action[-2]
+            samePairs = action[-1]
+            self.textBBs[id]=action[2:-2]
             if pairs is not None:
                 for pair in pairs:
                     self.pairing.append(pair)
+            if samePairs is not None:
+                for samePair in samePairs:
+                    self.samePairing.append(samePair)
             return ('add-text',)+action[1:]
         elif action[0] == 'add-field':
             id = action[1]
-            pairs = action[-1]
+            pairs = action[-2]
+            samePairs = action[-1]
             del self.fieldBBs[id]
             if pairs is not None:
                 for pair in pairs:
                     self.pairing.remove(pair)
+            if samePairs is not None:
+                for samePair in samePairs:
+                    self.samePairing.remove(samePair)
             if self.selected=='field' and self.selectedId==id:
                 self.selected='none'
             return ('remove-field',)+action[1:]
         elif action[0] == 'remove-field':
             id = action[1]
-            pairs = action[-1]
-            self.fieldBBs[id]=action[2:-1]
+            pairs = action[-2]
+            samePairs = action[-1]
+            self.fieldBBs[id]=action[2:-2]
             if pairs is not None:
                 for pair in pairs:
                     self.pairing.append(pair)
+            if samePairs is not None:
+                for samePair in samePairs:
+                    self.samePairing.append(samePair)
             return ('add-field',)+action[1:]
+        elif action[0] == 'add-group':
+            id = action[1]
+            group = action[2]
+            self.groups.remove(id)
+            return ('remove-group',id,group)
+        elif action[0] == 'remove-group':
+            id = action[1]
+            group = action[2]
+            self.groups[id]=group
+            return ('add-group',id,group)
+        elif action[0] == 'added-to-group':
+            groupId = action[1]
+            eleId = action[2]
+            self.groups[groupId].remove(eleId)
+            return ('removed-from-group',groupId,eleId)
+        elif action[0] == 'removed-from-group':
+            groupId = action[1]
+            eleId = action[2]
+            self.groups[groupId].add(eleId)
+            return ('added-to-group',groupId,eleId)
+        elif action[0] == 'add-group-pairing':
+            groupId = action[1]
+            eleId = action[2]
+            self.groups[groupId].unpair(eleId,True)
+            return ('remove-group-pairing',groupId,eleId)
+        elif action[0] == 'remove-group-pairing':
+            groupId = action[1]
+            eleId = action[2]
+            self.groups[groupId].pair(eleId,True)
+            return ('add-group-pairing',groupId,eleId)
+        elif action[0] == 'add-group-samePairing':
+            groupId = action[1]
+            eleId = action[2]
+            self.groups[groupId].unpair(eleId,False)
+            return ('remove-group-samePairing',groupId,eleId)
+        elif action[0] == 'remove-group-samePairing':
+            groupId = action[1]
+            eleId = action[2]
+            self.groups[groupId].pair(eleId,False)
+            return ('add-group-samePairing',groupId,eleId)
         elif action[0] == 'drag-field':
             id = action[1]
             toRet = ('drag-field',id)+self.fieldBBs[id][0:8]
@@ -806,6 +1157,24 @@ class Control:
             self.ax_tool.figure.canvas.draw()
             #drawToolbar(p)
 
+    def pairMode(self):
+            self.tmpMode = self.mode
+            self.mode='pair'
+            self.modeRect.set_y(toolYMap['pair'])
+            self.ax_tool.figure.canvas.draw()
+            
+    def setSecondaryMode(self,mode):
+        self.selected='none'
+        self.selectedId=None
+        if self.secondaryMode==mode:
+            self.secondaryMode=None;
+            self.secondaryModeRect.set_visible(False)
+        else:
+            self.secondaryMode=mode
+            self.secondaryModeRect.set_visible(True)
+            self.secondaryModeRect.set_y(toolYMap[mode])
+        self.ax_tool.figure.canvas.draw()
+            
     def setFieldType(self,ftype):
         if self.selected=='field':
             self.actionStack.append(('set-field-type',self.selectedId,self.fieldBBs[self.selectedId][9]))
@@ -815,7 +1184,7 @@ class Control:
     def setSelectedRect(self,bb):
         xc=(bb[0]+bb[2]+bb[4]+bb[6])/4.0
         yc=(bb[1]+bb[3]+bb[5]+bb[7])/4.0
-        size=10
+        size=12
         tld = size/math.sqrt((xc-bb[0])**2 + (yc-bb[1])**2)
         tlX = bb[0]+(bb[0]-xc)*tld
         tlY = bb[1]+(bb[1]-yc)*tld
@@ -839,21 +1208,7 @@ class Control:
 
     def checkInside(self,x,y,bb):
         vertices = [(bb[0],bb[1]),(bb[2],bb[3]),(bb[4],bb[5]),(bb[6],bb[7])]
-        point=(x,y)
-        previous_side = None
-        n_vertices = len(vertices)
-        for n in xrange(n_vertices):
-            a, b = vertices[n], vertices[(n+1)%n_vertices]
-            affine_segment = v_sub(b, a)
-            affine_point = v_sub(point, a)
-            current_side = get_side(affine_segment, affine_point)
-            if current_side is None:
-                return False #outside or over an edge
-            elif previous_side is None: #first segment
-                previous_side = current_side
-            elif previous_side != current_side:
-                return False
-        return True
+        return checkInsidePoly(x,y,vertices)
 
 
     def draw(self):
@@ -864,9 +1219,8 @@ class Control:
             self.setSelectedRect(self.textBBs[self.selectedId])
         else:
             self.setSelectedRectOff()
+
         #clear all
-        #print self.textRects
-        #print self.textBBs
         for id,rect in self.textRects.iteritems():
             rect.remove()
         self.textRects={}
@@ -876,6 +1230,42 @@ class Control:
         for id,line in self.pairLines.iteritems():
             line.remove()
         self.pairLines={}
+        for id,poly in self.groupPolys.iteritems():
+            poly.remove()
+        self.groupPolys={}
+
+        lineId=0
+        for id, group in self.groups.iteritems():
+            vertices = group.getPoly(self)
+            ar = []
+            for tuple in vertices:
+                ar.append([ar[0],ar[1]])
+                self.groupPolys[id] = patches.Polygon(np.array(ar),linewidth=4,edgecolor=colorMap[group.typeStr],facecolor='none')
+                self.ax_im.add_patch(self.groupPolys[id])
+                print 'drew poly'
+
+            for idx in group.pairings:
+                if group.holdsFields:
+                    bbs=self.textBBs
+                else:
+                    bbs=self.fieldBBs
+                x1,x2 = group.getCentriod(self)
+                x2=(bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6])/4
+                y2=(bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7])/4
+                self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='limegreen',facecolor='none')
+                self.ax_im.add_patch(self.pairLines[lineId])
+                lineId+=1
+            for idx in group.samePairings:
+                if group.holdsFields:
+                    bbs=self.fieldBBs
+                else:
+                    bbs=self.textBBs
+                x1,x2 = group.getCentriod(self)
+                x2=(bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6])/4
+                y2=(bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7])/4
+                self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='torquoise',facecolor='none')
+                self.ax_im.add_patch(self.pairLines[lineId])
+                lineId+=1
 
         #self.displayImage[0:self.image.shape[0], 0:self.image.shape[1]] = self.image
         for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,code,blank) in self.textBBs.iteritems():
@@ -887,7 +1277,7 @@ class Control:
             #cv2.rectangle(self.displayImage,(startX,startY),(endX,endY),colorMap[RcodeMap[code]],1)
             fill = 'none'
             if ftype==ftypeMap['blank']:
-                fill=(0.9,0.9,0.9,0.55)
+                fill=(0.5,0.5,0.9,0.35)
             elif ftype==ftypeMap['print']:
                 fill=(0.9,0.3,0.5,0.25)
             self.fieldRects[id] = patches.Polygon(np.array([[tlX,tlY],[trX,trY],[brX,brY],[blX,blY]]),linewidth=2,edgecolor=colorMap[RcodeMap[code]],facecolor=fill)
@@ -900,17 +1290,29 @@ class Control:
             #    cv2.rectangle(self.displayImage,(int(startX+0.15*w),int(startY+0.15*h)),(int(endX-0.15*w),int(endY-0.15*h)),(240,240,240),1)
             #    cv2.rectangle(self.displayImage,(int(startX+0.35*w),int(startY+0.35*h)),(int(endX-0.35*w),int(endY-0.35*h)),(240,240,240),1)
 
-        id=0
         for text,field in self.pairing:
             x1=(self.textBBs[text][0]+self.textBBs[text][2]+self.textBBs[text][4]+self.textBBs[text][6])/4
             y1=(self.textBBs[text][1]+self.textBBs[text][3]+self.textBBs[text][5]+self.textBBs[text][7])/4
             x2=(self.fieldBBs[field][0]+self.fieldBBs[field][2]+self.fieldBBs[field][4]+self.fieldBBs[field][6])/4
             y2=(self.fieldBBs[field][1]+self.fieldBBs[field][3]+self.fieldBBs[field][5]+self.fieldBBs[field][7])/4
             #cv2.line(self.displayImage,(x1,y1),(x2,y2),(0,255,0),1)
-            self.pairLines[id]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='g',facecolor='none')
-            self.ax_im.add_patch(self.pairLines[id])
-            id+=1
+            self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='g',facecolor='none')
+            self.ax_im.add_patch(self.pairLines[lineId])
+            lineId+=1
 
+        for a,b,field in self.samePairing:
+            if field:
+                bbs=self.fieldBBs
+            else:
+                bbs=self.textBBs
+            x1=(bbs[a][0]+bbs[a][2]+bbs[a][4]+bbs[a][6])/4
+            y1=(bbs[a][1]+bbs[a][3]+bbs[a][5]+bbs[a][7])/4
+            x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
+            y2=(bbs[b][1]+bbs[b][3]+bbs[b][5]+bbs[b][7])/4
+            #cv2.line(self.displayImage,(x1,y1),(x2,y2),(0,255,0),1)
+            self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='darkcyan',facecolor='none')
+            self.ax_im.add_patch(self.pairLines[lineId])
+            lineId+=1
         #if self.selected == 'text':
         #    self.selectedRect.set_bounds(self.startX-4,self.startY-4,self.endX-self.startX+8,self.endY-self.startY+8)
         #    startX,startY,endX,endY,para,blank = self.textBBs[self.selectedId]
@@ -943,7 +1345,7 @@ class Control:
 
 def drawToolbar(ax):
     #im[0:,-TOOL_WIDTH:]=(140,140,140)
-    im = np.zeros(((toolH+1)*(len(modes)+9),TOOL_WIDTH,3),dtype=np.uint8)
+    im = np.zeros(((toolH+1)*(len(modes)+13),TOOL_WIDTH,3),dtype=np.uint8)
     im[:,:] = (140,140,140)
 
     y=0
@@ -954,7 +1356,10 @@ def drawToolbar(ax):
         #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-1,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
         #cv2.putText(im,toolMap[mode],(im.shape[1]TOOL_WIDTH-3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
         #patches.Polygon((,linewidth=2,edgecolor=colorMap[mode],facecolor=fill)
-        ax.text(1,y+toolH-10,toolMap[mode])
+        textColor='black'
+        if mode=='fieldRegion':
+            textColor='white'
+        ax.text(1,y+toolH-10,toolMap[mode],color=textColor)
         toolYMap[mode]=y
         y+=toolH+1
 
@@ -986,12 +1391,12 @@ def drawToolbar(ax):
 
     #print
     im[y:y+toolH,:]=(255, 230, 242)
-    ax.text(1,y+toolH-10,'Z:mark field as print')
+    ax.text(1,y+toolH-10,'Z:mark field as print/stamp')
     toolYMap['print']=y
     y+=toolH+1
 
     #blank
-    im[y:y+toolH,:]=(250,250,250)
+    im[y:y+toolH,:]=(240,240,255)
     #if self.mode=='blank':
     #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-10,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
     #cv2.putText(im,'Z:mark blank',(im.shape[1]TOOL_WIDTH-3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(240,240,240))
@@ -1003,6 +1408,24 @@ def drawToolbar(ax):
     im[y:y+toolH,:]=(190,190,190)
     ax.text(1,y+toolH-10,'C:mark field as handwriting')
     toolYMap['handwriting']=y
+    y+=toolH+1
+
+    #pair
+    im[y:y+toolH,:]=(19,160,19)
+    ax.text(1,y+toolH-10,'V:pair mode')
+    toolYMap['pair']=y
+    y+=toolH+1
+
+    #col
+    im[y:y+toolH,:]=colorMap['col'] #(5,50,5)
+    ax.text(1,y+toolH-10,';:col mode', color=(1,1,1))
+    toolYMap['col']=y
+    y+=toolH+1
+
+    #row
+    im[y:y+toolH,:]=colorMap['row'] #(45,45,5)
+    ax.text(1,y+toolH-10,"':row mode", color=(1,1,1))
+    toolYMap['row']=y
     y+=toolH+1
 
     #move
@@ -1028,7 +1451,7 @@ def drawToolbar(ax):
     #cv2.imshow("labeler",self.displayImage)
         
 
-def labelImage(imagePath,texts,fields,pairs,page_corners):
+def labelImage(imagePath,texts,fields,pairs,samePairs,groups,page_corners):
     #p = Params()
     image = mpimg.imread(sys.argv[1])
     #if p.image is None:
@@ -1056,7 +1479,7 @@ def labelImage(imagePath,texts,fields,pairs,page_corners):
     toolImage = drawToolbar(ax_tool)
     ax_tool.imshow(toolImage)
     ax_im.figure.canvas.mpl_disconnect(fig.canvas.manager.key_press_handler_id)
-    control = Control(ax_im,ax_tool,image.shape[1],image.shape[0],texts,fields,pairs,page_corners)
+    control = Control(ax_im,ax_tool,image.shape[1],image.shape[0],texts,fields,pairs,samePairs,groups,page_corners)
     #control.draw()
     plt.show()
 
@@ -1074,12 +1497,54 @@ def labelImage(imagePath,texts,fields,pairs,page_corners):
     pairing=[]
     for text,field in control.pairing:
         pairing.append((idToIdxText[text],idToIdxField[field]))
+    samePairing=[]
+    for a,b,field in control.samePairing:
+        if field:
+            idToIdx = idToIdxField
+            #typ='field'
+        else:
+            idToIdx = idToIdxText
+            #typ='text'
+        samePairing.append((idToIdx[a],idToIdx[b],field))
 
-    return textBBs, fieldBBs, pairing, control.corners
+    groups=[]
+    for id,group in control.groups.iteritems():
+        elements=[]
+        if group.holdsFields:
+            idToIdx = idToIdxField
+        else:
+            idToIdx = idToIdxText
+        for eleId in group.elements:
+            if eleId in idToIdx:
+                elements.append(idToIdx[eleId])
+        samePairings=[]
+        for eleId in group.samePairings:
+            if eleId in idToIdx:
+                samePairings.append(idToIdx[eleId])
+        pairings=[]
+        if not group.holdsFields:
+            idToIdx = idToIdxField
+        else:
+            idToIdx = idToIdxText
+        for eleId in group.pairings:
+            if eleId in idToIdx:
+                pairings.append(idToIdx[eleId])
+        newGroup= { 'type':group.typeStr,
+                    'holds': ('field' if group.holdsFields else 'text'),
+                    'elements': elements,
+                    'pairings': pairings,
+                    'samePairings': samePairings,
+                  }
+        groups.append(newGroup)
+
+
+    return textBBs, fieldBBs, pairing, samePairing, groups, control.corners
 
 texts=None
 fields=None
 pairs=None
+samePairs=None
+groups=None
 page_corners=None
 if len(sys.argv)>4:
     with open(sys.argv[4]) as f:
@@ -1087,10 +1552,15 @@ if len(sys.argv)>4:
         texts=read['textBBs']
         fields=read['fieldBBs']
         pairs=read['pairs']
+        samePairs=read['samePairs']
+        #for i in len(samePairs):
+        #    if samePairs[i][-1][0]=='f':
+        groups=read['groups']
+                
         page_corners=read['page_corners']
 
-texts,fields,pairs,corners = labelImage(sys.argv[1],texts,fields,pairs,page_corners)
+texts,fields,pairs,samePairs,groups,corners = labelImage(sys.argv[1],texts,fields,pairs,samePairs,groups,page_corners)
 outFile='test.json'
 if len(texts)+len(fields)+len(corners)>0:
     with open(outFile,'w') as out:
-        out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "page_corners":corners}))
+        out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners}))
