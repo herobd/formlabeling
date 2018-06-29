@@ -84,9 +84,10 @@ class Group:
         if json is not None:
             self.typeStr=json['type']
             self.holdsFields=json['holds']=='field'
-            self.elements=set(json['elements'])
-            self.pairings=set(json['pairings'])
-            self.samePairings=set(json['samePairings'])
+            typ= 'f' if self.holdsFields else 't'
+            self.elements=set( int(x[1:]) for x in json['elements'] if x[0]==typ)
+            self.pairings=set(int(x[1:]) for x in json['pairings'] if x[0]!=typ)
+            self.samePairings=set(int(x[1:]) for x in json['samePairings'] if x[0]==typ)
 
     def contains(self,index):
         return index in self.elements
@@ -145,13 +146,15 @@ class Group:
             bbs=control.fieldBBs
         x=0
         y=0
+        count=0
         
         for idx in self.elements:
             if idx in bbs: #check in case element was deleted
+                count+=1
                 x+=bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6]
                 y+=bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7]
 
-        return x/(4*len(self.elements)), y/(4*len(self.elements))
+        return x/(4*count), y/(4*count)
 
 
 class Control:
@@ -197,9 +200,12 @@ class Control:
         self.preFields=fields
         self.preCorners=page_corners
         if pairs is not None:
-            self.pairing=pairs
+            self.pairing=[(int(x[1:]),int(y[1:])) for (x,y) in pairs if (x[0]=='t' and y[0]=='f')]
+            switched = [(int(y[1:]),int(x[1:])) for (x,y) in pairs if (x[0]=='f' and y[0]=='t')]
+            if len(switched)>0:
+                self.pairing += switched
         if samePairs is not None:
-            self.samePairing=samePairs
+            self.samePairing=[(int(x[1:]),int(y[1:]),(1 if x[0]=='f' else 0)) for (x,y) in samePairs if x[0]==y[0]]
         self.corners_text = ax_im.text(W/2,H/2,'Mark the page corners, then press ENTER.\n(outer corners if two pages).\nIf odd position, press BACKSPACE for corner by corner query.',horizontalalignment='center',verticalalignment='center')
         self.ax_im.figure.canvas.draw()
         self.imageW=W
@@ -228,7 +234,12 @@ class Control:
             trans = trans.transpose()
             #point_new = trans point_old, done with homogeneour cords
 
-            for (tlX,tlY,trX,trY,brX,brY,blX,blY,para) in self.preTexts:
+            for bb in self.preTexts:
+                tlX,tlY = bb['poly_points'][0]
+                trX,trY = bb['poly_points'][1]
+                brX,brY = bb['poly_points'][2]
+                blX,blY = bb['poly_points'][3]
+                para = codeMap[bb['type']]
                 old_corners = np.array([[tlX,trX,brX,blX],
                                         [tlY,trY,brY,blY],
                                         [1,1,1,1]])
@@ -241,7 +252,13 @@ class Control:
                 #self.textBBs[self.bbCurId] = (int(round(startX)),int(round(startY)),int(round(endX)),int(round(endY)),para,0)
                 self.textBBs[self.textBBCurId] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,0)
                 self.textBBCurId+=1
-            for (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in self.preFields:
+            for bb in self.preFields:
+                tlX,tlY = bb['poly_points'][0]
+                trX,trY = bb['poly_points'][1]
+                brX,brY = bb['poly_points'][2]
+                blX,blY = bb['poly_points'][3]
+                para = codeMap[bb['type']]
+                blank = int(bb['isBlank'])
                 old_corners = np.array([[tlX,trX,brX,blX],
                                         [tlY,trY,brY,blY],
                                         [1,1,1,1]])
@@ -584,9 +601,6 @@ class Control:
                                 if id==pair[0]:
                                     pairIds.append(i)
                                     pairs.append(pair)
-                            print id
-                            print self.pairing
-                            print pairIds
                             for i in sorted(pairIds, reverse=True):
                                 del self.pairing[i]
                             samePairs=[]#pairs this BB is part of
@@ -1312,7 +1326,7 @@ class Control:
                 x1,y1 = group.getCentroid(self)
                 x2=(bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6])/4
                 y2=(bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7])/4
-                self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='limegreen',facecolor='none')
+                self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='turquoise',facecolor='none')
                 self.ax_im.add_patch(self.pairLines[lineId])
                 lineId+=1
             for idx in group.samePairings:
@@ -1323,7 +1337,7 @@ class Control:
                 x1,y1 = group.getCentroid(self)
                 x2=(bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6])/4
                 y2=(bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7])/4
-                self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='torquoise',facecolor='none')
+                self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='orchid',facecolor='none')
                 self.ax_im.add_patch(self.pairLines[lineId])
                 lineId+=1
 
@@ -1370,7 +1384,7 @@ class Control:
             x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
             y2=(bbs[b][1]+bbs[b][3]+bbs[b][5]+bbs[b][7])/4
             #cv2.line(self.displayImage,(x1,y1),(x2,y2),(0,255,0),1)
-            self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='darkcyan',facecolor='none')
+            self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='purple',facecolor='none')
             self.ax_im.add_patch(self.pairLines[lineId])
             lineId+=1
         #if self.selected == 'text':
@@ -1477,13 +1491,13 @@ def drawToolbar(ax):
     y+=toolH+1
 
     #col
-    im[y:y+toolH,:]=colorMap['col'] #(5,50,5)
+    im[y:y+toolH,:]=(255*colorMap['col'][0],255*colorMap['col'][1],255*colorMap['col'][2]) #(5,50,5)
     ax.text(1,y+toolH-10,';:col mode', color=(1,1,1))
     toolYMap['col']=y
     y+=toolH+1
 
     #row
-    im[y:y+toolH,:]=colorMap['row'] #(45,45,5)
+    im[y:y+toolH,:]=(255*colorMap['row'][0],255*colorMap['row'][1],255*colorMap['row'][2]) #(45,45,5)
     ax.text(1,y+toolH-10,"':row mode", color=(1,1,1))
     toolYMap['row']=y
     y+=toolH+1
@@ -1513,7 +1527,7 @@ def drawToolbar(ax):
 
 def labelImage(imagePath,texts,fields,pairs,samePairs,groups,page_corners):
     #p = Params()
-    image = mpimg.imread(sys.argv[1])
+    image = mpimg.imread(imagePath)
     #if p.image is None:
     #    print 'cannot open image '+imagePath
     #    exit(1)
@@ -1548,49 +1562,63 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,page_corners):
     textBBs=[]
     for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in control.textBBs.iteritems():
         idToIdxText[id]=len(textBBs)
-        textBBs.append((int(round(tlX)),int(round(tlY)),int(round(trX)),int(round(trY)),int(round(brX)),int(round(brY)),int(round(blX)),int(round(blY)),para))
+        textBBs.append({
+                        'id': 't'+str(idToIdxText[id]),
+                        'poly_points':[[int(round(tlX)),int(round(tlY))],[int(round(trX)),int(round(trY))],[int(round(brX)),int(round(brY))],[int(round(blX)),int(round(blY))]],
+                        'type':RcodeMap[para]
+                       })
     idToIdxField={}
     fieldBBs=[]
     for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in control.fieldBBs.iteritems():
         idToIdxField[id]=len(fieldBBs)
-        fieldBBs.append((int(round(tlX)),int(round(tlY)),int(round(trX)),int(round(trY)),int(round(brX)),int(round(brY)),int(round(blX)),int(round(blY)),para,blank))
+        fieldBBs.append({
+                        'id': 'f'+str(idToIdxField[id]),
+                        'poly_points':[[int(round(tlX)),int(round(tlY))],[int(round(trX)),int(round(trY))],[int(round(brX)),int(round(brY))],[int(round(blX)),int(round(blY))]],
+                        'type':RcodeMap[para],
+                        'isBlank':blank,
+                       })
     pairing=[]
     for text,field in control.pairing:
-        pairing.append((idToIdxText[text],idToIdxField[field]))
+        pairing.append(('t'+str(idToIdxText[text]),'f'+str(idToIdxField[field])))
     samePairing=[]
     for a,b,field in control.samePairing:
         if field:
             idToIdx = idToIdxField
-            #typ='field'
+            typ='f'
         else:
             idToIdx = idToIdxText
-            #typ='text'
-        samePairing.append((idToIdx[a],idToIdx[b],field))
+            typ='t'
+        samePairing.append((typ+str(idToIdx[a]),typ+str(idToIdx[b])))
 
     groups=[]
     for id,group in control.groups.iteritems():
         elements=[]
         if group.holdsFields:
             idToIdx = idToIdxField
+            typ='f'
         else:
             idToIdx = idToIdxText
+            typ='t'
         for eleId in group.elements:
             if eleId in idToIdx:
-                elements.append(idToIdx[eleId])
+                elements.append(typ+str(idToIdx[eleId]))
         if len(elements)>0:
             samePairings=[]
             for eleId in group.samePairings:
                 if eleId in idToIdx:
-                    samePairings.append(idToIdx[eleId])
+                    samePairings.append(typ+str(idToIdx[eleId]))
             pairings=[]
             if not group.holdsFields:
                 idToIdx = idToIdxField
+                typ='f'
             else:
                 idToIdx = idToIdxText
+                typ='t'
             for eleId in group.pairings:
                 if eleId in idToIdx:
-                    pairings.append(idToIdx[eleId])
-            newGroup= { 'type':group.typeStr,
+                    pairings.append(typ+str(idToIdx[eleId]))
+            newGroup= { 'id': 'g'+str(len(groups)),
+                        'type':group.typeStr,
                         'holds': ('field' if group.holdsFields else 'text'),
                         'elements': elements,
                         'pairings': pairings,
@@ -1601,27 +1629,30 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,page_corners):
 
     return textBBs, fieldBBs, pairing, samePairing, groups, control.corners
 
-texts=None
-fields=None
-pairs=None
-samePairs=None
-groups=None
-page_corners=None
-if len(sys.argv)>4:
-    with open(sys.argv[4]) as f:
-        read = json.loads(f.read())
-        texts=read['textBBs']
-        fields=read['fieldBBs']
-        pairs=read['pairs']
-        samePairs=read['samePairs']
-        #for i in len(samePairs):
-        #    if samePairs[i][-1][0]=='f':
-        groups=read['groups']
-                
-        page_corners=read['page_corners']
+if __name__ == "__main__":
 
-texts,fields,pairs,samePairs,groups,corners = labelImage(sys.argv[1],texts,fields,pairs,samePairs,groups,page_corners)
-outFile='test.json'
-if len(texts)+len(fields)+len(corners)>0:
-    with open(outFile,'w') as out:
-        out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners}))
+    texts=None
+    fields=None
+    pairs=None
+    samePairs=None
+    groups=None
+    page_corners=None
+    if len(sys.argv)>4:
+        with open(sys.argv[4]) as f:
+            read = json.loads(f.read())
+            texts=read['textBBs']
+            fields=read['fieldBBs']
+            pairs=read['pairs']
+            samePairs=read['samePairs']
+            #for i in len(samePairs):
+            #    if samePairs[i][-1][0]=='f':
+            groups=read['groups']
+                    
+            page_corners=read['page_corners']
+
+    imageName = sys.argv[1][(sys.argv[1].rfind('/')+1):]
+    texts,fields,pairs,samePairs,groups,corners = labelImage(sys.argv[1],texts,fields,pairs,samePairs,groups,page_corners)
+    outFile='test.json'
+    if len(texts)+len(fields)+len(corners)>0:
+        with open(outFile,'w') as out:
+            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "imageFilename":imageName}))
