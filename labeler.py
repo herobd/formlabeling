@@ -7,14 +7,15 @@ from matplotlib import gridspec
 import numpy as np
 import math
 import json
+from collections import defaultdict
 
 #Globals
 mouse_button=3
 TOOL_WIDTH=240
 toolH=40
-colorMap = {'text':(0/255.0,0/255.0,255/255.0), 'textP':(0/255.0,150/255.0,255/255.0), 'textMinor':(100/255.0,190/255.0,205/255.0), 'textInst':(190/255.0,210/255.0,255/255.0), 'textNumber':(0/255.0,160/255.0,100/255.0), 'fieldCircle':(255/255.0,190/255.0,210/255.0), 'field':(255/255.0,0/255.0,0/255.0), 'fieldP':(255/255.0,120/255.0,0/255.0), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0), 'graphic':(255/255.0,105/255.0,250/255.0), 'comment':(165/255.0,10/255.0,15/255.0), 'pair':(15/255.0,150/255.0,15/255.0), 'col':(5/255.0,70/255.0,5/255.0), 'row':(75/255.0,65/255.0,5/255.0), 'fieldRegion':(15/255.0,15/255.0,75/255.0)}
+colorMap = {'text':(0/255.0,0/255.0,255/255.0,0.51), 'textP':(0/255.0,150/255.0,255/255.0,0.51), 'textMinor':(100/255.0,190/255.0,205/255.0,0.51), 'textInst':(180/255.0,200/255.0,255/255.0,0.71), 'textNumber':(0/255.0,160/255.0,100/255.0,0.51), 'fieldCircle':(255/255.0,190/255.0,210/255.0,0.61), 'field':(255/255.0,0/255.0,0/255.0,0.51), 'fieldP':(255/255.0,120/255.0,0/255.0,0.51), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0,0.51), 'graphic':(255/255.0,105/255.0,250/255.0,0.51), 'comment':(165/255.0,10/255.0,15/255.0,0.51), 'pair':(15/255.0,150/255.0,15/255.0,0.51), 'col':(5/255.0,70/255.0,5/255.0,0.35), 'row':(25/255.0,5/255.0,75/255.0,0.35), 'fieldRegion':(15/255.0,15/255.0,75/255.0,0.51), 'fieldCol':(65/255.0,70/255.0,5/255.0,0.65), 'fieldRow':(65/255.0,5/255.0,75/255.0,0.65)}
 DRAW_COLOR=(1,0.7,1)
-codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11}
+codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11, 'fieldCol':12, 'fieldRow':13}
 RcodeMap = {v: k for k, v in codeMap.iteritems()}
 keyMap = {'text':'1',
           'textP':'2',
@@ -27,15 +28,17 @@ keyMap = {'text':'1',
           'fieldCircle':'r',
           'graphic':'t',
           'comment':'y',
+          'fieldCol':'u',
+          'fieldRow':'i',
           'fieldRegion':'`',
           #'col':'6',
           #'row':'7',
           }
 RkeyMap = {v: k for k, v in keyMap.iteritems()}
-toolMap = {'text':'1:text/label', 'textP':'2:text para', 'textMinor':'3:minor label', 'textInst':'4:instructions', 'textNumber':'5:enumeration (#)', 'fieldCircle':'R:to be circled', 'field':'Q:field', 'fieldP':'W:field para', 'fieldCheckBox':'E:check-box', 'graphic':'T:graphic', 'comment':'Y:comment', 'fieldRegion':'~:Partitioned region'}
+toolMap = {'text':'1:text/label', 'textP':'2:text para', 'textMinor':'3:minor label', 'textInst':'4:instructions', 'textNumber':'5:enumeration (#)', 'fieldCircle':'R:to be circled', 'field':'Q:field', 'fieldP':'W:field para', 'fieldCheckBox':'E:check-box', 'graphic':'T:graphic', 'comment':'Y:comment', 'fieldRegion':'~:Partitioned region', 'fieldCol':'U:col (cells)', 'fieldRow':'I:row (cells)'}
 toolYMap = {}
-modes = ['text', 'textP', 'textMinor', 'textInst', 'textNumber', 'field', 'fieldP', 'fieldCheckBox', 'fieldCircle', 'graphic', 'comment', 'fieldRegion']
-ftypeMap = {'text':0, 'handwriting':1, 'print':2, 'blank':3} #print:typewriter or stamp
+modes = ['text', 'textP', 'textMinor', 'textInst', 'textNumber', 'field', 'fieldP', 'fieldCheckBox', 'fieldCircle', 'graphic', 'comment', 'fieldCol', 'fieldRow', 'fieldRegion']
+ftypeMap = {'text':0, 'handwriting':1, 'print':2, 'blank':3, 'signature':4} #print:typewriter or stamp
 RftypeMap = {v: k for k, v in ftypeMap.iteritems()}
 
 def get_side(a, b):
@@ -153,12 +156,14 @@ class Group:
                 count+=1
                 x+=bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6]
                 y+=bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7]
+        if count==0:
+            return -1,-1
 
         return x/(4*count), y/(4*count)
 
 
 class Control:
-    def __init__(self,ax_im,ax_tool,W,H,texts,fields,pairs,samePairs,groups,page_corners):
+    def __init__(self,ax_im,ax_tool,W,H,texts,fields,pairs,samePairs,groups,pre_corners,page_corners=None, page_cornersActual=None):
         self.ax_im=ax_im
         self.ax_tool=ax_tool
         self.down_cid = self.ax_im.figure.canvas.mpl_connect(
@@ -171,9 +176,9 @@ class Control:
                             'key_press_event', self.doKey)
         self.mode='corners' #this indicates the 'state'
         self.secondaryMode=None
-        self.textBBs={} #this holds each text box as (x1,y1,x2,y2,type_code,blank). x1,y1<x2,y2 and blank is always 0
+        self.textBBs={} #this holds each text box as (x1,y1,x2,y2,x3,y3,x4,y4,type_code,blank).  blank is always 0
         self.textRects={} #this holds the drawing patches
-        self.fieldBBs={} #this holds each field box as (x1,y1,x2,y2,type_code,blank). x1,y1<x2,y2 blank is 0/1
+        self.fieldBBs={} #this holds each field box as (x1,y1,x2,y2,x3,y3,x4,y4,type_code,blank). blank is 0/1
         self.fieldRects={} #this holds the drawing patches
         self.textBBCurId=0
         self.fieldBBCurId=0
@@ -184,7 +189,8 @@ class Control:
         self.groupCurId=0
         self.groupPolys={} #for drawing
         self.corners={'tl':None, 'tr':None, 'br':None, 'bl':None}
-        self.corners_draw={'tl':None, 'tr':None, 'br':None, 'bl':None}
+        self.cornersActual=None
+        self.corners_draw=defaultdict(lambda: None) #{'tl':None, 'tr':None, 'br':None, 'bl':None}
         #self.image=None
         #self.displayImage=None
         self.startX=-1 #where the user clicks down
@@ -198,7 +204,7 @@ class Control:
         self.drawRect=None #drawing patch
         self.preTexts=texts
         self.preFields=fields
-        self.preCorners=page_corners
+        self.preCorners=pre_corners
         if pairs is not None:
             self.pairing=[(int(x[1:]),int(y[1:])) for (x,y) in pairs if (x[0]=='t' and y[0]=='f')]
             switched = [(int(y[1:]),int(x[1:])) for (x,y) in pairs if (x[0]=='f' and y[0]=='t')]
@@ -206,7 +212,7 @@ class Control:
                 self.pairing += switched
         if samePairs is not None:
             self.samePairing=[(int(x[1:]),int(y[1:]),(1 if x[0]=='f' else 0)) for (x,y) in samePairs if x[0]==y[0]]
-        self.corners_text = ax_im.text(W/2,H/2,'Mark the page corners, then press ENTER.\n(outer corners if two pages).\nIf odd position, press BACKSPACE for corner by corner query.',horizontalalignment='center',verticalalignment='center')
+        self.corners_text = ax_im.text(W/2,H/2,'Mark the page corners OR WHERE THEY SHOULD BE, then press ENTER.\n(outer corners if two pages).\nIf odd position, press BACKSPACE for corner by corner query.',horizontalalignment='center',verticalalignment='center', color='red')
         self.ax_im.figure.canvas.draw()
         self.imageW=W
         self.imageH=H
@@ -215,6 +221,12 @@ class Control:
             for group in groups:
                 self.groups[self.groupCurId] = Group(json=group)
                 self.groupCurId+=1
+
+        if page_corners is not None:
+            self.corners=page_corners
+            self.preCorners=page_corners
+            self.cornersActual=page_cornersActual
+            self.init()
 
 
     def init(self):
@@ -303,13 +315,19 @@ class Control:
     def clickerDown(self,event):
         #image,displayImage,mode,textBBs,fieldBBs,pairing = param
         if event.inaxes!=self.ax_im.axes or event.button!=mouse_button: return
-        if self.mode!='delete' and self.mode!='corners':
+        if self.mode!='delete' and 'corner' not in self.mode:
             self.mode+='-d'
             self.startX=event.xdata
             self.startY=event.ydata
 
     def clickerUp(self,event):
         if event.button!=mouse_button: return
+        if event.inaxes!=self.ax_im.axes:
+            self.selected='none'
+            self.setSelectedRectOff()
+            if '-d' == self.mode[-2:] or '-m' == self.mode[-2:]:
+                self.mode=self.mode[:-2]
+            return
         x=event.xdata
         y=event.ydata
         if '-m' == self.mode[-2:]: #we dragged to make a box
@@ -353,7 +371,7 @@ class Control:
                     self.fieldBBCurId+=1
 
                 if self.secondaryMode=='row' or self.secondaryMode=='col':
-                    if self.mode[:4] in self.selected:
+                    if self.selected!='none' and (self.mode[:4]=='text') != self.groups[self.selectedId].holdsFields:
                         #add to group
                         self.groups[self.selectedId].add(newId)
                         self.actionStack.append(('added-to-group',self.selectedId,newId))
@@ -368,8 +386,100 @@ class Control:
                         self.groupCurId+=1
                 #else:
                    #self.setSelectedRect(sv)
-                self.draw()
+            self.draw()
 
+        elif 'corners' in self.mode:
+            if self.mode=='corners':
+                cornersStore=self.corners
+            else:
+                cornersStore=self.cornersActual
+            self.ax_im.set_xlim(0,self.imageW)
+            self.ax_im.set_ylim(self.imageH,0)
+            if x<=self.imageW/2 and y<=self.imageH/2:
+                cornersStore['tl']=(x,y)
+                if self.corners_draw['tl'] is not None:
+                    self.corners_draw['tl'].remove()
+                    self.corners_draw['tl']=None
+                self.corners_draw['tl'], = self.ax_im.plot(x,y,'ro')
+            elif x>self.imageW/2 and y<=self.imageH/2:
+                cornersStore['tr']=(x,y)
+                if self.corners_draw['tr'] is not None:
+                    self.corners_draw['tr'].remove()
+                    self.corners_draw['tr']=None
+                self.corners_draw['tr'], = self.ax_im.plot(x,y,'ro')
+            elif x>self.imageW/2 and y>self.imageH/2:
+                cornersStore['br']=(x,y)
+                if self.corners_draw['br'] is not None:
+                    self.corners_draw['br'].remove()
+                    self.corners_draw['br']=None
+                self.corners_draw['br'], = self.ax_im.plot(x,y,'ro')
+            elif x<=self.imageW/2 and y>self.imageH/2:
+                cornersStore['bl']=(x,y)
+                if self.corners_draw['bl'] is not None:
+                    self.corners_draw['bl'].remove()
+                    self.corners_draw['bl']=None
+                self.corners_draw['bl'], = self.ax_im.plot(x,y,'ro')
+
+            if cornersStore['tl'] is not None and cornersStore['tr'] is not None:
+                if self.corners_draw['tl-tr'] is not None:
+                    self.corners_draw['tl-tr'].remove()
+                self.corners_draw['tl-tr'], =self.ax_im.plot([cornersStore['tl'][0],cornersStore['tr'][0]],[cornersStore['tl'][1],cornersStore['tr'][1]],'r-')
+            if cornersStore['br'] is not None and cornersStore['tr'] is not None:
+                if self.corners_draw['br-tr'] is not None:
+                    self.corners_draw['br-tr'].remove()
+                self.corners_draw['br-tr'], =self.ax_im.plot([cornersStore['br'][0],cornersStore['tr'][0]],[cornersStore['br'][1],cornersStore['tr'][1]],'r-')
+            if cornersStore['tl'] is not None and cornersStore['bl'] is not None:
+                if self.corners_draw['tl-bl'] is not None:
+                    self.corners_draw['tl-bl'].remove()
+                self.corners_draw['tl-bl'], =self.ax_im.plot([cornersStore['tl'][0],cornersStore['bl'][0]],[cornersStore['tl'][1],cornersStore['bl'][1]],'r-')
+            if cornersStore['br'] is not None and cornersStore['bl'] is not None:
+                if self.corners_draw['br-bl'] is not None:
+                    self.corners_draw['br-bl'].remove()
+                self.corners_draw['br-bl'], =self.ax_im.plot([cornersStore['br'][0],cornersStore['bl'][0]],[cornersStore['br'][1],cornersStore['bl'][1]],'r-')
+
+            self.ax_im.figure.canvas.draw()
+        elif 'corner' in self.mode and '-' in self.mode:
+            if 'Actual' in self.mode:
+                cornersStore=self.cornersActual
+            else:
+                cornersStore=self.corners
+            curCorner = self.mode[-2:]
+            cornersStore[curCorner]=(x,y)
+            if self.corners_draw[curCorner] is not None:
+                self.corners_draw[curCorner].remove()
+                self.corners_draw[curCorner]=None
+            self.corners_draw[curCorner], = self.ax_im.plot(x,y,'ro')
+            if curCorner=='tl':
+                self.corners_text.set_text('click on top right corner')
+                self.mode = self.mode[:-2]+'tr'
+            elif curCorner=='tr':
+                self.corners_text.set_text('click on bottom right corner')
+                self.mode = self.mode[:-2]+'br'
+            elif curCorner=='br':
+                self.corners_text.set_text('click on bottom left corner')
+                self.mode = self.mode[:-2]+'bl'
+            elif curCorner=='bl':
+                self.corners_text.set_text('BACKSPACE to reset. ENTER to confirm')
+                self.mode = 'corners-done'
+
+            if cornersStore['tl'] is not None and cornersStore['tr'] is not None:
+                if self.corners_draw['tl-tr'] is not None:
+                    self.corners_draw['tl-tr'].remove()
+                self.corners_draw['tl-tr'], =self.ax_im.plot([cornersStore['tl'][0],cornersStore['tr'][0]],[cornersStore['tl'][1],cornersStore['tr'][1]],'r-')
+            if cornersStore['br'] is not None and cornersStore['tr'] is not None:
+                if self.corners_draw['br-tr'] is not None:
+                    self.corners_draw['br-tr'].remove()
+                self.corners_draw['br-tr'], =self.ax_im.plot([cornersStore['br'][0],cornersStore['tr'][0]],[cornersStore['br'][1],cornersStore['tr'][1]],'r-')
+            if cornersStore['tl'] is not None and cornersStore['bl'] is not None:
+                if self.corners_draw['tl-bl'] is not None:
+                    self.corners_draw['tl-bl'].remove()
+                self.corners_draw['tl-bl'], =self.ax_im.plot([cornersStore['tl'][0],cornersStore['bl'][0]],[cornersStore['tl'][1],cornersStore['bl'][1]],'r-')
+            if cornersStore['br'] is not None and cornersStore['bl'] is not None:
+                if self.corners_draw['br-bl'] is not None:
+                    self.corners_draw['br-bl'].remove()
+                self.corners_draw['br-bl'], =self.ax_im.plot([cornersStore['br'][0],cornersStore['bl'][0]],[cornersStore['br'][1],cornersStore['bl'][1]],'r-')
+
+            self.ax_im.figure.canvas.draw()
         elif '-tl' == self.mode[-3:]:#we dragged the top-left corner to resize the selected box
             self.mode=self.mode[:-3]
             bbs = None
@@ -381,7 +491,7 @@ class Control:
                 self.actionStack.append(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
                 bbs[self.selectedId] = (self.endX,self.endY)+bbs[self.selectedId][2:]
                 #self.setSelectedRect(bbs[self.selectedId])
-                self.draw()
+            self.draw()
         elif '-bl' == self.mode[-3:]:#we dragged the top-left corner to resize the selected box
             self.mode=self.mode[:-3]
             bbs = None
@@ -393,7 +503,7 @@ class Control:
                 self.actionStack.append(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
                 bbs[self.selectedId] = bbs[self.selectedId][0:6]+(self.endX,self.endY)+bbs[self.selectedId][8:]
                 #self.setSelectedRect(bbs[self.selectedId])
-                self.draw()
+            self.draw()
         elif '-tr' == self.mode[-3:]:#we dragged the top-left corner to resize the selected box
             self.mode=self.mode[:-3]
             bbs = None
@@ -405,7 +515,7 @@ class Control:
                 self.actionStack.append(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
                 bbs[self.selectedId] = bbs[self.selectedId][0:2]+(self.endX,self.endY)+bbs[self.selectedId][4:]
                 #self.setSelectedRect(bbs[self.selectedId])
-                self.draw()
+            self.draw()
         elif '-br' == self.mode[-3:]:#we dragged the top-left corner to resize the selected box
             self.mode=self.mode[:-3]
             bbs = None
@@ -417,7 +527,7 @@ class Control:
                 self.actionStack.append(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
                 bbs[self.selectedId] = bbs[self.selectedId][0:4]+(self.endX,self.endY)+bbs[self.selectedId][6:]
                 #self.setSelectedRect(bbs[self.selectedId])
-                self.draw()
+            self.draw()
         elif '-mv' == self.mode[-3:]:#we're just moving the box
             self.mode=self.mode[:-3]
             bbs = None
@@ -434,80 +544,13 @@ class Control:
                                         bbs[self.selectedId][4]+shiftX,bbs[self.selectedId][5]+shiftY,
                                         bbs[self.selectedId][6]+shiftX,bbs[self.selectedId][7]+shiftY)+bbs[self.selectedId][8:]
                 #self.setSelectedRect(bbs[self.selectedId])
-                self.draw()
+            self.draw()
         else:
             if '-d' == self.mode[-2:]:
                 self.mode=self.mode[:-2]
 
-            if self.mode == 'corners':
-                self.ax_im.set_xlim(0,self.imageW)
-                self.ax_im.set_ylim(self.imageH,0)
-                if x<=self.imageW/2 and y<=self.imageH/2:
-                    self.corners['tl']=(x,y)
-                    if self.corners_draw['tl'] is not None:
-                        self.corners_draw['tl'].remove()
-                        self.corners_draw['tl']=None
-                    self.corners_draw['tl'], = self.ax_im.plot(x,y,'ro')
-                elif x>self.imageW/2 and y<=self.imageH/2:
-                    self.corners['tr']=(x,y)
-                    if self.corners_draw['tr'] is not None:
-                        self.corners_draw['tr'].remove()
-                        self.corners_draw['tr']=None
-                    self.corners_draw['tr'], = self.ax_im.plot(x,y,'ro')
-                elif x>self.imageW/2 and y>self.imageH/2:
-                    self.corners['br']=(x,y)
-                    if self.corners_draw['br'] is not None:
-                        self.corners_draw['br'].remove()
-                        self.corners_draw['br']=None
-                    self.corners_draw['br'], = self.ax_im.plot(x,y,'ro')
-                elif x<=self.imageW/2 and y>self.imageH/2:
-                    self.corners['bl']=(x,y)
-                    if self.corners_draw['bl'] is not None:
-                        self.corners_draw['bl'].remove()
-                        self.corners_draw['bl']=None
-                    self.corners_draw['bl'], = self.ax_im.plot(x,y,'ro')
-                self.ax_im.figure.canvas.draw()
-                return
-            elif self.mode == 'corners-tl':
-                self.corners['tl']=(x,y)
-                if self.corners_draw['tl'] is not None:
-                    self.corners_draw['tl'].remove()
-                    self.corners_draw['tl']=None
-                self.corners_draw['tl'], = self.ax_im.plot(x,y,'ro')
-                self.corners_text.set_text('click on top right corner')
-                self.mode = 'corners-tr'
-                self.ax_im.figure.canvas.draw()
-                return
-            elif self.mode == 'corners-tr':
-                self.corners['tr']=(x,y)
-                if self.corners_draw['tr'] is not None:
-                    self.corners_draw['tr'].remove()
-                    self.corners_draw['tr']=None
-                self.corners_draw['tr'], = self.ax_im.plot(x,y,'ro')
-                self.corners_text.set_text('click on bottom right corner')
-                self.mode = 'corners-br'
-                self.ax_im.figure.canvas.draw()
-                return
-            elif self.mode == 'corners-br':
-                self.corners['br']=(x,y)
-                if self.corners_draw['br'] is not None:
-                    self.corners_draw['br'].remove()
-                    self.corners_draw['br']=None
-                self.corners_draw['br'], = self.ax_im.plot(x,y,'ro')
-                self.corners_text.set_text('click on bottom left corner')
-                self.mode = 'corners-bl'
-                self.ax_im.figure.canvas.draw()
-                return
-            elif self.mode == 'corners-bl':
-                self.corners['bl']=(x,y)
-                if self.corners_draw['bl'] is not None:
-                    self.corners_draw['bl'].remove()
-                    self.corners_draw['bl']=None
-                self.corners_draw['bl'], = self.ax_im.plot(x,y,'ro')
-                self.corners_text.set_text('BACKSPACE to reset. ENTER to confirm')
-                self.mode = 'corners-done'
-                self.ax_im.figure.canvas.draw()
-                return
+
+
 
             if self.mode=='delete':
                 if self.secondaryMode is None:
@@ -617,23 +660,26 @@ class Control:
                             if self.selected=='text' and self.selectedId==id:
                                 self.selected='none'
                                 self.setSelectedRectOff()
+                            self.draw()
+                            return
 
                         else:
-                            #pair to prev selected?
-                            if self.selected=='field' and (id,self.selectedId) not in self.pairing:
-                                self.pairing.append((id,self.selectedId))
-                                self.actionStack.append(('add-pairing',id,self.selectedId))
-                                self.undoStack=[]
-                            elif self.mode=='pair' and self.selected=='text' and (id,self.selectedId) not in self.samePairing and (self.selectedId,id) not in self.samePairing:
-                                self.samePairing.append((id,self.selectedId,0))
-                                self.actionStack.append(('add-samePairing',id,self.selectedId,0))
-                                self.undoStack=[]
-                            #select the text BB
-                            self.selectedId=id
-                            self.selected='text'
-                            #self.setSelectedRect(self.textBBs[id])
-                        self.draw()
-                        return
+                            if self.selected!='text' or self.selectedId!=id:
+                                #pair to prev selected?
+                                if self.selected=='field' and (id,self.selectedId) not in self.pairing:
+                                    self.pairing.append((id,self.selectedId))
+                                    self.actionStack.append(('add-pairing',id,self.selectedId))
+                                    self.undoStack=[]
+                                elif self.mode=='pair' and self.selected=='text' and (id,self.selectedId) not in self.samePairing and (self.selectedId,id) not in self.samePairing:
+                                    self.samePairing.append((id,self.selectedId,0))
+                                    self.actionStack.append(('add-samePairing',id,self.selectedId,0))
+                                    self.undoStack=[]
+                                #select the text BB
+                                self.selectedId=id
+                                self.selected='text'
+                                #self.setSelectedRect(self.textBBs[id])
+                                self.draw()
+                                return
 
                 for id in self.fieldBBs:
                     if self.checkInside(x,y,self.fieldBBs[id]):
@@ -662,23 +708,26 @@ class Control:
                             if self.selected=='field' and self.selectedId==id:
                                 self.selected='none'
                                 self.setSelectedRectOff()
+                            self.draw()
+                            return
 
                         else:
-                            #pair to prev selected?
-                            if self.selected=='text' and (self.selectedId,id) not in self.pairing:
-                                self.pairing.append((self.selectedId,id))
-                                self.actionStack.append(('add-pairing',self.selectedId,id))
-                                self.undoStack=[]
-                            elif self.mode=='pair' and self.selected=='field' and (id,self.selectedId) not in self.samePairing and (self.selectedId,id) not in self.samePairing:
-                                self.samePairing.append((id,self.selectedId,1))
-                                self.actionStack.append(('add-samePairing',id,self.selectedId,1))
-                                self.undoStack=[]
-                            #select the field BB
-                            self.selectedId=id
-                            self.selected='field'
-                            self.setSelectedRect(self.fieldBBs[id])
-                        self.draw()
-                        return
+                            if self.selected!='field' or self.selectedId!=id:
+                                #pair to prev selected?
+                                if self.selected=='text' and (self.selectedId,id) not in self.pairing:
+                                    self.pairing.append((self.selectedId,id))
+                                    self.actionStack.append(('add-pairing',self.selectedId,id))
+                                    self.undoStack=[]
+                                elif self.mode=='pair' and self.selected=='field' and (id,self.selectedId) not in self.samePairing and (self.selectedId,id) not in self.samePairing:
+                                    self.samePairing.append((id,self.selectedId,1))
+                                    self.actionStack.append(('add-samePairing',id,self.selectedId,1))
+                                    self.undoStack=[]
+                                #select the field BB
+                                self.selectedId=id
+                                self.selected='field'
+                                #self.setSelectedRect(self.fieldBBs[id])
+                                self.draw()
+                                return
 
             elif self.secondaryMode=='row' or self.secondaryMode=='col':
                 if self.mode!='delete':
@@ -727,7 +776,7 @@ class Control:
                             if self.selected=='none':
                                 skip=False
                                 for gId,group in self.groups.iteritems():
-                                    if group.holdsFields and group.contains(id):
+                                    if group.holdsFields and group.contains(id): # and group.typeStr==self.secondaryMode:
                                         skip=True
                                         break
                                 if not skip:
@@ -795,6 +844,7 @@ class Control:
             bbs = self.textBBs
         if '-d' == self.mode[-2:] and math.sqrt(pow(event.xdata-self.startX,2)+pow(event.ydata-self.startY,2))>2:
             if bbs is not None and self.checkInside(self.startX,self.startY,bbs[self.selectedId]):
+                self.draw(clear=True)
                 #we are going to adjust the selected BB, but how?
                 #we see which point (corners and centerofmass) the click is closest to
                 xc=(bbs[self.selectedId][0]+bbs[self.selectedId][2]+bbs[self.selectedId][4]+bbs[self.selectedId][6])/4
@@ -805,7 +855,7 @@ class Control:
                 #rightBoundary = bbs[self.selectedId][0] + 0.5*w
                 #topBoundary = bbs[self.selectedId][1] + 0.5*h
                 #bottomBoundary = bbs[self.selectedId][1] + 0.5*h
-                col=colorMap[self.mode[:-2]]
+                col=colorMap[RcodeMap[bbs[self.selectedId][8]]] #colorMap[self.mode[:-2]]
 
                 closestDist = (self.startX-xc)**2 + (self.startY-yc)**2
                 self.mode = self.mode[:-1]+'mv'
@@ -836,6 +886,7 @@ class Control:
                 #    self.mode = self.mode[:-1]+'b'
                 self.drawRect.set_edgecolor(col)
             elif 'none' not in self.mode and 'delete' not in self.mode and 'change' not in self.mode and 'pair' not in self.mode:
+                self.draw(clear=True)
                 col=DRAW_COLOR
                 if self.mode[:-2] in colorMap:
                     col=colorMap[self.mode[:-2]]
@@ -919,30 +970,32 @@ class Control:
                 self.pairing=[]
                 self.samePairing=[]
                 self.corners={}
+                self.cornersActual={}
                 plt.close('all')
             elif event.key=='backspace':
-                self.corners['tl']=None
-                if self.corners_draw['tl'] is not None:
-                    self.corners_draw['tl'].remove()
-                    self.corners_draw['tl']=None
-                self.corners['tr']=None
-                if self.corners_draw['tr'] is not None:
-                    self.corners_draw['tr'].remove()
-                    self.corners_draw['tr']=None
-                self.corners['br']=None
-                if self.corners_draw['br'] is not None:
-                    self.corners_draw['br'].remove()
-                    self.corners_draw['br']=None
-                self.corners['bl']=None
-                if self.corners_draw['bl'] is not None:
-                    self.corners_draw['bl'].remove()
-                    self.corners_draw['bl']=None
+                if 'Actual' in self.mode:
+                    self.mode='cornerActual-tl'
+                    for key in self.cornersActual:
+                        self.cornersActual[key]=None
+                else:
+                    self.mode='corner-tl'
+                    for key in self.corners:
+                        self.corners[key]=None
+                for key in self.corners_draw:
+                    if self.corners_draw[key] is not None:
+                        self.corners_draw[key].remove()
+                        self.corners_draw[key]=None
                 self.corners_text.set_text('click on the top left corner')
-                self.mode='corners-tl'
                 self.ax_im.figure.canvas.draw()
             elif event.key=='enter':
-                if self.corners['tl'] is not None and self.corners['tr'] is not None and self.corners['br'] is not None and self.corners['bl'] is not None:
+                if 'Actual' in self.mode and self.cornersActual['tl'] is not None and self.cornersActual['tr'] is not None and self.cornersActual['br'] is not None and self.cornersActual['bl'] is not None:
                     self.init()
+                elif self.corners['tl'] is not None and self.corners['tr'] is not None and self.corners['br'] is not None and self.corners['bl'] is not None:
+                    self.cornersActual=dict(self.corners)
+                    self.mode='cornersActual'
+                    self.corners_text.set_text('Mark the ACTUAL page corner (physical paper), then press ENTER.\n(outer corners if two pages).\nIf odd position, press BACKSPACE for corner by corner query.')
+                    self.corners_text.set_color('darkmagenta')
+                    self.ax_im.figure.canvas.draw()
         else:
             key = event.key
             if key in RkeyMap:
@@ -955,7 +1008,7 @@ class Control:
                     #drawToolbar(p)
             elif key=='escape': #quit
                 plt.close('all')
-            elif key=='f': #delete:
+            elif key=='g': #delete:
                 if self.mode != 'delete':
                     self.modeRect.set_y(toolYMap['delete'])
                     self.ax_tool.figure.canvas.draw()
@@ -973,7 +1026,9 @@ class Control:
                 self.setFieldType(ftypeMap['blank'])
             elif key=='c': # set field to handwriting (default)
                 self.setFieldType(ftypeMap['handwriting'])
-            elif key=='v': #V pair
+            elif key=='v': # set field to signature
+                self.setFieldType(ftypeMap['signature'])
+            elif key=='f': #V pair
                 self.pairMode()
             elif key=="'": #row
                 self.setSecondaryMode('row')
@@ -1016,7 +1071,7 @@ class Control:
                                   [0,0,1]])
                 self.transAll(trans)
             elif key=='-':#scale
-                t=0.97
+                t=0.99
                 x=self.imageW/2.0
                 y=self.imageH/2.0
                 trans = np.array([[t,0,x-t*x],
@@ -1024,7 +1079,7 @@ class Control:
                                   [0,0,1]])
                 self.transAll(trans)
             elif key=='=':#scale
-                t=1.03
+                t=1.01
                 x=self.imageW/2.0
                 y=self.imageH/2.0
                 trans = np.array([[t,0,x-t*x],
@@ -1280,11 +1335,13 @@ class Control:
         self.selectedRect.set_xy(np.array([[0,0],[0.1,0],[0,0.1]]))
 
     def checkInside(self,x,y,bb):
+        if bb[0] is None or bb[1] is None or bb[2] is None or bb[3] is None or bb[4] is None or bb[5] is None or bb[6] is None or bb[7] is None:
+            print bb
         vertices = [(bb[0],bb[1]),(bb[2],bb[3]),(bb[4],bb[5]),(bb[6],bb[7])]
         return checkInsidePoly(x,y,vertices)
 
 
-    def draw(self):
+    def draw(self, clear=False):
         self.drawRect.set_xy(np.array([[0,0],[0.1,0],[0,0.1]]))
         if self.selected=='field':
             self.setSelectedRect(self.fieldBBs[self.selectedId])
@@ -1309,117 +1366,101 @@ class Control:
             poly.remove()
         self.groupPolys={}
 
-        lineId=0
-        for id, group in self.groups.iteritems():
-            vertices = group.getPoly(self)
-            ar = []
-            for tup in vertices:
-                ar.append([tup[0],tup[1]])
-            self.groupPolys[id] = patches.Polygon(np.array(ar),linewidth=4,edgecolor=colorMap[group.typeStr],facecolor='none')
-            self.ax_im.add_patch(self.groupPolys[id])
+        if not clear:
 
-            for idx in group.pairings:
-                if group.holdsFields:
-                    bbs=self.textBBs
-                else:
-                    bbs=self.fieldBBs
-                x1,y1 = group.getCentroid(self)
-                x2=(bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6])/4
-                y2=(bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7])/4
-                self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='turquoise',facecolor='none')
+            lineId=0
+            for id, group in self.groups.iteritems():
+                vertices = group.getPoly(self)
+                ar = []
+                for tup in vertices:
+                    ar.append([tup[0],tup[1]])
+                self.groupPolys[id] = patches.Polygon(np.array(ar),linewidth=4,edgecolor=colorMap[group.typeStr],facecolor='none')
+                self.ax_im.add_patch(self.groupPolys[id])
+
+                for idx in group.pairings:
+                    if group.holdsFields:
+                        bbs=self.textBBs
+                    else:
+                        bbs=self.fieldBBs
+                    if idx in bbs:
+                        x1,y1 = group.getCentroid(self)
+                        x2=(bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6])/4
+                        y2=(bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7])/4
+                        self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='turquoise',facecolor='none')
+                        self.ax_im.add_patch(self.pairLines[lineId])
+                        lineId+=1
+                for idx in group.samePairings:
+                    if group.holdsFields:
+                        bbs=self.fieldBBs
+                    else:
+                        bbs=self.textBBs
+                    if idx in bbs:
+                        x1,y1 = group.getCentroid(self)
+                        x2=(bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6])/4
+                        y2=(bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7])/4
+                        self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='orchid',facecolor='none')
+                        self.ax_im.add_patch(self.pairLines[lineId])
+                        lineId+=1
+
+            #self.displayImage[0:self.image.shape[0], 0:self.image.shape[1]] = self.image
+            for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,code,blank) in self.textBBs.iteritems():
+                #cv2.rectangle(self.displayImage,(startX,startY),(endX,endY),colorMap[RcodeMap[code]],1)
+                color = colorMap[RcodeMap[code]]
+                if (self.selected=='row' or self.selected=='col') and not self.groups[self.selectedId].holdsFields and self.groups[self.selectedId].contains(id):
+                    color = (color[0]/2.0, color[1]/2.0, color[2]/2.0,)+color[3:]
+                self.textRects[id] = patches.Polygon(np.array([[tlX,tlY],[trX,trY],[brX,brY],[blX,blY]]),linewidth=2,edgecolor=color,facecolor='none')
+                self.ax_im.add_patch(self.textRects[id])
+
+            for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,code,ftype) in self.fieldBBs.iteritems():
+                #cv2.rectangle(self.displayImage,(startX,startY),(endX,endY),colorMap[RcodeMap[code]],1)
+                fill = 'none'
+                if ftype==ftypeMap['blank']:
+                    fill=(0.5,0.5,0.9,0.25)
+                elif ftype==ftypeMap['print']:
+                    fill=(0.9,0.3,0.5,0.15)
+                elif ftype==ftypeMap['signature']:
+                    fill=(0.3,0.9,0.5,0.1)
+                color = colorMap[RcodeMap[code]]
+                if (self.selected=='row' or self.selected=='col') and self.groups[self.selectedId].holdsFields and self.groups[self.selectedId].contains(id):
+                    color = (color[0]/2.0, color[1]/2.0, color[2]/2.0,)+color[3:]
+                self.fieldRects[id] = patches.Polygon(np.array([[tlX,tlY],[trX,trY],[brX,brY],[blX,blY]]),linewidth=2,edgecolor=color,facecolor=fill)
+                self.ax_im.add_patch(self.fieldRects[id])
+                #if blank==1:
+                #    w = endX-startX
+                #    h = endY-startY
+                #    cv2.rectangle(self.displayImage,(startX+2,startY+2),(endX-2,endY-2),(240,240,240),1)
+                #    cv2.rectangle(self.displayImage,(int(startX+0.25*w),int(startY+0.25*h)),(int(endX-0.25*w),int(endY-0.25*h)),(240,240,240),1)
+                #    cv2.rectangle(self.displayImage,(int(startX+0.15*w),int(startY+0.15*h)),(int(endX-0.15*w),int(endY-0.15*h)),(240,240,240),1)
+                #    cv2.rectangle(self.displayImage,(int(startX+0.35*w),int(startY+0.35*h)),(int(endX-0.35*w),int(endY-0.35*h)),(240,240,240),1)
+
+            for text,field in self.pairing:
+                x1=(self.textBBs[text][0]+self.textBBs[text][2]+self.textBBs[text][4]+self.textBBs[text][6])/4
+                y1=(self.textBBs[text][1]+self.textBBs[text][3]+self.textBBs[text][5]+self.textBBs[text][7])/4
+                x2=(self.fieldBBs[field][0]+self.fieldBBs[field][2]+self.fieldBBs[field][4]+self.fieldBBs[field][6])/4
+                y2=(self.fieldBBs[field][1]+self.fieldBBs[field][3]+self.fieldBBs[field][5]+self.fieldBBs[field][7])/4
+                #cv2.line(self.displayImage,(x1,y1),(x2,y2),(0,255,0),1)
+                self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='g',facecolor='none')
                 self.ax_im.add_patch(self.pairLines[lineId])
                 lineId+=1
-            for idx in group.samePairings:
-                if group.holdsFields:
+
+            for a,b,field in self.samePairing:
+                if field:
                     bbs=self.fieldBBs
                 else:
                     bbs=self.textBBs
-                x1,y1 = group.getCentroid(self)
-                x2=(bbs[idx][0]+bbs[idx][2]+bbs[idx][4]+bbs[idx][6])/4
-                y2=(bbs[idx][1]+bbs[idx][3]+bbs[idx][5]+bbs[idx][7])/4
-                self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='orchid',facecolor='none')
+                x1=(bbs[a][0]+bbs[a][2]+bbs[a][4]+bbs[a][6])/4
+                y1=(bbs[a][1]+bbs[a][3]+bbs[a][5]+bbs[a][7])/4
+                x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
+                y2=(bbs[b][1]+bbs[b][3]+bbs[b][5]+bbs[b][7])/4
+                #cv2.line(self.displayImage,(x1,y1),(x2,y2),(0,255,0),1)
+                self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='purple',facecolor='none')
                 self.ax_im.add_patch(self.pairLines[lineId])
                 lineId+=1
-
-        #self.displayImage[0:self.image.shape[0], 0:self.image.shape[1]] = self.image
-        for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,code,blank) in self.textBBs.iteritems():
-            #cv2.rectangle(self.displayImage,(startX,startY),(endX,endY),colorMap[RcodeMap[code]],1)
-            self.textRects[id] = patches.Polygon(np.array([[tlX,tlY],[trX,trY],[brX,brY],[blX,blY]]),linewidth=2,edgecolor=colorMap[RcodeMap[code]],facecolor='none')
-            self.ax_im.add_patch(self.textRects[id])
-
-        for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,code,ftype) in self.fieldBBs.iteritems():
-            #cv2.rectangle(self.displayImage,(startX,startY),(endX,endY),colorMap[RcodeMap[code]],1)
-            fill = 'none'
-            if ftype==ftypeMap['blank']:
-                fill=(0.5,0.5,0.9,0.35)
-            elif ftype==ftypeMap['print']:
-                fill=(0.9,0.3,0.5,0.25)
-            self.fieldRects[id] = patches.Polygon(np.array([[tlX,tlY],[trX,trY],[brX,brY],[blX,blY]]),linewidth=2,edgecolor=colorMap[RcodeMap[code]],facecolor=fill)
-            self.ax_im.add_patch(self.fieldRects[id])
-            #if blank==1:
-            #    w = endX-startX
-            #    h = endY-startY
-            #    cv2.rectangle(self.displayImage,(startX+2,startY+2),(endX-2,endY-2),(240,240,240),1)
-            #    cv2.rectangle(self.displayImage,(int(startX+0.25*w),int(startY+0.25*h)),(int(endX-0.25*w),int(endY-0.25*h)),(240,240,240),1)
-            #    cv2.rectangle(self.displayImage,(int(startX+0.15*w),int(startY+0.15*h)),(int(endX-0.15*w),int(endY-0.15*h)),(240,240,240),1)
-            #    cv2.rectangle(self.displayImage,(int(startX+0.35*w),int(startY+0.35*h)),(int(endX-0.35*w),int(endY-0.35*h)),(240,240,240),1)
-
-        for text,field in self.pairing:
-            x1=(self.textBBs[text][0]+self.textBBs[text][2]+self.textBBs[text][4]+self.textBBs[text][6])/4
-            y1=(self.textBBs[text][1]+self.textBBs[text][3]+self.textBBs[text][5]+self.textBBs[text][7])/4
-            x2=(self.fieldBBs[field][0]+self.fieldBBs[field][2]+self.fieldBBs[field][4]+self.fieldBBs[field][6])/4
-            y2=(self.fieldBBs[field][1]+self.fieldBBs[field][3]+self.fieldBBs[field][5]+self.fieldBBs[field][7])/4
-            #cv2.line(self.displayImage,(x1,y1),(x2,y2),(0,255,0),1)
-            self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='g',facecolor='none')
-            self.ax_im.add_patch(self.pairLines[lineId])
-            lineId+=1
-
-        for a,b,field in self.samePairing:
-            if field:
-                bbs=self.fieldBBs
-            else:
-                bbs=self.textBBs
-            x1=(bbs[a][0]+bbs[a][2]+bbs[a][4]+bbs[a][6])/4
-            y1=(bbs[a][1]+bbs[a][3]+bbs[a][5]+bbs[a][7])/4
-            x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
-            y2=(bbs[b][1]+bbs[b][3]+bbs[b][5]+bbs[b][7])/4
-            #cv2.line(self.displayImage,(x1,y1),(x2,y2),(0,255,0),1)
-            self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='purple',facecolor='none')
-            self.ax_im.add_patch(self.pairLines[lineId])
-            lineId+=1
-        #if self.selected == 'text':
-        #    self.selectedRect.set_bounds(self.startX-4,self.startY-4,self.endX-self.startX+8,self.endY-self.startY+8)
-        #    startX,startY,endX,endY,para,blank = self.textBBs[self.selectedId]
-        #    if self.mode[-3:]=='-tl':
-        #        cv2.rectangle(self.displayImage,(self.endX,self.endY),(max(startX,endX),max(startY,endY)),(255,240,100),1)
-        #    elif self.mode[-3:]=='-tr':
-        #        cv2.rectangle(self.displayImage,(startX,self.endY),(self.endX,endY),(255,240,100),1)
-        #    elif self.mode[-3:]=='-bl':
-        #        cv2.rectangle(self.displayImage,(self.endX,startY),(endX,self.endY),(255,240,100),1)
-        #    elif self.mode[-3:]=='-br':
-        #        cv2.rectangle(self.displayImage,(startX,startY),(self.endX,self.endY),(255,240,100),1)
-        #    cv2.rectangle(self.displayImage,(min(startX,endX)-2,min(startY,endY)-2),(max(startX,endX)+2,max(startY,endY)+2),(255,0,255),1)
-        #elif self.selected == 'field':
-        #    startX,startY,endX,endY,para,blank = self.fieldBBs[self.selectedId]
-        #    if self.mode[-3:]=='-tl':
-        #        cv2.rectangle(self.displayImage,(self.endX,self.endY),(max(startX,endX),max(startY,endY)),(120,255,255),1)
-        #    elif self.mode[-3:]=='-tr':
-        #        cv2.rectangle(self.displayImage,(startX,self.endY),(self.endX,endY),(120,255,255),1)
-        #    elif self.mode[-3:]=='-bl':
-        #        cv2.rectangle(self.displayImage,(self.endX,startY),(endX,self.endY),(120,255,255),1)
-        #    elif self.mode[-3:]=='-br':
-        #        cv2.rectangle(self.displayImage,(startX,startY),(self.endX,self.endY),(120,255,255),1)
-        #    cv2.rectangle(self.displayImage,(min(startX,endX)-2,min(startY,endY)-2),(max(startX,endX)+2,max(startY,endY)+2),(255,0,255),1)
-
-        #if self.mode[-2:]=='-m':
-        #    cv2.rectangle(self.displayImage,(self.startX,self.startY),(self.endX,self.endY),colorMap[self.mode[:-2]],1)
-
-        #cv2.imshow("labeler",self.displayImage)
         self.ax_im.figure.canvas.draw()
 
 def drawToolbar(ax):
     #im[0:,-TOOL_WIDTH:]=(140,140,140)
-    im = np.zeros(((toolH+1)*(len(modes)+13),TOOL_WIDTH,3),dtype=np.uint8)
+    im = np.zeros(((toolH+1)*(len(modes)+14),TOOL_WIDTH,3),dtype=np.uint8)
     im[:,:] = (140,140,140)
 
     y=0
@@ -1455,11 +1496,17 @@ def drawToolbar(ax):
     toolYMap['change']=y
     y+=toolH+1
 
+    #pair
+    im[y:y+toolH,:]=(19,160,19)
+    ax.text(1,y+toolH-10,'F:pair mode')
+    toolYMap['pair']=y
+    y+=toolH+1
+
     #delete
     im[y:y+toolH,:]=(250,250,250)
     #if self.mode=='delete':
     #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-10,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
-    ax.text(1,y+toolH-10,'F:delete')
+    ax.text(1,y+toolH-10,'G:delete')
     toolYMap['delete']=y
     y+=toolH+1
 
@@ -1484,10 +1531,10 @@ def drawToolbar(ax):
     toolYMap['handwriting']=y
     y+=toolH+1
 
-    #pair
-    im[y:y+toolH,:]=(19,160,19)
-    ax.text(1,y+toolH-10,'V:pair mode')
-    toolYMap['pair']=y
+    #signature
+    im[y:y+toolH,:]=(235,250,235)
+    ax.text(1,y+toolH-10,'V:mark field as signature')
+    toolYMap['signature']=y
     y+=toolH+1
 
     #col
@@ -1525,7 +1572,7 @@ def drawToolbar(ax):
     #cv2.imshow("labeler",self.displayImage)
         
 
-def labelImage(imagePath,texts,fields,pairs,samePairs,groups,page_corners):
+def labelImage(imagePath,texts,fields,pairs,samePairs,groups,pre_corners=None, page_corners=None, page_cornersActual=None):
     #p = Params()
     image = mpimg.imread(imagePath)
     #if p.image is None:
@@ -1553,7 +1600,7 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,page_corners):
     toolImage = drawToolbar(ax_tool)
     ax_tool.imshow(toolImage)
     ax_im.figure.canvas.mpl_disconnect(fig.canvas.manager.key_press_handler_id)
-    control = Control(ax_im,ax_tool,image.shape[1],image.shape[0],texts,fields,pairs,samePairs,groups,page_corners)
+    control = Control(ax_im,ax_tool,image.shape[1],image.shape[0],texts,fields,pairs,samePairs,groups,pre_corners, page_corners, page_cornersActual)
     #control.draw()
     plt.show()
 
@@ -1627,7 +1674,7 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,page_corners):
             groups.append(newGroup)
 
 
-    return textBBs, fieldBBs, pairing, samePairing, groups, control.corners
+    return textBBs, fieldBBs, pairing, samePairing, groups, control.corners, control.cornersActual
 
 if __name__ == "__main__":
 
@@ -1651,8 +1698,8 @@ if __name__ == "__main__":
             page_corners=read['page_corners']
 
     imageName = sys.argv[1][(sys.argv[1].rfind('/')+1):]
-    texts,fields,pairs,samePairs,groups,corners = labelImage(sys.argv[1],texts,fields,pairs,samePairs,groups,page_corners)
+    texts,fields,pairs,samePairs,groups,corners,actualCorners = labelImage(sys.argv[1],texts,fields,pairs,samePairs,groups,page_corners)
     outFile='test.json'
     if len(texts)+len(fields)+len(corners)>0:
         with open(outFile,'w') as out:
-            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "imageFilename":imageName}))
+            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners,  "imageFilename":imageName}))

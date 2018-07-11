@@ -1,4 +1,5 @@
 from labeler import labelImage
+from filelock import FileLock, FileLockException
 import os
 import sys
 import json
@@ -43,30 +44,44 @@ for groupName in sorted(groupNames):
     for f in files:
         if imageTemplate is None and f[-4:]=='.jpg':
             imageTemplate = files[0]
-        if 'template' in f and f[-5:]=='.json':
-            if startHere is None:
-                continue
-            else:
-                template = os.path.join(directory,groupName,f)
 
-    texts=fields=pairs=samePairs=groups=page_corners=None
-    if template is not None:
-        with open(template) as f:
-            read = json.loads(f.read())
-            texts=read['textBBs']
-            fields=read['fieldBBs']
-            pairs=read['pairs']
-            samePairs=read['samePairs']
-            #for i in len(samePairs):
-            #    if samePairs[i][-1][0]=='f':
-            groups=read['groups']
-            page_corners=read['page_corners']
-            imageTemplate=read['imageFilename']
+        if 'template' in f and f[-5:]=='.json':
+            print 'found template for group '+groupName
+            template = os.path.join(directory,groupName,f)
+
+    if template is not None and startHere is None:
+        continue
+
     print 'group '+groupName+', template image: '+imageTemplate                   
-    texts,fields,pairs,samePairs,groups,corners = labelImage(os.path.join(directory,groupName,imageTemplate),texts,fields,pairs,samePairs,groups,page_corners)
-    if len(texts)==0 and len(fields)==0:
-        break
     outFile=os.path.join(directory,groupName,'template'+groupName+'.json')
-    if len(texts)+len(fields)+len(corners)>0:
-        with open(outFile,'w') as out:
-            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "imageFilename":imageTemplate}))
+    lock = FileLock(outFile, timeout=None)
+    try:
+        lock.acquire()
+        texts=fields=pairs=samePairs=groups=page_corners=page_cornersActual=None
+        if template is not None:
+            with open(template) as f:
+                read = json.loads(f.read())
+                texts=read['textBBs']
+                fields=read['fieldBBs']
+                pairs=read['pairs']
+                samePairs=read['samePairs']
+                #for i in len(samePairs):
+                #    if samePairs[i][-1][0]=='f':
+                groups=read['groups']
+                imageTemplate=read['imageFilename']
+                if 'page_corners' in read:
+                    page_corners=read['page_corners']
+                if 'actualPage_corners' in read:
+                    page_cornersActual=read['actualPage_corners']
+        texts,fields,pairs,samePairs,groups,corners,actualCorners = labelImage(os.path.join(directory,groupName,imageTemplate),texts,fields,pairs,samePairs,groups,None,page_corners,page_cornersActual)
+        if len(texts)==0 and len(fields)==0:
+            break
+        if len(texts)+len(fields)+len(corners)>0:
+            with open(outFile,'w') as out:
+                out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "imageFilename":imageTemplate}))
+        lock.release()
+        lock=None
+    except FileLockException as e:
+        print 'template locked, moving to next group'
+        lock=None
+        continue
