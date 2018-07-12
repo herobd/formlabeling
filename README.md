@@ -1,20 +1,17 @@
-Key labeler output:
-BB of each text region
-Flag for paragraph region
-approximate BB of each field/HW region
-pairing of text and field regions
+# Forms project labeling tools
+These tools are for annotating form images. They are designed to operate on the same set of files using file locks to prevent stepping on eachothers toes.
 
-T# tlx tly brx bry N/P (normal/paragraph)
-...
-F# tlx tly brx bry N/B (normal/blank)
-...
-T# F#
-...
+The tools are build on matplotlib. Use the left mouse to interact with the matplotlib GUI, use the right mouse button to annotate. Saving is done automatically when the GUI closes (ESC).
 
-HW Boxes output:
-same
+## labelKeys.py
 
+Usage: `python labelKeys.py directory-of-image-groups [start-at-group]`
 
-TODO
-All should read in an images regestration (read original image and register)
-imagelabeler should allow re-registration
+This creates the template for each form type/group. If no starting group is given it automatically goes to the next group without a template.
+
+## labelAll.py
+
+Usage: `python labelAll.py directory-of-image-groups [start-at-group] [start-at-image]`
+
+This creates annotations for each image, starting with the annotations provided with the template. If not start group or image is provided it automatically goes to the next image.
+
