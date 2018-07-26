@@ -234,6 +234,8 @@ class Control:
         for key, dot in self.corners_draw.iteritems():
             dot.remove()
         if self.preTexts is not None and self.preFields is not None:
+            if self.preCorners is None:
+                self.preCorners = self.corners
             #compute an approximate transformation based on the template corners and the just labeled ones
             trans,res_,rank_,s_ = np.linalg.lstsq(np.array([[self.preCorners['tl'][0], self.preCorners['tl'][1], 1],
                                               [self.preCorners['tr'][0], self.preCorners['tr'][1], 1],
@@ -1030,6 +1032,8 @@ class Control:
                 self.setFieldType(ftypeMap['signature'])
             elif key=='f': #V pair
                 self.pairMode()
+            elif key=='k': #K copy selected
+                self.copy()
             elif key=="'": #row
                 self.setSecondaryMode('row')
             elif key==';': #col
@@ -1104,6 +1108,31 @@ class Control:
     #            self.pairLines[i]=patches.Arrow(x,y,xe-x,ye-y,2,edgecolor='g',facecolor='none')
     #            self.ax_im.add_patch(self.pairLines[i])
 
+    def copy(self):
+        if 'text'==self.selected:
+            bb = self.textBBs[self.selectedId]
+            ydif = bb[5]-bb[1]
+            bb = (bb[0], bb[1]+ydif, bb[2], bb[3]+ydif, bb[4], bb[5]+ydif, bb[6], bb[7]+ydif,) + bb[8:]
+            self.textBBs[self.textBBCurId]=bb
+            self.actionStack.append(('add-text',self.textBBCurId,)+bb+(None,None,))
+            self.undoStack=[]
+            if self.secondaryMode is None:
+                self.selectedId=self.textBBCurId
+                self.selected='text'
+            self.textBBCurId+=1
+            self.draw()
+        elif 'field'==self.selected:
+            bb = self.fieldBBs[self.selectedId]
+            ydif = bb[5]-bb[1]
+            bb = (bb[0], bb[1]+ydif, bb[2], bb[3]+ydif, bb[4], bb[5]+ydif, bb[6], bb[7]+ydif,) + bb[8:]
+            self.fieldBBs[self.fieldBBCurId]=bb
+            self.actionStack.append(('add-field',self.fieldBBCurId,)+bb+(None,None,))
+            self.undoStack=[]
+            if self.secondaryMode is None:
+                self.selectedId=self.fieldBBCurId
+                self.selected='field'
+            self.fieldBBCurId+=1
+            self.draw()
 
 
     def undo(self):
@@ -1268,7 +1297,6 @@ class Control:
             self.mode='change'
             self.modeRect.set_y(toolYMap['change'])
             self.ax_tool.figure.canvas.draw()
-            #drawToolbar(p)
 
     def pairMode(self):
             self.tmpMode = self.mode
@@ -1460,7 +1488,7 @@ class Control:
 
 def drawToolbar(ax):
     #im[0:,-TOOL_WIDTH:]=(140,140,140)
-    im = np.zeros(((toolH+1)*(len(modes)+14),TOOL_WIDTH,3),dtype=np.uint8)
+    im = np.zeros(((toolH+1)*(len(modes)+15),TOOL_WIDTH,3),dtype=np.uint8)
     im[:,:] = (140,140,140)
 
     y=0
@@ -1472,7 +1500,7 @@ def drawToolbar(ax):
         #cv2.putText(im,toolMap[mode],(im.shape[1]TOOL_WIDTH-3,y+toolH-3),cv2.FONT_HERSHEY_PLAIN,2.0,(40,40,40))
         #patches.Polygon((,linewidth=2,edgecolor=colorMap[mode],facecolor=fill)
         textColor='black'
-        if mode=='fieldRegion':
+        if mode=='fieldRegion' or mode=='fieldCol' or mode=='fieldRow':
             textColor='white'
         ax.text(1,y+toolH-10,toolMap[mode],color=textColor)
         toolYMap[mode]=y
@@ -1508,6 +1536,14 @@ def drawToolbar(ax):
     #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-10,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
     ax.text(1,y+toolH-10,'G:delete')
     toolYMap['delete']=y
+    y+=toolH+1
+
+    #copy
+    im[y:y+toolH,:]=(5,5,5)
+    #if self.mode=='delete':
+    #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-10,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
+    ax.text(1,y+toolH-10,'K:copy selected', color=(1,1,1))
+    toolYMap['copy']=y
     y+=toolH+1
 
     #print
