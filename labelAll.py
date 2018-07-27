@@ -3,19 +3,35 @@ from filelock import FileLock, FileLockException
 import os
 import sys
 import json
+import signal
+import timeit
+import grp
 #import Tkinter
 #import tkMessageBox
 
 NUM_PER_GROUP=10
+lock=None
+groupId = grp.getgrnam("pairing").gr_gid
+
+def exitGracefully(sig, frame):
+    global lock
+    if lock is not None:
+        lock.release()
+        exit()
+signal.signal(signal.SIGINT, exitGracefully)
 
 if len(sys.argv)<2:
     print 'usage: '+sys.argv[0]+' directory (startingGroup) (startingImage)'
     exit()
 
 directory = sys.argv[1]
+progressOnly=False
 if len(sys.argv)>2:
-    startHere = sys.argv[2]
-    going=False
+    if sys.argv[2][0]=='-':
+        progressOnly=True
+    else:
+        startHere = sys.argv[2]
+        going=False
 else:
     startHere=None
     going=True
@@ -41,6 +57,25 @@ for root, dirs, files in os.walk(directory):
     imageGroups[groupName]=sorted(files)
     groupNames.append(groupName)
 
+if progressOnly:
+    numTemplateDone=0
+    numDoneTotal=0
+    numTotal=0
+    for groupName in sorted(groupNames):
+        files = imageGroups[groupName]
+        imagesInGroup=0
+        for f in files:
+            if 'lock' not in f:
+                if f[-4:]=='.jpg' or f[-5:]=='.jpeg' or f[-4:]=='.png':
+                    imagesInGroup+=1
+                elif 'template' in f and f[-5:]=='.json':
+                    numTemplateDone+=1
+                elif f[-5:]=='.json':
+                    numDoneTotal+=1
+        numTotal += min(imagesInGroup,NUM_PER_GROUP)
+    print('Templates: {}/{}  {}'.format(numTemplateDone,len(groupNames),float(numTemplateDone)/len(groupNames)))
+    print('Images:    {}/{}  {}'.format(numDoneTotal,numTotal,float(numDoneTotal)/numTotal))
+    exit()
 
 for groupName in sorted(groupNames):
     files = imageGroups[groupName]
@@ -77,13 +112,22 @@ for groupName in sorted(groupNames):
             #tkMessageBox.showinfo("Template", "A template doesn't exist for group "+groupName+", creating one")
             print '!!!!!!!!!!!!!!!!!!!!!!!!!'
             print "A template doesn't exist for group "+groupName+", creating one"
-            textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT, actualCornersT = labelImage(os.path.join(directory,groupName,files[0]),textsT,fieldsT,pairsT,samePairsT,groupsT,None,cornersT,cornersActualT)
-            if len(textsT)==0 and len(fieldsT)==0:
+            timeStart = timeit.default_timer()
+            textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT, actualCornersT, complete = labelImage(os.path.join(directory,groupName,files[0]),textsT,fieldsT,pairsT,samePairsT,groupsT,None,cornersT,cornersActualT)
+            timeElapsed = timeit.default_timer()-timeStart
+            if (len(textsT)==0 and len(fieldsT)==0):
                 lock.release()
+                lock=None
                 exit()
             else:
-                 with open(template,'w') as out:
-                     out.write(json.dumps({"textBBs":textsT, "fieldBBs":fieldsT, "pairs":pairsT, "samePairs":samePairsT, "groups":groupsT, "page_corners":cornersT, "imageFilename":files[0]}))
+                if not complete:
+                     template+='.nf'
+                with open(template,'w') as out:
+                     out.write(json.dumps({"textBBs":textsT, "fieldBBs":fieldsT, "pairs":pairsT, "samePairs":samePairsT, "groups":groupsT, "page_corners":cornersT, "imageFilename":files[0], "labelTime":timeElapsed}))
+                if not complete:
+                    lock.release()
+                    lock=None
+                    exit()
 
         countInGroup=0
         for f in files:
@@ -99,36 +143,59 @@ for groupName in sorted(groupNames):
                         continue
                 name=f[:ind]
                 gtFileName = os.path.join(directory,groupName,name+'.json')
-                if os.path.exists(gtFileName) and startHereImage is None:
+                gtFileNameExists = os.path.exists(gtFileName)
+                if gtFileNameExists and startHereImage is None:
                     continue
+                nfGtFileNameExists = os.path.exists(gtFileName+'.nf')
+                
                 texts=fields=pairs=samePairs=groups=page_corners=page_cornersActual=None
-                try:
-                    with open(gtFileName) as gtF:
-                        read = json.loads(gtF.read())
-                        texts=read['textBBs']
-                        fields=read['fieldBBs']
-                        pairs=read['pairs']
-                        samePairs=read['samePairs']
-                        groups=read['groups']
-                        if 'page_corners' in read and 'actualPage_corners' in read:
-                            page_corners=read['page_corners']
-                            page_cornersActual=read['actualPage_corners']
-                        assert f==read['imageFilename']
-                        print 'g:'+groupName+', image: '+f+', gt found'
-                        texts,fields,pairs,samePairs,groups,corners,actualCorners = labelImage(os.path.join(directory,groupName,f),texts,fields,pairs,samePairs,groups,None,page_corners,page_cornersActual)
-                except IOError as e:
-                    if e.errno == 2:
-                        print 'g:'+groupName+', image: '+f+', from template'
-                        texts,fields,pairs,samePairs,groups,corners,actualCorners = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT)
+                if gtFileNameExists or nfGtFileNameExists:
+                    if gtFileNameExists:
+                        gtF = open(gtFileName)
+                    elif nfGtFileNameExists:
+                        gtF = open(gtFileName+'.nf')
+                    read = json.loads(gtF.read())
+                    texts=read['textBBs']
+                    fields=read['fieldBBs']
+                    pairs=read['pairs']
+                    samePairs=read['samePairs']
+                    groups=read['groups']
+                    if 'page_corners' in read and 'actualPage_corners' in read:
+                        page_corners=read['page_corners']
+                        page_cornersActual=read['actualPage_corners']
+                    if 'labelTime' in read:
+                        labelTime = read['labelTime']
                     else:
-                        raise
+                        labelTime = None
+                    assert f==read['imageFilename']
+                    print 'g:'+groupName+', image: '+f+', gt found'
+                    if labelTime is not None:
+                        timeStart = timeit.default_timer()
+                    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete = labelImage(os.path.join(directory,groupName,f),texts,fields,pairs,samePairs,groups,None,page_corners,page_cornersActual)
+                    if labelTime is not None:
+                        labelTime += timeit.default_timer()-timeStart
+                    gtF.close()
+                else:
+                    print 'g:'+groupName+', image: '+f+', from template'
+                    timeStart = timeit.default_timer()
+                    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT)
+                    labelTime = timeit.default_timer()-timeStart
 
                 if len(texts)==0 and len(fields)==0:
                     lock.release()
+                    lock=None
                     exit()
-                if len(texts)+len(fields)+len(corners)>0:
-                    with open(gtFileName,'w') as out:
-                        out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f}))
+                if not complete:
+                    gtFileName+='.nf'
+                with open(gtFileName,'w') as out:
+                    out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime}))
+                os.chown(gtFileName,-1,groupId)
+                if not complete:
+                    lock.release()
+                    lock=None
+                    exit()
+                elif nfGtFileNameExists:
+                    os.remove(gtFileName+'.nf')
         lock.release()
         lock=None
     except FileLockException as e:

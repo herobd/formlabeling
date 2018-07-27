@@ -3,7 +3,10 @@ from filelock import FileLock, FileLockException
 import os
 import sys
 import json
+import timeit
+import grp
 
+groupId = grp.getgrnam("pairing").gr_gid
 if len(sys.argv)<2:
     print 'usage: '+sys.argv[0]+' directory (startingGroup)'
     exit()
@@ -52,35 +55,58 @@ for groupName in sorted(groupNames):
     if template is not None and startHere is None:
         continue
 
+    nfTemplate = os.path.join(directory,groupName,'template'+groupName+'.json.nf')
+    nfExists = os.path.exists(nfTemplate)
+
     print 'group '+groupName+', template image: '+imageTemplate                   
     outFile=os.path.join(directory,groupName,'template'+groupName+'.json')
     lock = FileLock(outFile, timeout=None)
     try:
         lock.acquire()
         texts=fields=pairs=samePairs=groups=page_corners=page_cornersActual=None
-        if template is not None:
-            with open(template) as f:
-                read = json.loads(f.read())
-                texts=read['textBBs']
-                fields=read['fieldBBs']
-                pairs=read['pairs']
-                samePairs=read['samePairs']
-                #for i in len(samePairs):
-                #    if samePairs[i][-1][0]=='f':
-                groups=read['groups']
-                imageTemplate=read['imageFilename']
-                if 'page_corners' in read:
-                    page_corners=read['page_corners']
-                if 'actualPage_corners' in read:
-                    page_cornersActual=read['actualPage_corners']
-        texts,fields,pairs,samePairs,groups,corners,actualCorners = labelImage(os.path.join(directory,groupName,imageTemplate),texts,fields,pairs,samePairs,groups,None,page_corners,page_cornersActual)
+        if template is not None or nfExists:
+            if template is not None:
+                f=open(template)
+            elif nfExists:
+                f=open(nfTemplate)
+            read = json.loads(f.read())
+            f.close()
+            texts=read['textBBs']
+            fields=read['fieldBBs']
+            pairs=read['pairs']
+            samePairs=read['samePairs']
+            #for i in len(samePairs):
+            #    if samePairs[i][-1][0]=='f':
+            groups=read['groups']
+            imageTemplate=read['imageFilename']
+            if 'page_corners' in read:
+                page_corners=read['page_corners']
+            if 'actualPage_corners' in read:
+                page_cornersActual=read['actualPage_corners']
+            if 'labelTime' in read:
+                labelTime=read['labelTime']
+                startTime = timeit.default_timer()
+            else:
+                labelTime=None
+        else:
+            labelTime=0
+            startTime = timeit.default_timer()
+        texts,fields,pairs,samePairs,groups,corners,actualCorners,complete = labelImage(os.path.join(directory,groupName,imageTemplate),texts,fields,pairs,samePairs,groups,None,page_corners,page_cornersActual)
+        if labelTime is not None:
+            labelTime+=timeit.default_timer()-startTime
         if len(texts)==0 and len(fields)==0:
             break
-        if len(texts)+len(fields)+len(corners)>0:
-            with open(outFile,'w') as out:
-                out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "imageFilename":imageTemplate}))
+        if not complete:
+            outFile+='.nf'
+        with open(outFile,'w') as out:
+            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "imageFilename":imageTemplate, "labelTime": labelTime}))
+        os.chown(outFile,-1,groupId)
         lock.release()
         lock=None
+        if not complete:
+            exit()
+        elif nfExists:
+            os.remove(nfTemplate)
     except FileLockException as e:
         print 'template locked, moving to next group'
         lock=None

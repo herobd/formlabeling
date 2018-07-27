@@ -205,6 +205,7 @@ class Control:
         self.preTexts=texts
         self.preFields=fields
         self.preCorners=pre_corners
+        self.complete=False #this is for returning whether the user is done labeling
         if pairs is not None:
             self.pairing=[(int(x[1:]),int(y[1:])) for (x,y) in pairs if (x[0]=='t' and y[0]=='f')]
             switched = [(int(y[1:]),int(x[1:])) for (x,y) in pairs if (x[0]=='f' and y[0]=='t')]
@@ -964,7 +965,6 @@ class Control:
             self.mode=self.tmpMode
             self.modeRect.set_y(toolYMap[self.mode])
             self.ax_tool.figure.canvas.draw()
-            #drawToolbar(p)
         elif self.mode[:6] == 'corner':
             if event.key=='escape': #quit
                 self.textBBs={}
@@ -1007,15 +1007,16 @@ class Control:
                     self.modeRect.set_y(toolYMap[self.mode])
                     self.ax_tool.figure.canvas.draw()
                     #print newMode
-                    #drawToolbar(p)
-            elif key=='escape': #quit
+            elif key=='escape': #quit, unfinished
+                plt.close('all')
+            elif key=='enter': #quit, finished
+                self.complete=True
                 plt.close('all')
             elif key=='g': #delete:
                 if self.mode != 'delete':
                     self.modeRect.set_y(toolYMap['delete'])
                     self.ax_tool.figure.canvas.draw()
                     self.mode='delete'
-                    #drawToolbar(p)
             elif key=='a': # undo
                 self.undo()
             elif key=='s': #S redo
@@ -1488,7 +1489,7 @@ class Control:
 
 def drawToolbar(ax):
     #im[0:,-TOOL_WIDTH:]=(140,140,140)
-    im = np.zeros(((toolH+1)*(len(modes)+15),TOOL_WIDTH,3),dtype=np.uint8)
+    im = np.zeros(((toolH+1)*(len(modes)+17),TOOL_WIDTH,3),dtype=np.uint8)
     im[:,:] = (140,140,140)
 
     y=0
@@ -1603,6 +1604,18 @@ def drawToolbar(ax):
     toolYMap['scale']=y
     y+=toolH+1
 
+    #enter
+    im[y:y+toolH,:]=(15,5,5)
+    ax.text(1,y+toolH-10,'ENTER: complete, save-close', color=(1,1,1))
+    toolYMap['copy']=y
+    y+=toolH+1
+
+    #esc
+    im[y:y+toolH,:]=(5,15,5)
+    ax.text(1,y+toolH-10,'ESC:incomplete, save-close', color=(1,1,1))
+    toolYMap['quitNF']=y
+    y+=toolH+1
+
     return im
 
     #cv2.imshow("labeler",self.displayImage)
@@ -1710,7 +1723,7 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,pre_corners=None, p
             groups.append(newGroup)
 
 
-    return textBBs, fieldBBs, pairing, samePairing, groups, control.corners, control.cornersActual
+    return textBBs, fieldBBs, pairing, samePairing, groups, control.corners, control.cornersActual, control.complete
 
 if __name__ == "__main__":
 
