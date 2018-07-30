@@ -13,7 +13,7 @@ from collections import defaultdict
 mouse_button=3
 TOOL_WIDTH=240
 toolH=40
-colorMap = {'text':(0/255.0,0/255.0,255/255.0,0.51), 'textP':(0/255.0,150/255.0,255/255.0,0.51), 'textMinor':(100/255.0,190/255.0,205/255.0,0.51), 'textInst':(180/255.0,200/255.0,255/255.0,0.71), 'textNumber':(0/255.0,160/255.0,100/255.0,0.51), 'fieldCircle':(255/255.0,190/255.0,210/255.0,0.61), 'field':(255/255.0,0/255.0,0/255.0,0.51), 'fieldP':(255/255.0,120/255.0,0/255.0,0.51), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0,0.51), 'graphic':(255/255.0,105/255.0,250/255.0,0.51), 'comment':(165/255.0,10/255.0,15/255.0,0.51), 'pair':(15/255.0,150/255.0,15/255.0,0.51), 'col':(5/255.0,70/255.0,5/255.0,0.35), 'row':(25/255.0,5/255.0,75/255.0,0.35), 'fieldRegion':(15/255.0,15/255.0,75/255.0,0.51), 'fieldCol':(65/255.0,70/255.0,5/255.0,0.65), 'fieldRow':(65/255.0,5/255.0,75/255.0,0.65)}
+colorMap = {'text':(0/255.0,0/255.0,255/255.0,0.51), 'textP':(0/255.0,150/255.0,255/255.0,0.51), 'textMinor':(100/255.0,190/255.0,205/255.0,0.51), 'textInst':(180/255.0,200/255.0,255/255.0,0.71), 'textNumber':(0/255.0,160/255.0,100/255.0,0.51), 'fieldCircle':(255/255.0,190/255.0,210/255.0,0.61), 'field':(255/255.0,0/255.0,0/255.0,0.51), 'fieldP':(255/255.0,120/255.0,0/255.0,0.51), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0,0.51), 'graphic':(255/255.0,105/255.0,250/255.0,0.51), 'comment':(165/255.0,10/255.0,15/255.0,0.51), 'pair':(15/255.0,150/255.0,15/255.0,0.51), 'col':(5/255.0,70/255.0,5/255.0,0.35), 'row':(25/255.0,5/255.0,75/255.0,0.35), 'fieldRegion':(15/255.0,15/255.0,75/255.0,0.51), 'fieldCol':(65/255.0,70/255.0,5/255.0,0.65), 'fieldRow':(65/255.0,5/255.0,75/255.0,0.65), 'move':(1,0,1,0.5)}
 DRAW_COLOR=(1,0.7,1)
 codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11, 'fieldCol':12, 'fieldRow':13}
 RcodeMap = {v: k for k, v in codeMap.iteritems()}
@@ -188,6 +188,7 @@ class Control:
         self.groups={} #groups are rows or columns
         self.groupCurId=0
         self.groupPolys={} #for drawing
+        self.selectedRects=[] #for drawing in move mode
         self.corners={'tl':None, 'tr':None, 'br':None, 'bl':None}
         self.cornersActual=None
         self.corners_draw=defaultdict(lambda: None) #{'tl':None, 'tr':None, 'br':None, 'bl':None}
@@ -296,8 +297,15 @@ class Control:
         #self.ax_im.figure.canvas.draw()
         self.draw()
 
+    #applies the given transformation to every BB specified by Ids. Or all BBs if none
     def transAll(self,trans):
-        for id in self.textBBs:
+        if self.mode != 'move':
+            textIds = self.textBBs.keys()
+            fieldIds = self.fieldBBs.keys()
+        else:
+            textIds=self.selectedTextIds
+            fieldIds=self.selectedFieldIds
+        for id in textIds:
             tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank = self.textBBs[id]
             old_corners = np.array([[tlX,trX,brX,blX],
                                     [tlY,trY,brY,blY],
@@ -305,7 +313,7 @@ class Control:
             new_points = np.matmul(trans,old_corners)
             new_points/=new_points[2,:] #bring back to standard homogeneous form
             self.textBBs[id] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,0)
-        for id in self.fieldBBs:
+        for id in fieldIds:
             tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank = self.fieldBBs[id]
             old_corners = np.array([[tlX,trX,brX,blX],
                                     [tlY,trY,brY,blY],
@@ -314,6 +322,36 @@ class Control:
             new_points/=new_points[2,:] #bring back to standard homogeneous form
             self.fieldBBs[id] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,blank)
         self.draw()
+
+    def selectAllInRect(self,xa,ya,xb,yb):
+        x0 = min(xa,xb)
+        x1 = max(xa,xb)
+        y0 = min(ya,yb)
+        y1 = max(ya,yb)
+
+        def checkDim(tup,indicies,v0,v1):
+            for index in indicies:
+                #print '  {}: {}< {}'.format(index,tup[index]<v0,tup[index]>v1)
+                if tup[index]<v0 or tup[index]>v1:
+                    return False
+            return True
+
+
+        def checkBBs(bbs,x0,y0,x1,y1):
+            ret=[]
+            for id in bbs:
+                #print id
+                #print checkDim(bbs[id],[0,2,4,6],x0,x1)
+                #print checkDim(bbs[id],[1,3,5,7],y0,y1)
+                if checkDim(bbs[id],[0,2,4,6],x0,x1) and checkDim(bbs[id],[1,3,5,7],y0,y1):
+                    ret.append(id)
+            return ret
+        
+        self.selectedTextIds=checkBBs(self.textBBs,x0,y0,x1,y1)
+        self.selectedFieldIds=checkBBs(self.fieldBBs,x0,y0,x1,y1)
+        self.drawSelected()
+
+            
 
     def clickerDown(self,event):
         #image,displayImage,mode,textBBs,fieldBBs,pairing = param
@@ -336,6 +374,12 @@ class Control:
         if '-m' == self.mode[-2:]: #we dragged to make a box
             self.drawRect.set_xy(np.array([[0,0],[0.1,0],[0,0.1]]))
             self.mode=self.mode[:-2] #make state readable
+
+            if self.mode=='move':
+                if abs((self.startX-self.endX)*(self.startY-self.endY))>10: #the box is "big enough"
+                    self.selectAllInRect(self.startX,self.startY,self.endX,self.endY)
+                return
+
             if abs((self.startX-self.endX)*(self.startY-self.endY))>10: #the box is "big enough"
                 didPair=None #for storing auto-pair for undo/action stack
 
@@ -635,7 +679,45 @@ class Control:
                                         self.draw()
                                         return
             #then bbs
-            if self.secondaryMode is None:
+            if self.mode == 'move':
+                remove=None
+                add=None
+                for id in self.textBBs:
+                    if self.checkInside(x,y,self.textBBs[id]):
+                        if id not in self.selectedTextIds:
+                            add=id
+                        else:
+                            remove=id
+                        break
+                for id in self.fieldBBs:
+                    canAdd = add is None and id not in self.selectedFieldIds
+                    canRemove = remove is None and id in self.selectedFieldIds
+                    if canAdd or canRemove:
+                        if self.checkInside(x,y,self.fieldBBs[id]):
+                            if canAdd:
+                                self.selectedFieldIds.append(id)
+                                self.drawSelected()
+                                return
+                            elif canRemove:
+                                self.selectedFieldIds.remove(id)
+                                self.drawSelected()
+                                return
+                        
+                if add is not None:
+                    self.selectedTextIds.append(add)
+                    self.drawSelected()
+                    return
+                elif remove is not None:
+                    self.selectedTextIds.remove(remove)
+                    self.drawSelected()
+                    return
+
+                self.selectedTextIds=[]
+                self.selectedFieldIds=[]
+                self.drawSelected()
+                return
+                            
+            elif self.secondaryMode is None:
                 for id in self.textBBs:
                     if self.checkInside(x,y,self.textBBs[id]):
                         #print 'click on text b'
@@ -889,7 +971,8 @@ class Control:
                 #    self.mode = self.mode[:-1]+'b'
                 self.drawRect.set_edgecolor(col)
             elif 'none' not in self.mode and 'delete' not in self.mode and 'change' not in self.mode and 'pair' not in self.mode:
-                self.draw(clear=True)
+                if self.mode!='move':
+                    self.draw(clear=True)
                 col=DRAW_COLOR
                 if self.mode[:-2] in colorMap:
                     col=colorMap[self.mode[:-2]]
@@ -962,7 +1045,8 @@ class Control:
                         self.fieldBBs[self.selectedId]=self.fieldBBs[self.selectedId][0:8]+(codeMap[mode],)+self.fieldBBs[self.selectedId][9:]
                     self.draw()
 
-            self.mode=self.tmpMode
+            if self.tmpMode in modes:
+                self.mode=self.tmpMode
             self.modeRect.set_y(toolYMap[self.mode])
             self.ax_tool.figure.canvas.draw()
         elif self.mode[:6] == 'corner':
@@ -1035,6 +1119,8 @@ class Control:
                 self.pairMode()
             elif key=='k': #K copy selected
                 self.copy()
+            elif key=='m': #M select muliple BBs to apply transformations to
+                self.moveSelect()
             elif key=="'": #row
                 self.setSecondaryMode('row')
             elif key==';': #col
@@ -1299,6 +1385,16 @@ class Control:
             self.modeRect.set_y(toolYMap['change'])
             self.ax_tool.figure.canvas.draw()
 
+    def moveSelect(self):
+            self.mode='move'
+            self.modeRect.set_y(toolYMap['move'])
+            self.selectedTextIds=[]
+            self.selectedFieldIds=[]
+            self.ax_tool.figure.canvas.draw()
+            self.selected='none'
+            self.selectedId=None
+            self.setSelectedRectOff()
+
     def pairMode(self):
             self.tmpMode = self.mode
             self.mode='pair'
@@ -1337,7 +1433,7 @@ class Control:
         #print (minX,minY,maxX,minY,maxX,maxY,minX,maxY)
         self.setSelectedRect((minX,minY,maxX,minY,maxX,maxY,minX,maxY),size=30)
 
-    def setSelectedRect(self,bb,size=15):
+    def getSelectedPoly(self,bb, size=15):
         xc=(bb[0]+bb[2]+bb[4]+bb[6])/4.0
         yc=(bb[1]+bb[3]+bb[5]+bb[7])/4.0
         
@@ -1356,9 +1452,11 @@ class Control:
         bld = size/math.sqrt((xc-bb[6])**2 + (yc-bb[7])**2)
         blX = bb[6]+(bb[6]-xc)*bld
         blY = bb[7]+(bb[7]-yc)*bld
+        return np.array([[tlX,tlY],[trX,trY],[brX,brY],[blX,blY]])
 
 
-        self.selectedRect.set_xy(np.array([[tlX,tlY],[trX,trY],[brX,brY],[blX,blY]]))
+    def setSelectedRect(self,bb,size=15):
+        self.selectedRect.set_xy(self.getSelectedPoly(bb,size))
 
     def setSelectedRectOff(self):
         self.selectedRect.set_xy(np.array([[0,0],[0.1,0],[0,0.1]]))
@@ -1369,6 +1467,19 @@ class Control:
         vertices = [(bb[0],bb[1]),(bb[2],bb[3]),(bb[4],bb[5]),(bb[6],bb[7])]
         return checkInsidePoly(x,y,vertices)
 
+    def drawSelected(self):
+        for id in self.selectedTextIds:
+            polyPts = self.getSelectedPoly(self.textBBs[id])
+            poly = patches.Polygon(np.array(polyPts),linewidth=2,edgecolor=colorMap['move'],facecolor='none')
+            self.ax_im.add_patch(poly)
+            self.selectedRects.append(poly)
+        for id in self.selectedFieldIds:
+            polyPts = self.getSelectedPoly(self.fieldBBs[id])
+            poly = patches.Polygon(np.array(polyPts),linewidth=2,edgecolor=colorMap['move'],facecolor='none')
+            self.ax_im.add_patch(poly)
+            self.selectedRects.append(poly)
+
+        self.ax_im.figure.canvas.draw()
 
     def draw(self, clear=False):
         self.drawRect.set_xy(np.array([[0,0],[0.1,0],[0,0.1]]))
@@ -1394,6 +1505,9 @@ class Control:
         for id,poly in self.groupPolys.iteritems():
             poly.remove()
         self.groupPolys={}
+        for rect in self.selectedRects:
+                rect.remove()
+        self.selectedRects=[]
 
         if not clear:
 
@@ -1485,11 +1599,14 @@ class Control:
                 self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='purple',facecolor='none')
                 self.ax_im.add_patch(self.pairLines[lineId])
                 lineId+=1
-        self.ax_im.figure.canvas.draw()
+        if self.mode=='move':
+            self.drawSelected()
+        else:
+            self.ax_im.figure.canvas.draw()
 
 def drawToolbar(ax):
     #im[0:,-TOOL_WIDTH:]=(140,140,140)
-    im = np.zeros(((toolH+1)*(len(modes)+17),TOOL_WIDTH,3),dtype=np.uint8)
+    im = np.zeros(((toolH+1)*(len(modes)+18),TOOL_WIDTH,3),dtype=np.uint8)
     im[:,:] = (140,140,140)
 
     y=0
@@ -1547,6 +1664,12 @@ def drawToolbar(ax):
     toolYMap['copy']=y
     y+=toolH+1
 
+    #move
+    im[y:y+toolH,:]=(222,22,222)
+    ax.text(1,y+toolH-10,'M:select and move')
+    toolYMap['move']=y
+    y+=toolH+1
+
     #print
     im[y:y+toolH,:]=(255, 230, 242)
     ax.text(1,y+toolH-10,'Z:mark field as print/stamp')
@@ -1589,7 +1712,7 @@ def drawToolbar(ax):
     #move
     im[y:y+toolH,:]=(30,30,30)
     ax.text(1,y+toolH-10,'Arrow keys:move all labels', color=(1,1,1))
-    toolYMap['move']=y
+    toolYMap['translate']=y
     y+=toolH+1
 
     #rotate
