@@ -11,7 +11,7 @@ import grp
 
 NUM_PER_GROUP=10
 lock=None
-groupId = grp.getgrnam("pairing").gr_gid
+#groupId = grp.getgrnam("pairing").gr_gid
 
 def exitGracefully(sig, frame):
     global lock
@@ -189,7 +189,7 @@ for groupName in sorted(groupNames):
                     gtFileName+='.nf'
                 with open(gtFileName,'w') as out:
                     out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime}))
-                os.chown(gtFileName,-1,groupId)
+                #os.chown(gtFileName,-1,groupId)
                 if not complete:
                     lock.release()
                     lock=None

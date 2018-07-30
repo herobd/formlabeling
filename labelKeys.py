@@ -6,7 +6,7 @@ import json
 import timeit
 import grp
 
-groupId = grp.getgrnam("pairing").gr_gid
+#groupId = grp.getgrnam("pairing").gr_gid
 if len(sys.argv)<2:
     print 'usage: '+sys.argv[0]+' directory (startingGroup)'
     exit()
@@ -100,7 +100,7 @@ for groupName in sorted(groupNames):
             outFile+='.nf'
         with open(outFile,'w') as out:
             out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "imageFilename":imageTemplate, "labelTime": labelTime}))
-        os.chown(outFile,-1,groupId)
+        #os.chown(outFile,-1,groupId)
         lock.release()
         lock=None
         if not complete:
