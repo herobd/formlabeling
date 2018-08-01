@@ -13,7 +13,8 @@ from collections import defaultdict
 mouse_button=3
 TOOL_WIDTH=240
 toolH=40
-colorMap = {'text':(0/255.0,0/255.0,255/255.0,0.51), 'textP':(0/255.0,150/255.0,255/255.0,0.51), 'textMinor':(100/255.0,190/255.0,205/255.0,0.51), 'textInst':(180/255.0,200/255.0,255/255.0,0.71), 'textNumber':(0/255.0,160/255.0,100/255.0,0.51), 'fieldCircle':(255/255.0,190/255.0,210/255.0,0.61), 'field':(255/255.0,0/255.0,0/255.0,0.51), 'fieldP':(255/255.0,120/255.0,0/255.0,0.51), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0,0.51), 'graphic':(255/255.0,105/255.0,250/255.0,0.51), 'comment':(165/255.0,10/255.0,15/255.0,0.51), 'pair':(15/255.0,150/255.0,15/255.0,0.51), 'col':(5/255.0,70/255.0,5/255.0,0.35), 'row':(25/255.0,5/255.0,75/255.0,0.35), 'fieldRegion':(15/255.0,15/255.0,75/255.0,0.51), 'fieldCol':(65/255.0,70/255.0,5/255.0,0.65), 'fieldRow':(65/255.0,5/255.0,75/255.0,0.65), 'move':(1,0,1,0.5)}
+MAX_ARR_LEN=200
+colorMap = {'text':(0/255.0,0/255.0,255/255.0,0.51), 'textP':(0/255.0,150/255.0,255/255.0,0.51), 'textMinor':(80/255.0,170/255.0,190/255.0,0.65), 'textInst':(170/255.0,160/255.0,225/255.0,0.71), 'textNumber':(0/255.0,160/255.0,100/255.0,0.51), 'fieldCircle':(255/255.0,190/255.0,210/255.0,0.61), 'field':(255/255.0,0/255.0,0/255.0,0.51), 'fieldP':(255/255.0,120/255.0,0/255.0,0.51), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0,0.51), 'graphic':(255/255.0,105/255.0,250/255.0,0.51), 'comment':(165/255.0,10/255.0,15/255.0,0.51), 'pair':(15/255.0,150/255.0,15/255.0,0.51), 'col':(5/255.0,70/255.0,5/255.0,0.35), 'row':(25/255.0,5/255.0,75/255.0,0.35), 'fieldRegion':(15/255.0,15/255.0,75/255.0,0.51), 'fieldCol':(65/255.0,70/255.0,5/255.0,0.65), 'fieldRow':(65/255.0,5/255.0,75/255.0,0.65), 'move':(1,0,1,0.5)}
 DRAW_COLOR=(1,0.7,1)
 codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11, 'fieldCol':12, 'fieldRow':13}
 RcodeMap = {v: k for k, v in codeMap.iteritems()}
@@ -191,6 +192,7 @@ class Control:
         self.groups={} #groups are rows or columns
         self.groupCurId=0
         self.groupPolys={} #for drawing
+        self.arrowPolys=[]
         self.selectedRects=[] #for drawing in move mode
         self.corners={'tl':None, 'tr':None, 'br':None, 'bl':None}
         self.cornersActual=None
@@ -1186,6 +1188,14 @@ class Control:
             elif key=='enter': #quit, finished
                 self.complete=True
                 plt.close('all')
+            elif key=='f12': #quit, no save
+                self.textBBs={}
+                self.fieldBBs={}
+                self.pairing=[]
+                self.samePairing=[]
+                self.corners={}
+                self.cornersActual={}
+                plt.close('all')
             elif key=='g': #delete:
                 if self.mode != 'delete':
                     self.modeRect.set_y(toolYMap['delete'])
@@ -1207,6 +1217,8 @@ class Control:
                 self.setFieldType(ftypeMap['signature'])
             elif key=='f': #V pair
                 self.pairMode()
+            elif key=='j':
+                self.rotateOrien()
             elif key=='k': #K copy selected
                 self.copy()
             elif key=='m': #M select muliple BBs to apply transformations to
@@ -1310,6 +1322,19 @@ class Control:
     #            self.pairLines[i].remove()
     #            self.pairLines[i]=patches.Arrow(x,y,xe-x,ye-y,2,edgecolor='g',facecolor='none')
     #            self.ax_im.add_patch(self.pairLines[i])
+    def rotateOrien(self):
+        bbs=None
+        if 'text'==self.selected:
+            bbs=self.textBBs
+        elif 'field'==self.selected:
+            bbs=self.fieldBBs
+
+        if bbs is not None:
+            bb = bbs[self.selectedId]
+            if RcodeMap[bb[8]]!='graphic' and RcodeMap[bb[8]]!='fieldRow' and RcodeMap[bb[8]]!='fieldCol' and RcodeMap[bb[8]]!='fieldCheckBox' and RcodeMap[bb[8]]!='fieldRegion':
+                self.didAction(('rotate-orien',bbs,self.selectedId,bb))
+                bbs[self.selectedId] = (bb[2], bb[3],  bb[4], bb[5], bb[6], bb[7], bb[0], bb[1]) + bb[8:]
+                self.draw()
 
     def copy(self):
         if 'text'==self.selected:
@@ -1498,6 +1523,11 @@ class Control:
             invTrans = np.linalg.inv(trans)
             self.transAll(invTrans, textIds=textIds, fieldIds=fieldIds, recordAction=False)
             return (label, textIds, fieldIds, invTrans)
+        elif action[0] == 'rotate-orien':
+            label, bbs, id, bb = action
+            toRet = (label,bbs,id,bbs[id])
+            bbs[id]=bb
+            return toRet
         else:
             print 'Unimplemented action: '+str(action[0])
 
@@ -1631,6 +1661,9 @@ class Control:
         for id,poly in self.groupPolys.iteritems():
             poly.remove()
         self.groupPolys={}
+        for poly in self.arrowPolys:
+                poly.remove()
+        self.arrowPolys=[]
         for rect in self.selectedRects:
                 rect.remove()
         self.selectedRects=[]
@@ -1679,6 +1712,12 @@ class Control:
                     color = (color[0]/2.0, color[1]/2.0, color[2]/2.0,)+color[3:]
                 self.textRects[id] = patches.Polygon(np.array([[tlX,tlY],[trX,trY],[brX,brY],[blX,blY]]),linewidth=2,edgecolor=color,facecolor='none')
                 self.ax_im.add_patch(self.textRects[id])
+                
+                if self.selected=='text' and self.selectedId==id:
+                    color = (color[0]/2.0, color[1]/2.0, color[2]/2.0,2.0)
+                arrow = self.createArrow(tlX,tlY,trX,trY,brX,brY,blX,blY,color)
+                self.arrowPolys.append(arrow)
+                self.ax_im.add_patch(arrow)
 
             for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,code,ftype) in self.fieldBBs.iteritems():
                 #cv2.rectangle(self.displayImage,(startX,startY),(endX,endY),colorMap[RcodeMap[code]],1)
@@ -1694,13 +1733,14 @@ class Control:
                     color = (color[0]/2.0, color[1]/2.0, color[2]/2.0,)+color[3:]
                 self.fieldRects[id] = patches.Polygon(np.array([[tlX,tlY],[trX,trY],[brX,brY],[blX,blY]]),linewidth=2,edgecolor=color,facecolor=fill)
                 self.ax_im.add_patch(self.fieldRects[id])
-                #if blank==1:
-                #    w = endX-startX
-                #    h = endY-startY
-                #    cv2.rectangle(self.displayImage,(startX+2,startY+2),(endX-2,endY-2),(240,240,240),1)
-                #    cv2.rectangle(self.displayImage,(int(startX+0.25*w),int(startY+0.25*h)),(int(endX-0.25*w),int(endY-0.25*h)),(240,240,240),1)
-                #    cv2.rectangle(self.displayImage,(int(startX+0.15*w),int(startY+0.15*h)),(int(endX-0.15*w),int(endY-0.15*h)),(240,240,240),1)
-                #    cv2.rectangle(self.displayImage,(int(startX+0.35*w),int(startY+0.35*h)),(int(endX-0.35*w),int(endY-0.35*h)),(240,240,240),1)
+
+                if RcodeMap[code]!='graphic' and RcodeMap[code]!='fieldRow' and RcodeMap[code]!='fieldCol' and RcodeMap[code]!='fieldCheckBox' and RcodeMap[code]!='fieldRegion':
+
+                    if self.selected=='field' and self.selectedId==id:
+                        color = (color[0]/2.0, color[1]/2.0, color[2]/2.0,color[3]*1.5)
+                    arrow = self.createArrow(tlX,tlY,trX,trY,brX,brY,blX,blY,color)
+                    self.arrowPolys.append(arrow)
+                    self.ax_im.add_patch(arrow)
 
             for text,field in self.pairing:
                 x1=(self.textBBs[text][0]+self.textBBs[text][2]+self.textBBs[text][4]+self.textBBs[text][6])/4
@@ -1730,9 +1770,37 @@ class Control:
         else:
             self.ax_im.figure.canvas.draw()
 
+    def createArrow(self,tlX,tlY,trX,trY,brX,brY,blX,blY,color):
+        lX = (tlX+blX)/2.0
+        lY = (tlY+blY)/2.0
+        rX = (trX+brX)/2.0
+        rY = (trY+brY)/2.0
+        d=math.sqrt((lX-rX)**2 + (lY-rY)**2)
+        if rX-lX!=0:
+            s = (rY-lY)/(rX-lX)
+            ds = math.sqrt(s**2 + 1)
+            arrLen = min(d*0.25,MAX_ARR_LEN)
+            pX = lX+math.copysign(arrLen/ds,rX-lX)
+            pY = lY+math.copysign(s*arrLen/ds,rY-lY)
+        else:
+            arrLen = min(abs(rY-lY)*0.25,MAX_ARR_LEN)
+            pX = lX
+            pY = lY+math.copysign(arrLen,rY-lY)
+
+        hl = ((tlX-lX)*-(rY-lY) + (tlY-lY)*(rX-lX))/d #projection of half-left edge onto transpose horz run
+        hr = ((brX-rX)*-(lY-rY) + (brY-rY)*(lX-rX))/d #projection of half-right edge onto transpose horz run
+        h = (hl+hr)/2.0
+
+        tX = lX + h*-(rY-lY)/d
+        tY = lY + h*(rX-lX)/d
+        bX = lX - h*-(rY-lY)/d
+        bY = lY - h*(rX-lX)/d
+        color = color[0:3]+(color[3]/2.0,)
+        return patches.Polygon(np.array([[lX,lY],[tX,tY],[pX,pY],[bX,bY],[lX,lY],[pX,pY]]),linewidth=2,edgecolor=color,facecolor='none')
+
 def drawToolbar(ax):
     #im[0:,-TOOL_WIDTH:]=(140,140,140)
-    im = np.zeros(((toolH+1)*(len(modes)+18),TOOL_WIDTH,3),dtype=np.uint8)
+    im = np.zeros(((toolH+1)*(len(modes)+21),TOOL_WIDTH,3),dtype=np.uint8)
     im[:,:] = (140,140,140)
 
     y=0
@@ -1764,7 +1832,7 @@ def drawToolbar(ax):
     im[y:y+toolH,:]=(230,230,230)
     #if self.mode=='change':
     #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-10,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
-    ax.text(1,y+toolH-10,'D:switch type')
+    ax.text(1,y+toolH-10,'D:switch BB type')
     toolYMap['change']=y
     y+=toolH+1
 
@@ -1782,11 +1850,19 @@ def drawToolbar(ax):
     toolYMap['delete']=y
     y+=toolH+1
 
+    #rotateOrien
+    im[y:y+toolH,:]=(80,80,150)
+    #if self.mode=='delete':
+    #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-10,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
+    ax.text(1,y+toolH-10,'J:rotate BB orientation')
+    toolYMap['rotateOrien']=y
+    y+=toolH+1
+
     #copy
     im[y:y+toolH,:]=(5,5,5)
     #if self.mode=='delete':
     #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-10,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
-    ax.text(1,y+toolH-10,'K:copy selected', color=(1,1,1))
+    ax.text(1,y+toolH-10,'K:copy selected BB', color=(1,1,1))
     toolYMap['copy']=y
     y+=toolH+1
 
@@ -1825,17 +1901,17 @@ def drawToolbar(ax):
 
     #col
     im[y:y+toolH,:]=(255*colorMap['col'][0],255*colorMap['col'][1],255*colorMap['col'][2]) #(5,50,5)
-    ax.text(1,y+toolH-10,';:col mode', color=(1,1,1))
+    ax.text(1,y+toolH-10,';:special col mode', color=(1,1,1))
     toolYMap['col']=y
     y+=toolH+1
 
     #row
     im[y:y+toolH,:]=(255*colorMap['row'][0],255*colorMap['row'][1],255*colorMap['row'][2]) #(45,45,5)
-    ax.text(1,y+toolH-10,"':row mode", color=(1,1,1))
+    ax.text(1,y+toolH-10,"':special row mode", color=(1,1,1))
     toolYMap['row']=y
     y+=toolH+1
 
-    #move
+    #translate
     im[y:y+toolH,:]=(30,30,30)
     ax.text(1,y+toolH-10,'Arrow keys:move all labels', color=(1,1,1))
     toolYMap['translate']=y
@@ -1853,16 +1929,28 @@ def drawToolbar(ax):
     toolYMap['scale']=y
     y+=toolH+1
 
+    #shift
+    im[y:y+toolH,:]=(50,40,40)
+    ax.text(1,y+toolH-10,'SHIFT (hold):to drag corners', color=(1,1,1))
+    toolYMap['corners']=y
+    y+=toolH+1
+
     #enter
-    im[y:y+toolH,:]=(15,5,5)
+    im[y:y+toolH,:]=(5,35,5)
     ax.text(1,y+toolH-10,'ENTER: complete, save-close', color=(1,1,1))
-    toolYMap['copy']=y
+    toolYMap['quit']=y
     y+=toolH+1
 
     #esc
-    im[y:y+toolH,:]=(5,15,5)
-    ax.text(1,y+toolH-10,'ESC:incomplete, save-close', color=(1,1,1))
+    im[y:y+toolH,:]=(5,5,35)
+    ax.text(1,y+toolH-10,'ESC: incomplete, save-close', color=(1,1,1))
     toolYMap['quitNF']=y
+    y+=toolH+1
+
+    #f12
+    im[y:y+toolH,:]=(25,0,0)
+    ax.text(1,y+toolH-10,'F12: close without saving', color=(1,1,1))
+    toolYMap['quitNS']=y
     y+=toolH+1
 
     return im
