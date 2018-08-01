@@ -174,8 +174,11 @@ class Control:
                             'motion_notify_event', self.clickerMove)
         self.key_cid = self.ax_im.figure.canvas.mpl_connect(
                             'key_press_event', self.doKey)
+        self.keyup_cid = self.ax_im.figure.canvas.mpl_connect(
+                            'key_release_event', self.doKeyUp)
         self.mode='corners' #this indicates the 'state'
         self.secondaryMode=None
+        self.resizeMode='edges'
         self.textBBs={} #this holds each text box as (x1,y1,x2,y2,x3,y3,x4,y4,type_code,blank).  blank is always 0
         self.textRects={} #this holds the drawing patches
         self.fieldBBs={} #this holds each field box as (x1,y1,x2,y2,x3,y3,x4,y4,type_code,blank). blank is 0/1
@@ -582,6 +585,58 @@ class Control:
                 bbs[self.selectedId] = bbs[self.selectedId][0:4]+(self.endX,self.endY)+bbs[self.selectedId][6:]
                 #self.setSelectedRect(bbs[self.selectedId])
             self.draw()
+        elif '-le' == self.mode[-3:]:#we dragged the left edge to resize the selected box
+            self.mode=self.mode[:-3]
+            bbs = None
+            if self.selected=='field':
+                bbs = self.fieldBBs
+            elif self.selected=='text':
+                bbs = self.textBBs
+            if bbs is not None:
+                shiftX=self.endX-self.startX
+                shiftY=self.endY-self.startY
+                self.didAction(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
+                bbs[self.selectedId] = (bbs[self.selectedId][0]+shiftX,bbs[self.selectedId][1]+shiftY,) + bbs[self.selectedId][2:6] +  (bbs[self.selectedId][6]+shiftX,bbs[self.selectedId][7]+shiftY,) + bbs[self.selectedId][8:]
+            self.draw()
+        elif '-re' == self.mode[-3:]:#we dragged the right edge to resize the selected box
+            self.mode=self.mode[:-3]
+            bbs = None
+            if self.selected=='field':
+                bbs = self.fieldBBs
+            elif self.selected=='text':
+                bbs = self.textBBs
+            if bbs is not None:
+                shiftX=self.endX-self.startX
+                shiftY=self.endY-self.startY
+                self.didAction(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
+                bbs[self.selectedId] = bbs[self.selectedId][0:2] + (bbs[self.selectedId][2]+shiftX,bbs[self.selectedId][3]+shiftY,bbs[self.selectedId][4]+shiftX,bbs[self.selectedId][5]+shiftY,) + bbs[self.selectedId][6:]
+            self.draw()
+        elif '-te' == self.mode[-3:]:#we dragged the right edge to resize the selected box
+            self.mode=self.mode[:-3]
+            bbs = None
+            if self.selected=='field':
+                bbs = self.fieldBBs
+            elif self.selected=='text':
+                bbs = self.textBBs
+            if bbs is not None:
+                shiftX=self.endX-self.startX
+                shiftY=self.endY-self.startY
+                self.didAction(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
+                bbs[self.selectedId] = (bbs[self.selectedId][0]+shiftX,bbs[self.selectedId][1]+shiftY,bbs[self.selectedId][2]+shiftX,bbs[self.selectedId][3]+shiftY,) + bbs[self.selectedId][4:]
+            self.draw()
+        elif '-be' == self.mode[-3:]:#we dragged the right edge to resize the selected box
+            self.mode=self.mode[:-3]
+            bbs = None
+            if self.selected=='field':
+                bbs = self.fieldBBs
+            elif self.selected=='text':
+                bbs = self.textBBs
+            if bbs is not None:
+                shiftX=self.endX-self.startX
+                shiftY=self.endY-self.startY
+                self.didAction(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
+                bbs[self.selectedId] = bbs[self.selectedId][0:4] + (bbs[self.selectedId][4]+shiftX,bbs[self.selectedId][5]+shiftY,bbs[self.selectedId][6]+shiftX,bbs[self.selectedId][7]+shiftY,) + bbs[self.selectedId][8:]
+            self.draw()
         elif '-mv' == self.mode[-3:]:#we're just moving the box
             self.mode=self.mode[:-3]
             bbs = None
@@ -939,25 +994,43 @@ class Control:
                 #bottomBoundary = bbs[self.selectedId][1] + 0.5*h
                 col=colorMap[RcodeMap[bbs[self.selectedId][8]]] #colorMap[self.mode[:-2]]
 
-                closestDist = (self.startX-xc)**2 + (self.startY-yc)**2
                 self.mode = self.mode[:-1]+'mv'
                 
-                dist = (self.startX-bbs[self.selectedId][0])**2 + (self.startY-bbs[self.selectedId][1])**2 #top-left corner
-                if dist<closestDist:
-                    self.mode = self.mode[:-2]+'tl'
-                    closestDist = dist
-                dist = (self.startX-bbs[self.selectedId][6])**2 + (self.startY-bbs[self.selectedId][7])**2 #bot-left corner
-                if dist<closestDist:
-                    self.mode = self.mode[:-2]+'bl'
-                    closestDist = dist
-                dist = (self.startX-bbs[self.selectedId][2])**2 + (self.startY-bbs[self.selectedId][3])**2 #top-right corner
-                if dist<closestDist:
-                    self.mode = self.mode[:-2]+'tr'
-                    closestDist = dist
-                dist = (self.startX-bbs[self.selectedId][4])**2 + (self.startY-bbs[self.selectedId][5])**2 #bot-right corner
-                if dist<closestDist:
-                    self.mode = self.mode[:-2]+'br'
-                    closestDist = dist
+                closestDist = (self.startX-xc)**2 + (self.startY-yc)**2
+                if self.resizeMode=='corners':
+                    dist = (self.startX-bbs[self.selectedId][0])**2 + (self.startY-bbs[self.selectedId][1])**2 #top-left corner
+                    if dist<closestDist:
+                        self.mode = self.mode[:-2]+'tl'
+                        closestDist = dist
+                    dist = (self.startX-bbs[self.selectedId][6])**2 + (self.startY-bbs[self.selectedId][7])**2 #bot-left corner
+                    if dist<closestDist:
+                        self.mode = self.mode[:-2]+'bl'
+                        closestDist = dist
+                    dist = (self.startX-bbs[self.selectedId][2])**2 + (self.startY-bbs[self.selectedId][3])**2 #top-right corner
+                    if dist<closestDist:
+                        self.mode = self.mode[:-2]+'tr'
+                        closestDist = dist
+                    dist = (self.startX-bbs[self.selectedId][4])**2 + (self.startY-bbs[self.selectedId][5])**2 #bot-right corner
+                    if dist<closestDist:
+                        self.mode = self.mode[:-2]+'br'
+                        closestDist = dist
+                elif self.resizeMode=='edges':
+                    dist = ((self.startX-bbs[self.selectedId][0]+self.startX-bbs[self.selectedId][6])/2)**2 + (self.startY-yc)**2 #left edge
+                    if dist<closestDist:
+                        self.mode = self.mode[:-2]+'le'
+                        closestDist = dist
+                    dist = (-(self.startX-bbs[self.selectedId][2]+self.startX-bbs[self.selectedId][4])/2)**2 + (self.startY-yc)**2 #right edge
+                    if dist<closestDist:
+                        self.mode = self.mode[:-2]+'re'
+                        closestDist = dist
+                    dist = ((self.startY-bbs[self.selectedId][1]+self.startY-bbs[self.selectedId][3])/2)**2 + (self.startX-xc)**2 #top edge
+                    if dist<closestDist:
+                        self.mode = self.mode[:-2]+'te'
+                        closestDist = dist
+                    dist = (-(self.startY-bbs[self.selectedId][5]+self.startY-bbs[self.selectedId][7])/2)**2 + (self.startX-xc)**2 #bot edge
+                    if dist<closestDist:
+                        self.mode = self.mode[:-2]+'be'
+                        closestDist = dist
                 #elif self.startX<leftBoundary:#left
                 #    self.mode = self.mode[:-1]+'l'
                 #elif self.startX>rightBoundary:#right
@@ -988,10 +1061,10 @@ class Control:
               ('-bl' == self.mode[-3:])or # and  event.xdata<bbs[self.selectedId][2] and event.ydata>bbs[self.selectedId][1]) or
               ('-tr' == self.mode[-3:])or # and  event.xdata>bbs[self.selectedId][0] and event.ydata<bbs[self.selectedId][3]) or
               ('-br' == self.mode[-3:])or # and  event.xdata>bbs[self.selectedId][0] and event.ydata>bbs[self.selectedId][1]) or
-              ('-l' == self.mode[-3:] )or # and  event.xdata<bbs[self.selectedId][2]) or
-              ('-r' == self.mode[-3:] )or # and  event.xdata>bbs[self.selectedId][0]) or
-              ('-t' == self.mode[-3:] )or # and  event.ydata<bbs[self.selectedId][3]) or
-              ('-b' == self.mode[-3:] )or # and  event.ydata>bbs[self.selectedId][1]))):
+              ('-le' == self.mode[-3:])or
+              ('-re' == self.mode[-3:])or
+              ('-te' == self.mode[-3:] )or # and  event.ydata<bbs[self.selectedId][3]) or
+              ('-be' == self.mode[-3:] )or # and  event.ydata>bbs[self.selectedId][1]))):
               ('-mv' == self.mode[-3:] ))):
             self.endX=event.xdata
             self.endY=event.ydata
@@ -1015,6 +1088,26 @@ class Control:
             elif '-br' == self.mode[-3:]:
                 brX=self.endX
                 brY=self.endY
+            elif '-le' == self.mode[-3:]:
+                tlX += self.endX-self.startX
+                blX += self.endX-self.startX
+                tlY += self.endY-self.startY
+                blY += self.endY-self.startY
+            elif '-re' == self.mode[-3:]:
+                trX += self.endX-self.startX
+                brX += self.endX-self.startX
+                trY += self.endY-self.startY
+                brY += self.endY-self.startY
+            elif '-te' == self.mode[-3:]:
+                tlX += self.endX-self.startX
+                trX += self.endX-self.startX
+                tlY += self.endY-self.startY
+                trY += self.endY-self.startY
+            elif '-be' == self.mode[-3:]:
+                blX += self.endX-self.startX
+                brX += self.endX-self.startX
+                blY += self.endY-self.startY
+                brY += self.endY-self.startY
             elif '-mv' == self.mode[-3:]:
                 shiftX=self.endX-self.startX
                 shiftY=self.endY-self.startY
@@ -1176,7 +1269,33 @@ class Control:
                 self.transAll(trans)
             elif key=='backspace':
                 self.draw()
+            elif key=='f4' and self.mode=='move':
+                textBBs=[]
+                for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in self.textBBs.iteritems():
+                    if id in self.selectedTextIds:
+                        textBBs.append({
+                                        'id': 't'+str(id+1000),
+                                        'poly_points':[[int(round(tlX)),int(round(tlY))],[int(round(trX)),int(round(trY))],[int(round(brX)),int(round(brY))],[int(round(blX)),int(round(blY))]],
+                                        'type':RcodeMap[para]
+                                       })
+                fieldBBs=[]
+                for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in self.fieldBBs.iteritems():
+                    if id in self.selectedFieldIds:
+                        fieldBBs.append({
+                                        'id': 'f'+str(id+1000),
+                                        'poly_points':[[int(round(tlX)),int(round(tlY))],[int(round(trX)),int(round(trY))],[int(round(brX)),int(round(brY))],[int(round(blX)),int(round(blY))]],
+                                        'type':RcodeMap[para],
+                                        'isBlank':blank,
+                                       })
+                with open('copied.json','w') as out:
+                    out.write(json.dumps({'textBBs':textBBs, 'fieldBBs':fieldBBs}))
+            elif key=='shift':
+                self.resizeMode='corners'
 
+    
+    def doKeyUp(self,event):
+        if event.key=='shift':
+            self.resizeMode='edges'
     #def updatePairLines(self):
     #    for i, pair in enumerate(self.pairing):
     #        if (self.selected=='text' and pair[0]==self.selectedId) or (self.selected=='field' and pair[1]==self.selectedId):
