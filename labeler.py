@@ -1333,7 +1333,8 @@ class Control:
             bb = bbs[self.selectedId]
             if RcodeMap[bb[8]]!='graphic' and RcodeMap[bb[8]]!='fieldRow' and RcodeMap[bb[8]]!='fieldCol' and RcodeMap[bb[8]]!='fieldCheckBox' and RcodeMap[bb[8]]!='fieldRegion':
                 self.didAction(('rotate-orien',bbs,self.selectedId,bb))
-                bbs[self.selectedId] = (bb[2], bb[3],  bb[4], bb[5], bb[6], bb[7], bb[0], bb[1]) + bb[8:]
+                #bbs[self.selectedId] = (bb[2], bb[3],  bb[4], bb[5], bb[6], bb[7], bb[0], bb[1]) + bb[8:]
+                bbs[self.selectedId] = (bb[6], bb[7], bb[0], bb[1], bb[2], bb[3],  bb[4], bb[5]) + bb[8:]
                 self.draw()
 
     def copy(self):
