@@ -1017,19 +1017,19 @@ class Control:
                         self.mode = self.mode[:-2]+'br'
                         closestDist = dist
                 elif self.resizeMode=='edges':
-                    dist = ((self.startX-bbs[self.selectedId][0]+self.startX-bbs[self.selectedId][6])/2)**2 + (self.startY-yc)**2 #left edge
+                    dist = ((self.startX-bbs[self.selectedId][0]+self.startX-bbs[self.selectedId][6])/2)**2 + ((self.startY-bbs[self.selectedId][1]+self.startY-bbs[self.selectedId][7])/2)**2 #left edge
                     if dist<closestDist:
                         self.mode = self.mode[:-2]+'le'
                         closestDist = dist
-                    dist = (-(self.startX-bbs[self.selectedId][2]+self.startX-bbs[self.selectedId][4])/2)**2 + (self.startY-yc)**2 #right edge
+                    dist = (-(self.startX-bbs[self.selectedId][2]+self.startX-bbs[self.selectedId][4])/2)**2 + ((self.startY-bbs[self.selectedId][3]+self.startY-bbs[self.selectedId][5])/2)**2 #right edge
                     if dist<closestDist:
                         self.mode = self.mode[:-2]+'re'
                         closestDist = dist
-                    dist = ((self.startY-bbs[self.selectedId][1]+self.startY-bbs[self.selectedId][3])/2)**2 + (self.startX-xc)**2 #top edge
+                    dist = ((self.startY-bbs[self.selectedId][1]+self.startY-bbs[self.selectedId][3])/2)**2 + ((self.startX-bbs[self.selectedId][0]+self.startX-bbs[self.selectedId][2])/2)**2 #top edge
                     if dist<closestDist:
                         self.mode = self.mode[:-2]+'te'
                         closestDist = dist
-                    dist = (-(self.startY-bbs[self.selectedId][5]+self.startY-bbs[self.selectedId][7])/2)**2 + (self.startX-xc)**2 #bot edge
+                    dist = (-(self.startY-bbs[self.selectedId][5]+self.startY-bbs[self.selectedId][7])/2)**2 + ((self.startX-bbs[self.selectedId][4]+self.startX-bbs[self.selectedId][6])/2)**2 #bot edge
                     if dist<closestDist:
                         self.mode = self.mode[:-2]+'be'
                         closestDist = dist
