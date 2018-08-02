@@ -8,6 +8,7 @@ import numpy as np
 import math
 import json
 from collections import defaultdict
+from random import shuffle
 
 #Globals
 mouse_button=3
@@ -778,7 +779,10 @@ class Control:
                 return
                             
             elif self.secondaryMode is None:
-                for id in self.textBBs:
+                indecies = list(range(len(self.textBBs)))
+                shuffle(indecies)
+                for index in indecies:
+                    id = self.textBBs.keys()[index]
                     if self.checkInside(x,y,self.textBBs[id]):
                         #print 'click on text b'
                         if self.mode=='delete':
@@ -823,7 +827,10 @@ class Control:
                                 self.draw()
                                 return
 
-                for id in self.fieldBBs:
+                indecies = list(range(len(self.fieldBBs)))
+                shuffle(indecies)
+                for index in indecies:
+                    id = self.fieldBBs.keys()[index]
                     if self.checkInside(x,y,self.fieldBBs[id]):
                         #print 'click on field b'
                         if self.mode=='delete':
@@ -1142,7 +1149,7 @@ class Control:
             self.modeRect.set_y(toolYMap[self.mode])
             self.ax_tool.figure.canvas.draw()
         elif self.mode[:6] == 'corner':
-            if event.key=='escape': #quit
+            if event.key=='escape' or event.key=='f12': #quit
                 self.textBBs={}
                 self.fieldBBs={}
                 self.pairing=[]
@@ -2061,7 +2068,7 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,pre_corners=None, p
             groups.append(newGroup)
 
 
-    return textBBs, fieldBBs, pairing, samePairing, groups, control.corners, control.cornersActual, control.complete
+    return textBBs, fieldBBs, pairing, samePairing, groups, control.corners, control.cornersActual, control.complete, image.shape[0], image.shape[1]
 
 if __name__ == "__main__":
 
@@ -2085,8 +2092,8 @@ if __name__ == "__main__":
             page_corners=read['page_corners']
 
     imageName = sys.argv[1][(sys.argv[1].rfind('/')+1):]
-    texts,fields,pairs,samePairs,groups,corners,actualCorners = labelImage(sys.argv[1],texts,fields,pairs,samePairs,groups,page_corners)
+    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete,H,W = labelImage(sys.argv[1],texts,fields,pairs,samePairs,groups,page_corners)
     outFile='test.json'
     if len(texts)+len(fields)+len(corners)>0:
         with open(outFile,'w') as out:
-            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners,  "imageFilename":imageName}))
+            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners,  "imageFilename":imageName, 'height':H, 'width':W}))

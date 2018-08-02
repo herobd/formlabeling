@@ -26,9 +26,12 @@ if len(sys.argv)<2:
 
 directory = sys.argv[1]
 progressOnly=False
+addOnly=False
 if len(sys.argv)>2:
     if sys.argv[2][0]=='-':
         progressOnly=True
+    elif sys.argv[2][0]=='+':
+        addOnly=True
     else:
         startHere = sys.argv[2]
         going=False
@@ -61,6 +64,14 @@ if progressOnly:
     numTemplateDone=0
     numDoneTotal=0
     numTotal=0
+    numTimed=0
+    timeTotal=0
+    numTempTimed=0
+    timeTemp=0
+    if len(sys.argv[2])>1:
+        doTime=True
+    else:
+        doTime=False
     for groupName in sorted(groupNames):
         files = imageGroups[groupName]
         imagesInGroup=0
@@ -68,13 +79,49 @@ if progressOnly:
             if 'lock' not in f:
                 if f[-4:]=='.jpg' or f[-5:]=='.jpeg' or f[-4:]=='.png':
                     imagesInGroup+=1
-                elif 'template' in f and f[-5:]=='.json':
+                elif 'templa' in f and f[-5:]=='.json':
                     numTemplateDone+=1
+                    if doTime:
+                        with open(os.path.join(directory,groupName,f)) as annFile:
+                            read = json.loads(annFile.read())
+                            if 'labelTime' in read and read['labelTime'] is not None:
+                                numTempTimed+=1
+                                timeTemp+=read['labelTime']
                 elif f[-5:]=='.json':
                     numDoneTotal+=1
+                    if doTime:
+                        with open(os.path.join(directory,groupName,f)) as annFile:
+                            read = json.loads(annFile.read())
+                            if 'labelTime' in read and read['labelTime'] is not None:
+                                numTimed+=1
+                                timeTotal+=read['labelTime']
+
         numTotal += min(imagesInGroup,NUM_PER_GROUP)
     print('Templates: {}/{}  {}'.format(numTemplateDone,len(groupNames),float(numTemplateDone)/len(groupNames)))
     print('Images:    {}/{}  {}'.format(numDoneTotal,numTotal,float(numDoneTotal)/numTotal))
+    if doTime:
+        timeTotal/=numTimed
+        timeTemp/=numTempTimed
+        print (' Templates take {} secs, or {} minutes   ({} samples)'.format(timeTemp,timeTemp/60,numTempTimed))
+        print ('Alignment takes {} secs, or {} minutes   ({} samples)'.format(timeTotal,timeTotal/60,numTimed))
+    exit()
+elif addOnly:
+    import matplotlib.image as mpimg
+    count=0
+    for groupName in sorted(groupNames):
+        files = imageGroups[groupName]
+        for f in files:
+            if f[-5:]=='.json' and 'templa' not in f:
+                with open(os.path.join(directory,groupName,f)) as annFile:
+                    read = json.loads(annFile.read())
+                if 'height' not in read or 'width' not in read:
+                    image = mpimg.imread(os.path.join(directory,groupName,f[:-5]+'.jpg'))
+                    read['height']=image.shape[0]
+                    read['width']=image.shape[1]
+                    with open(os.path.join(directory,groupName,f),'w') as annFile:
+                        annFile.write(json.dumps(read))
+                        count+=1
+    print 'added to '+str(count)+' jsons'
     exit()
 
 for groupName in sorted(groupNames):
@@ -113,7 +160,7 @@ for groupName in sorted(groupNames):
             print '!!!!!!!!!!!!!!!!!!!!!!!!!'
             print "A template doesn't exist for group "+groupName+", creating one"
             timeStart = timeit.default_timer()
-            textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT, actualCornersT, complete = labelImage(os.path.join(directory,groupName,files[0]),textsT,fieldsT,pairsT,samePairsT,groupsT,None,cornersT,cornersActualT)
+            textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT, actualCornersT, complete, height, width = labelImage(os.path.join(directory,groupName,files[0]),textsT,fieldsT,pairsT,samePairsT,groupsT,None,cornersT,cornersActualT)
             timeElapsed = timeit.default_timer()-timeStart
             if (len(textsT)==0 and len(fieldsT)==0):
                 lock.release()
@@ -123,7 +170,7 @@ for groupName in sorted(groupNames):
                 if not complete:
                      template+='.nf'
                 with open(template,'w') as out:
-                     out.write(json.dumps({"textBBs":textsT, "fieldBBs":fieldsT, "pairs":pairsT, "samePairs":samePairsT, "groups":groupsT, "page_corners":cornersT, "imageFilename":files[0], "labelTime":timeElapsed}))
+                    out.write(json.dumps({"textBBs":textsT, "fieldBBs":fieldsT, "pairs":pairsT, "samePairs":samePairsT, "groups":groupsT, "page_corners":cornersT, "imageFilename":files[0], "labelTime":timeElapsed, "height":height, "width":width}))
                 if not complete:
                     lock.release()
                     lock=None
@@ -171,14 +218,14 @@ for groupName in sorted(groupNames):
                     print 'g:'+groupName+', image: '+f+', gt found'
                     if labelTime is not None:
                         timeStart = timeit.default_timer()
-                    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete = labelImage(os.path.join(directory,groupName,f),texts,fields,pairs,samePairs,groups,None,page_corners,page_cornersActual)
+                    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),texts,fields,pairs,samePairs,groups,None,page_corners,page_cornersActual)
                     if labelTime is not None:
                         labelTime += timeit.default_timer()-timeStart
                     gtF.close()
                 else:
                     print 'g:'+groupName+', image: '+f+', from template'
                     timeStart = timeit.default_timer()
-                    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT)
+                    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT)
                     labelTime = timeit.default_timer()-timeStart
 
                 if len(texts)==0 and len(fields)==0:
@@ -188,7 +235,7 @@ for groupName in sorted(groupNames):
                 if not complete:
                     gtFileName+='.nf'
                 with open(gtFileName,'w') as out:
-                    out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime}))
+                    out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime, "height":height, "width":width}))
                 #os.chown(gtFileName,-1,groupId)
                 if not complete:
                     lock.release()
