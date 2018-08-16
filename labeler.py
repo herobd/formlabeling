@@ -397,7 +397,6 @@ class Control:
                     self.selectAllInRect(self.startX,self.startY,self.endX,self.endY)
                 return
 
-            print abs((self.startX-self.endX)*(self.startY-self.endY))
             if abs((self.startX-self.endX)*(self.startY-self.endY))>BOX_MIN_AREA: #the box is "big enough"
                 didPair=None #for storing auto-pair for undo/action stack
 
@@ -991,8 +990,6 @@ class Control:
             bbs = self.fieldBBs
         elif self.selected == 'text':
             bbs = self.textBBs
-        if '-d' == self.mode[-2:]:
-            print math.sqrt(pow(event.xdata-self.startX,2)+pow(event.ydata-self.startY,2))
         if '-d' == self.mode[-2:] and math.sqrt(pow(event.xdata-self.startX,2)+pow(event.ydata-self.startY,2))>MIN_MOVE_DIST:
             if bbs is not None and self.checkInside(self.startX,self.startY,bbs[self.selectedId]):
                 self.draw(clear=True)
