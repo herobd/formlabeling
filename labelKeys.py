@@ -6,6 +6,7 @@ import json
 import timeit
 import grp
 
+iains_groups=['131','131_1','131_2','132','132_1','133','134','136','14','142','144','145','146','146_1','153','153_1','153_2','155','158','159','16','163','171','172','173','174','182','187','189','193','194','197','199','200','29','30','34','34_1','35','35_1','39','4','42','46','46_1','46_2','5','52','53','53_1','58','58_1','6','60','60_1','60_2','60_3','61','62','62_1','65','68','69','70','71','71_1','72','75_1','78','79','8','81','81_1','86','86_1','88','89','89_1','89_2','93','96','98']
 #groupId = grp.getgrnam("pairing").gr_gid
 if len(sys.argv)<2:
     print 'usage: '+sys.argv[0]+' directory (startingGroup)'
@@ -52,8 +53,11 @@ for groupName in sorted(groupNames):
             print 'found template for group '+groupName
             template = os.path.join(directory,groupName,f)
 
-    if template is not None and startHere is None:
+    if template is not None and startHere is None and groupName not in iains_groups:
         continue
+
+    if groupName in iains_groups:
+        print "this is in Iain's groups. Remove when finished with template, then set all to nf?"
 
     nfTemplate = os.path.join(directory,groupName,'template'+groupName+'.json.nf')
     nfExists = os.path.exists(nfTemplate)
@@ -91,7 +95,7 @@ for groupName in sorted(groupNames):
         else:
             labelTime=0
             startTime = timeit.default_timer()
-        texts,fields,pairs,samePairs,groups,corners,actualCorners,complete = labelImage(os.path.join(directory,groupName,imageTemplate),texts,fields,pairs,samePairs,groups,None,page_corners,page_cornersActual)
+        texts,fields,pairs,samePairs,groups,corners,actualCorners,complete,r,c = labelImage(os.path.join(directory,groupName,imageTemplate),texts,fields,pairs,samePairs,groups,None,page_corners,page_cornersActual)
         if labelTime is not None:
             labelTime+=timeit.default_timer()-startTime
         if len(texts)==0 and len(fields)==0:

@@ -196,6 +196,8 @@ for groupName in sorted(groupNames):
                 nfGtFileNameExists = os.path.exists(gtFileName+'.nf')
                 
                 texts=fields=pairs=samePairs=groups=page_corners=page_cornersActual=None
+                if f == imageTemplate:
+                    page_corners=page_cornersActual=cornersT
                 if gtFileNameExists or nfGtFileNameExists:
                     if gtFileNameExists:
                         gtF = open(gtFileName)
@@ -225,7 +227,7 @@ for groupName in sorted(groupNames):
                 else:
                     print 'g:'+groupName+', image: '+f+', from template'
                     timeStart = timeit.default_timer()
-                    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT)
+                    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT,page_corners,page_cornersActual)
                     labelTime = timeit.default_timer()-timeStart
 
                 if len(texts)==0 and len(fields)==0:
