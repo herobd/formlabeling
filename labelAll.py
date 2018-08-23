@@ -142,7 +142,7 @@ for groupName in sorted(groupNames):
     lock = FileLock(template, timeout=None)
     try:
         lock.acquire()
-        textsT=fieldsT=pairsT=samePairsT=groupsT=cornersT=cornersActualT=None
+        textsT=fieldsT=pairsT=samePairsT=horzLinksT=groupsT=cornersT=cornersActualT=None
         if template is not None:
             with open(template) as f:
                 read = json.loads(f.read())
@@ -152,6 +152,8 @@ for groupName in sorted(groupNames):
                 samePairsT=read['samePairs']
                 groupsT=read['groups']
                 cornersT=read['page_corners']
+                if 'horzLinks' in read:
+                    horzLinksT=read['horzLinks']
                 #cornersActualT=read['actualPage_corners']
                 imageTemplate=read['imageFilename']
         else:
@@ -160,7 +162,7 @@ for groupName in sorted(groupNames):
             print '!!!!!!!!!!!!!!!!!!!!!!!!!'
             print "A template doesn't exist for group "+groupName+", creating one"
             timeStart = timeit.default_timer()
-            textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT, actualCornersT, complete, height, width = labelImage(os.path.join(directory,groupName,files[0]),textsT,fieldsT,pairsT,samePairsT,groupsT,None,cornersT,cornersActualT)
+            textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,cornersT, actualCornersT, complete, height, width = labelImage(os.path.join(directory,groupName,files[0]),textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,None,cornersT,cornersActualT)
             timeElapsed = timeit.default_timer()-timeStart
             if (len(textsT)==0 and len(fieldsT)==0):
                 lock.release()
@@ -170,7 +172,7 @@ for groupName in sorted(groupNames):
                 if not complete:
                      template+='.nf'
                 with open(template,'w') as out:
-                    out.write(json.dumps({"textBBs":textsT, "fieldBBs":fieldsT, "pairs":pairsT, "samePairs":samePairsT, "groups":groupsT, "page_corners":cornersT, "imageFilename":files[0], "labelTime":timeElapsed, "height":height, "width":width}))
+                    out.write(json.dumps({"textBBs":textsT, "fieldBBs":fieldsT, "pairs":pairsT, "samePairs":samePairsT, "horzLinks":horzLinksT, "groups":groupsT, "page_corners":cornersT, "imageFilename":files[0], "labelTime":timeElapsed, "height":height, "width":width}))
                 if not complete:
                     lock.release()
                     lock=None
@@ -195,7 +197,7 @@ for groupName in sorted(groupNames):
                     continue
                 nfGtFileNameExists = os.path.exists(gtFileName+'.nf')
                 
-                texts=fields=pairs=samePairs=groups=page_corners=page_cornersActual=None
+                texts=fields=pairs=samePairs=horzLinks=groups=page_corners=page_cornersActual=None
                 if f == imageTemplate:
                     page_corners=page_cornersActual=cornersT
                 if gtFileNameExists or nfGtFileNameExists:
@@ -209,6 +211,8 @@ for groupName in sorted(groupNames):
                     pairs=read['pairs']
                     samePairs=read['samePairs']
                     groups=read['groups']
+                    if 'horzLinks' in read:
+                        horzLinks=read['horzLinks']
                     if 'page_corners' in read and 'actualPage_corners' in read:
                         page_corners=read['page_corners']
                         page_cornersActual=read['actualPage_corners']
@@ -220,14 +224,14 @@ for groupName in sorted(groupNames):
                     print 'g:'+groupName+', image: '+f+', gt found'
                     if labelTime is not None:
                         timeStart = timeit.default_timer()
-                    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),texts,fields,pairs,samePairs,groups,None,page_corners,page_cornersActual)
+                    texts,fields,pairs,samePairs,horzLinks,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),texts,fields,pairs,samePairs,horzLinks,groups,None,page_corners,page_cornersActual)
                     if labelTime is not None:
                         labelTime += timeit.default_timer()-timeStart
                     gtF.close()
                 else:
                     print 'g:'+groupName+', image: '+f+', from template'
                     timeStart = timeit.default_timer()
-                    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,groupsT,cornersT,page_corners,page_cornersActual)
+                    texts,fields,pairs,samePairs,horzLinks,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,cornersT,page_corners,page_cornersActual)
                     labelTime = timeit.default_timer()-timeStart
 
                 if len(texts)==0 and len(fields)==0:
@@ -237,7 +241,7 @@ for groupName in sorted(groupNames):
                 if not complete:
                     gtFileName+='.nf'
                 with open(gtFileName,'w') as out:
-                    out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime, "height":height, "width":width}))
+                    out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime, "height":height, "width":width}))
                 #os.chown(gtFileName,-1,groupId)
                 if not complete:
                     lock.release()

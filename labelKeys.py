@@ -67,7 +67,7 @@ for groupName in sorted(groupNames):
     lock = FileLock(outFile, timeout=None)
     try:
         lock.acquire()
-        texts=fields=pairs=samePairs=groups=page_corners=page_cornersActual=None
+        texts=fields=pairs=samePairs=horzLinks=groups=page_corners=page_cornersActual=None
         if template is not None or nfExists:
             if template is not None:
                 f=open(template)
@@ -92,10 +92,12 @@ for groupName in sorted(groupNames):
                 startTime = timeit.default_timer()
             else:
                 labelTime=None
+            if 'horzLinks' in read:
+                horzLinks = read['horzLinks']
         else:
             labelTime=0
             startTime = timeit.default_timer()
-        texts,fields,pairs,samePairs,groups,corners,actualCorners,complete,r,c = labelImage(os.path.join(directory,groupName,imageTemplate),texts,fields,pairs,samePairs,groups,None,page_corners,page_cornersActual)
+        texts,fields,pairs,samePairs,horzLinks,groups,corners,actualCorners,complete,r,c = labelImage(os.path.join(directory,groupName,imageTemplate),texts,fields,pairs,samePairs,horzLinks,groups,None,page_corners,page_cornersActual)
         if labelTime is not None:
             labelTime+=timeit.default_timer()-startTime
         if len(texts)==0 and len(fields)==0:
@@ -103,7 +105,7 @@ for groupName in sorted(groupNames):
         if not complete:
             outFile+='.nf'
         with open(outFile,'w') as out:
-            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "imageFilename":imageTemplate, "labelTime": labelTime}))
+            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "imageFilename":imageTemplate, "labelTime": labelTime}))
         #os.chown(outFile,-1,groupId)
         lock.release()
         lock=None

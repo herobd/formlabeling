@@ -12,7 +12,7 @@ from random import shuffle
 
 #Globals
 mouse_button=3
-TOOL_WIDTH=240
+TOOL_WIDTH=320
 toolH=40
 MAX_ARR_LEN=200
 BOX_MIN_AREA=600
@@ -167,7 +167,8 @@ class Group:
 
 
 class Control:
-    def __init__(self,ax_im,ax_tool,W,H,texts,fields,pairs,samePairs,groups,pre_corners,page_corners=None, page_cornersActual=None):
+    def __init__(self,ax_im,ax_tool,W,H,texts,fields,pairs,samePairs,horzLinks,groups,pre_corners,page_corners=None, page_cornersActual=None):
+        #print(page_corners)
         self.ax_im=ax_im
         self.ax_tool=ax_tool
         self.down_cid = self.ax_im.figure.canvas.mpl_connect(
@@ -191,6 +192,8 @@ class Control:
         self.fieldBBCurId=0
         self.pairing=[] #this holds each pairing as a tuple (textId,fieldId)
         self.pairLines={} #this holds drawing patches for ALL pairlines (samePairs and group pairings)
+        self.horzLinks={} #this is a special pairing indicating that a series of bbs form a single horz line. Represented as arrays of ids
+        self.cur_hlid=0
         self.samePairing=[] #this holds each pairing between two of the same type as a tuple (Id,Id,bool_field)
         self.groups={} #groups are rows or columns
         self.groupCurId=0
@@ -223,6 +226,11 @@ class Control:
         if samePairs is not None:
             self.samePairing=[(int(x[1:]),int(y[1:]),(1 if x[0]=='f' else 0)) for (x,y) in samePairs if x[0]==y[0]]
         self.corners_text = ax_im.text(W/2,H/2,'Mark the page corners OR WHERE THEY SHOULD BE, then press ENTER.\n(outer corners if two pages).\nIf odd position, press BACKSPACE for corner by corner query.',horizontalalignment='center',verticalalignment='center', color='red')
+        if horzLinks is not None:
+            for link in horzLinks:
+                self.horzLinks[self.cur_hlid]=link
+                #print('{}: {}'.format(self.cur_hlid,link))
+                self.cur_hlid+=1
         self.ax_im.figure.canvas.draw()
         self.imageW=W
         self.imageH=H
@@ -788,6 +796,20 @@ class Control:
                     if self.checkInside(x,y,self.textBBs[id]):
                         #print 'click on text b'
                         if self.mode=='delete':
+                            for hlid in self.horzLinks:
+                                s_id='t'+str(id)
+                                if s_id in self.horzLinks[hlid]:
+                                    if len(self.horzLinks[hlid])>2:
+                                        link_ind = self.horzLinks[hlid].index(s_id)
+                                        self.horzLinks[hlid].remove(s_id)
+                                        self.didAction(('minus-horzLink',hlid,s_id,link_ind))
+                                    else:
+                                        toDel = self.horzLinks[hlid]
+                                        del self.horzLinks[hlid]
+                                        self.didAction(('remove-horzLink',hlid,toDel))
+                                    self.draw()
+                                    return
+
                             #delete the text BB
                             pairs=[]#pairs this BB is part of
                             pairIds=[]
@@ -816,7 +838,9 @@ class Control:
                         else:
                             if self.selected!='text' or self.selectedId!=id:
                                 #pair to prev selected?
-                                if self.selected=='field' and (id,self.selectedId) not in self.pairing:
+                                if self.mode=='horzLink':
+                                    self.doHorzLink('t'+str(id))
+                                elif self.selected=='field' and (id,self.selectedId) not in self.pairing:
                                     self.pairing.append((id,self.selectedId))
                                     self.didAction(('add-pairing',id,self.selectedId))
                                 elif self.mode=='pair' and self.selected=='text' and (id,self.selectedId) not in self.samePairing and (self.selectedId,id) not in self.samePairing:
@@ -831,11 +855,25 @@ class Control:
 
                 indecies = list(range(len(self.fieldBBs)))
                 shuffle(indecies)
+                indecies.sort(key=lambda a: int(self.fieldBBs[a][8]==codeMap['fieldCol'] or self.fieldBBs[a][8]==codeMap['fieldRow']))
                 for index in indecies:
                     id = self.fieldBBs.keys()[index]
                     if self.checkInside(x,y,self.fieldBBs[id]):
                         #print 'click on field b'
                         if self.mode=='delete':
+                            for hlid in self.horzLinks:
+                                s_id='f'+str(id)
+                                if s_id in self.horzLinks[hlid]:
+                                    if len(self.horzLinks[hlid])>2:
+                                        link_ind = self.horzLinks[hlid].index(s_id)
+                                        self.horzLinks[hlid].remove(s_id)
+                                        self.didAction(('minus-horzLink',hlid,s_id,link_ind))
+                                    else:
+                                        toDel = self.horzLinks[hlid]
+                                        del self.horzLinks[hlid]
+                                        self.didAction(('remove-horzLink',hlid,toDel))
+                                    self.draw()
+                                    return
                             #delete the field BB
                             pairs=[]#pairs this BB is part of
                             pairIds=[]
@@ -864,7 +902,9 @@ class Control:
                         else:
                             if self.selected!='field' or self.selectedId!=id:
                                 #pair to prev selected?
-                                if self.selected=='text' and (self.selectedId,id) not in self.pairing:
+                                if self.mode=='horzLink':
+                                    self.doHorzLink('f'+str(id))
+                                elif self.selected=='text' and (self.selectedId,id) not in self.pairing:
                                     self.pairing.append((self.selectedId,id))
                                     self.didAction(('add-pairing',self.selectedId,id))
                                 elif self.mode=='pair' and self.selected=='field' and (id,self.selectedId) not in self.samePairing and (self.selectedId,id) not in self.samePairing:
@@ -1051,7 +1091,7 @@ class Control:
                 #elif self.startY<bottomBoundary:#bot
                 #    self.mode = self.mode[:-1]+'b'
                 self.drawRect.set_edgecolor(col)
-            elif 'none' not in self.mode and 'delete' not in self.mode and 'change' not in self.mode and 'pair' not in self.mode:
+            elif 'none' not in self.mode and 'delete' not in self.mode and 'change' not in self.mode and 'pair' not in self.mode and 'horzLink' not in self.mode:
                 if 'move' not in self.mode:
                     self.draw(clear=True)
                 col=DRAW_COLOR
@@ -1215,7 +1255,7 @@ class Control:
             elif key=='s': #S redo
                 self.redo()
             elif key=='d': #D change
-                self.change()
+                self.setMode('change')
             elif key=='z': # set field to print/stamp
                 self.setFieldType(ftypeMap['print'])
             elif key=='x': # set field to blank
@@ -1225,7 +1265,9 @@ class Control:
             elif key=='v': # set field to signature
                 self.setFieldType(ftypeMap['signature'])
             elif key=='f': #V pair
-                self.pairMode()
+                self.setMode('pair')
+            elif key=='h':
+                self.setMode('horzLink')
             elif key=='j':
                 self.rotateOrien()
             elif key=='k': #K copy selected
@@ -1369,6 +1411,96 @@ class Control:
                 self.selected='field'
             self.fieldBBCurId+=1
             self.draw()
+
+    def doHorzLink(self,id):
+        oid=None
+        if self.selected=='field':
+            oid='f'+str(self.selectedId)
+            rot = self.getRotation(self.fieldBBs[self.selectedId])
+        elif self.selected=='text':
+            oid='t'+str(self.selectedId)
+            rot = self.getRotation(self.textBBs[self.selectedId])
+        if oid is not None:
+            id_hlid=None
+            oid_hlid=None
+            for hlid, hl in self.horzLinks.iteritems():
+                if id_hlid is None and id in hl:
+                    id_hlid=hlid
+                    if oid_hlid is not None:
+                        break
+                if oid_hlid is None and oid in hl:
+                    oid_hlid=hlid
+                    if id_hlid is not None:
+                        break
+            if id_hlid is None and oid_hlid is None:
+                x = self.getOrd(id,rot)
+                ox = self.getOrd(oid,rot)
+                if x<ox:
+                    self.horzLinks[self.cur_hlid]=[id,oid]
+                else:
+                    self.horzLinks[self.cur_hlid]=[oid,id]
+                self.didAction(('create-horzLink',self.cur_hlid))
+                self.cur_hlid+=1
+            elif id_hlid is None:
+                self.addLink(id,oid_hlid,rot)
+            elif oid_hlid is None:
+                self.addLink(oid,id_hlid,rot)
+            elif id_hlid==oid_hlid:
+                return
+            else:
+                #merge
+                newLink=[]
+                indexI=0
+                indexO=0
+                linkI=self.horzLinks[id_hlid]
+                linkO=self.horzLinks[oid_hlid]
+                while indexI<len(linkI) and indexO<len(linkO):
+                    if self.getOrd(linkI[indexI],rot) < self.getOrd(linkO[indexO],rot):
+                        newLink.append(linkI[indexI])
+                        indexI+=1
+                    else:
+                        newLink.append(linkO[indexO])
+                        indexO+=1
+                if indexI<len(linkI):
+                    newLink+=linkI[indexI:]
+                elif indexO<len(linkO):
+                    newLink+=linkO[indexO:]
+                del self.horzLinks[oid_hlid]
+                self.horzLinks[id_hlid]=newLink
+                self.didAction(('merge-horzLink',id_hlid,linkI,oid_hlid,linkO))
+            self.draw()
+
+    def addLink(self,id,hlid,rot):
+        hit=False
+        x = self.getOrd(id,rot)
+        for index in range(len(self.horzLinks[hlid])):
+            ox = self.getOrd(self.horzLinks[hlid][index],rot)
+            if x<ox:
+                hit=True
+                break
+        if hit:
+            self.horzLinks[hlid].insert(index,id)
+        else:
+            self.horzLinks[hlid].append(id)
+        #self.horzMap[id]=hlid
+        self.didAction(('add-horzLink',hlid,id))
+
+    def getOrd(self,lid,rot):
+        id=int(lid[1:])
+        if lid[0]=='t':
+            bbs=self.textBBs
+        elif lid[0]=='f':
+            bbs=self.fieldBBs
+        if rot=='left-right':
+            return (bbs[id][0]+bbs[id][2]+bbs[id][4]+bbs[id][6])/4.0
+        elif rot=='right-left':
+            return -(bbs[id][0]+bbs[id][3]+bbs[id][4]+bbs[id][6])/4.0
+        elif rot=='down':
+            return (bbs[id][1]+bbs[id][3]+bbs[id][5]+bbs[id][7])/4.0
+        elif rot=='up':
+            return -(bbs[id][1]+bbs[id][3]+bbs[id][5]+bbs[id][7])/4.0
+        else:
+            return (bbs[id][0]+bbs[id][2]+bbs[id][4]+bbs[id][6]+bbs[id][1]+bbs[id][3]+bbs[id][5]+bbs[id][7])/8.0
     
     def didAction(self,tup):
         self.actionStack.append(tup)
@@ -1538,13 +1670,41 @@ class Control:
             toRet = (label,bbs,id,bbs[id])
             bbs[id]=bb
             return toRet
+        elif action[0] == 'create-horzLink':
+            label, hlid = action
+            toRet = ('remove-horzLink',hlid,self.horzLinks[hlid])
+            del self.horzLinks[hlid]
+            return toRet
+        elif action[0] == 'remove-horzLink':
+            label, hlid, link = action
+            self.horzLinks[hlid]=link
+            return ('create-horzLink',hlid)
+        elif action[0]=='add-horzLink':
+            label, hlid, id = action
+            ind = self.horzLinks[hlid].index(id)
+            self.horzLinks[hlid].remove(id)
+            return ('minus-horzLink',hlid,id,ind)
+        elif action[0]=='minus-horzLink':
+            label,hlid,id,index = action
+            self.horzLinks[hlid].insert(index,id)
+            return ('add-horzLink',hlid,id)
+        elif action[0]=='merge-horzLink':
+            label,hlid1,link1,hlid2,link2 = action
+            toRet = ('unmerge-horzLink',hlid1,hlid2,self.horzLinks[hlid1])
+            self.horzLinks[hlid1]=link1
+            self.horzLinks[hlid2]=link2
+            return toReg
+        elif action[0]=='unmerge-horzLink':
+            label,hlid1,hlid2,merged = action
+            toRet = ('merge-horzLink',hlid1,self.horzLinks[hlid1],hlid2,self.horzLinks[hlid2])
+            self.horzLinks[hlid1]=merged
         else:
             print 'Unimplemented action: '+str(action[0])
 
-    def change(self):
+    def setMode(self,mode):
             self.tmpMode = self.mode
-            self.mode='change'
-            self.modeRect.set_y(toolYMap['change'])
+            self.mode=mode
+            self.modeRect.set_y(toolYMap[mode])
             self.ax_tool.figure.canvas.draw()
 
     def moveSelect(self):
@@ -1557,11 +1717,11 @@ class Control:
             self.selectedId=None
             self.setSelectedRectOff()
 
-    def pairMode(self):
-            self.tmpMode = self.mode
-            self.mode='pair'
-            self.modeRect.set_y(toolYMap['pair'])
-            self.ax_tool.figure.canvas.draw()
+    #def pairMode(self):
+    #        self.tmpMode = self.mode
+    #        self.mode='pair'
+    #        self.modeRect.set_y(toolYMap['pair'])
+    #        self.ax_tool.figure.canvas.draw()
             
     def setSecondaryMode(self,mode):
         self.selected='none'
@@ -1752,6 +1912,50 @@ class Control:
                     self.arrowPolys.append(arrow)
                     self.ax_im.add_patch(arrow)
 
+            for hlid, link in self.horzLinks.iteritems():
+                pointsTop=[]
+                pointsBot=[]
+                rot=None
+                for lid in link:
+                    id=int(lid[1:])
+                    if lid[0]=='t':
+                        bbs=self.textBBs
+                    elif lid[0]=='f':
+                        bbs=self.fieldBBs
+                    if id in bbs:
+                        if rot is None:
+                            rot=self.getRotation(bbs[id])
+                            #print(rot)
+                        #print(bbs[id])
+
+                        if (len(pointsTop)==0 or 
+                                (rot=='left-right' and bbs[id][0]>pointsTop[-1][0]) or
+                                (rot=='right-left' and bbs[id][0]<pointsTop[-1][0]) or
+                                (rot=='up' and bbs[id][1]<pointsTop[-1][1]) or
+                                (rot=='down' and bbs[id][1]>pointsTop[-1][1]) ):
+                            pointsTop.append(bbs[id][0:2])
+                        else:
+                            pointsTop[-1]=( (pointsTop[-1][0]+bbs[id][0])/2.0, (pointsTop[-1][1]+bbs[id][1])/2.0 )
+                        #pointsTop.append(bbs[id][0:2])
+                        pointsTop.append(bbs[id][2:4])
+
+                        if len(pointsBot)==0 or ( 
+                                (rot=='left-right' and bbs[id][6]>pointsBot[-1][0]) or
+                                (rot=='right-left' and bbs[id][6]<pointsBot[-1][0]) or
+                                (rot=='up' and bbs[id][7]<pointsBot[-1][1]) or
+                                (rot=='down' and bbs[id][7]>pointsBot[-1][1]) ):
+                            pointsBot.append(bbs[id][6:8])
+                        else:
+                            pointsBot[-1]=( (pointsBot[-1][0]+bbs[id][6])/2.0, (pointsBot[-1][1]+bbs[id][7])/2.0 )
+                        #pointsBot.append(bbs[id][6:8])
+                        pointsBot.append(bbs[id][4:6])
+                pointsBot.reverse()
+                #print(pointsTop)
+                #print(pointsBot)
+                self.pairLines[lineId] = patches.Polygon(np.array(pointsTop+pointsBot),linewidth=3,edgecolor=(0,1,0,0.2),fill=False)
+                self.ax_im.add_patch(self.pairLines[lineId])
+                lineId+=1
+
             for text,field in self.pairing:
                 x1=(self.textBBs[text][0]+self.textBBs[text][2]+self.textBBs[text][4]+self.textBBs[text][6])/4
                 y1=(self.textBBs[text][1]+self.textBBs[text][3]+self.textBBs[text][5]+self.textBBs[text][7])/4
@@ -1779,6 +1983,18 @@ class Control:
             self.drawSelected(clear=False)
         else:
             self.ax_im.figure.canvas.draw()
+
+    def getRotation(self,bb): #read direction
+        if max(bb[1],bb[3])<min(bb[5],bb[7]) and max(bb[0],bb[6])<min(bb[2],bb[4]):
+            return 'left-right'
+        elif max(bb[0],bb[2])<min(bb[6],bb[4]) and max(bb[3],bb[5])<min(bb[1],bb[7]):
+            return 'up'
+        elif min(bb[1],bb[3])>max(bb[5],bb[7]) and min(bb[0],bb[6])>max(bb[2],bb[4]):
+            return 'right-left'
+        elif max(bb[6],bb[4])<min(bb[0],bb[2]) and max(bb[7],bb[1])<min(bb[5],bb[3]):
+            return 'down'
+        else:
+            return 'diag'
 
     def createArrow(self,tlX,tlY,trX,trY,brX,brY,blX,blY,color):
         lX = (tlX+blX)/2.0
@@ -1810,7 +2026,7 @@ class Control:
 
 def drawToolbar(ax):
     #im[0:,-TOOL_WIDTH:]=(140,140,140)
-    im = np.zeros(((toolH+1)*(len(modes)+21),TOOL_WIDTH,3),dtype=np.uint8)
+    im = np.zeros(((toolH+1)*(len(modes)+22),TOOL_WIDTH,3),dtype=np.uint8)
     im[:,:] = (140,140,140)
 
     y=0
@@ -1858,6 +2074,12 @@ def drawToolbar(ax):
     #    cv2.rectangle(im,(im.shape[1]TOOL_WIDTH-10,y),(im.shape[1]-1,y+toolH),(255,0,255),2)
     ax.text(1,y+toolH-10,'G:delete')
     toolYMap['delete']=y
+    y+=toolH+1
+
+    #pair
+    im[y:y+toolH,:]=(10,250,10)
+    ax.text(1,y+toolH-10,'H:horz link mode')
+    toolYMap['horzLink']=y
     y+=toolH+1
 
     #rotateOrien
@@ -1968,7 +2190,7 @@ def drawToolbar(ax):
     #cv2.imshow("labeler",self.displayImage)
         
 
-def labelImage(imagePath,texts,fields,pairs,samePairs,groups,pre_corners=None, page_corners=None, page_cornersActual=None):
+def labelImage(imagePath,texts,fields,pairs,samePairs,horzLinks,groups,pre_corners=None, page_corners=None, page_cornersActual=None):
     #p = Params()
     image = mpimg.imread(imagePath)
     #if p.image is None:
@@ -1996,11 +2218,11 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,pre_corners=None, p
     toolImage = drawToolbar(ax_tool)
     ax_tool.imshow(toolImage)
     ax_im.figure.canvas.mpl_disconnect(fig.canvas.manager.key_press_handler_id)
-    control = Control(ax_im,ax_tool,image.shape[1],image.shape[0],texts,fields,pairs,samePairs,groups,pre_corners, page_corners, page_cornersActual)
+    control = Control(ax_im,ax_tool,image.shape[1],image.shape[0],texts,fields,pairs,samePairs,horzLinks,groups,pre_corners, page_corners, page_cornersActual)
     #control.draw()
     plt.show()
 
-
+    allIds=set()
     idToIdxText={}
     textBBs=[]
     for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in control.textBBs.iteritems():
@@ -2010,6 +2232,7 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,pre_corners=None, p
                         'poly_points':[[int(round(tlX)),int(round(tlY))],[int(round(trX)),int(round(trY))],[int(round(brX)),int(round(brY))],[int(round(blX)),int(round(blY))]],
                         'type':RcodeMap[para]
                        })
+        allIds.add(textBBs[-1]['id'])
     idToIdxField={}
     fieldBBs=[]
     for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in control.fieldBBs.iteritems():
@@ -2020,6 +2243,7 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,pre_corners=None, p
                         'type':RcodeMap[para],
                         'isBlank':blank,
                        })
+        allIds.add(fieldBBs[-1]['id'])
     pairing=[]
     for text,field in control.pairing:
         pairing.append(('t'+str(idToIdxText[text]),'f'+str(idToIdxField[field])))
@@ -2032,6 +2256,12 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,pre_corners=None, p
             idToIdx = idToIdxText
             typ='t'
         samePairing.append((typ+str(idToIdx[a]),typ+str(idToIdx[b])))
+    #horzLinks=[link for hid,link in control.horzLinks.iteritems()]
+    horzLinks=[]
+    for hid,link in control.horzLinks.iteritems():
+        newLink = [id for id in link if id in allIds] #we don't ever remove deleted bb ids, do it here
+        horzLinks.append(newLink)
+        
 
     groups=[]
     for id,group in control.groups.iteritems():
@@ -2070,7 +2300,7 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,groups,pre_corners=None, p
             groups.append(newGroup)
 
 
-    return textBBs, fieldBBs, pairing, samePairing, groups, control.corners, control.cornersActual, control.complete, image.shape[0], image.shape[1]
+    return textBBs, fieldBBs, pairing, samePairing, horzLinks, groups, control.corners, control.cornersActual, control.complete, image.shape[0], image.shape[1]
 
 if __name__ == "__main__":
 
@@ -2078,6 +2308,7 @@ if __name__ == "__main__":
     fields=None
     pairs=None
     samePairs=None
+    horzLinks=None
     groups=None
     page_corners=None
     if len(sys.argv)>4:
@@ -2087,6 +2318,8 @@ if __name__ == "__main__":
             fields=read['fieldBBs']
             pairs=read['pairs']
             samePairs=read['samePairs']
+            if 'horzLinks' in read:
+                horzLinks=read['horzLinks']
             #for i in len(samePairs):
             #    if samePairs[i][-1][0]=='f':
             groups=read['groups']
@@ -2094,8 +2327,8 @@ if __name__ == "__main__":
             page_corners=read['page_corners']
 
     imageName = sys.argv[1][(sys.argv[1].rfind('/')+1):]
-    texts,fields,pairs,samePairs,groups,corners,actualCorners,complete,H,W = labelImage(sys.argv[1],texts,fields,pairs,samePairs,groups,page_corners)
+    texts,fields,pairs,samePairs,horzLinks,groups,corners,actualCorners,complete,H,W = labelImage(sys.argv[1],texts,fields,pairs,samePairs,horzLinks,groups,page_corners)
     outFile='test.json'
     if len(texts)+len(fields)+len(corners)>0:
         with open(outFile,'w') as out:
-            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners,  "imageFilename":imageName, 'height':H, 'width':W}))
+            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners,  "imageFilename":imageName, 'height':H, 'width':W}))
