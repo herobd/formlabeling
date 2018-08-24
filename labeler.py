@@ -1961,10 +1961,10 @@ class Control:
                         color=(0,1,0,0.8)
                     else:
                         color=(0,1,0,0.6)
-                    if sel:
-                        color=(0,1,0,0.4)
-                    else:
-                        color=(0,1,0,0.2)
+                if sel:
+                    color=(0,1,0,0.4)
+                else:
+                    color=(0,1,0,0.2)
                 self.pairLines[lineId] = patches.Polygon(np.array(pointsTop+pointsBot),linewidth=3,edgecolor=color,fill=False)
                 self.ax_im.add_patch(self.pairLines[lineId])
                 lineId+=1
@@ -2287,29 +2287,29 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,horzLinks,groups,pre_corne
     for id,group in control.groups.iteritems():
         elements=[]
         if group.holdsFields:
-            idToIdx = idToIdxField
+            #idToIdx = idToIdxField
             typ='f'
         else:
-            idToIdx = idToIdxText
+            #idToIdx = idToIdxText
             typ='t'
         for eleId in group.elements:
-            if eleId in idToIdx:
-                elements.append(typ+str(idToIdx[eleId]))
+            if typ+str(eleId) in allIds:
+                elements.append(typ+str(eleId))
         if len(elements)>0:
             samePairings=[]
             for eleId in group.samePairings:
-                if eleId in idToIdx:
-                    samePairings.append(typ+str(idToIdx[eleId]))
+                if typ+str(eleId) in allIds:
+                    samePairings.append(typ+str(eleId))
             pairings=[]
             if not group.holdsFields:
-                idToIdx = idToIdxField
+                #idToIdx = idToIdxField
                 typ='f'
             else:
-                idToIdx = idToIdxText
+                #idToIdx = idToIdxText
                 typ='t'
             for eleId in group.pairings:
-                if eleId in idToIdx:
-                    pairings.append(typ+str(idToIdx[eleId]))
+                if typ+str(eleId) in allIds:
+                    pairings.append(typ+str(eleId))
             newGroup= { 'id': 'g'+str(len(groups)),
                         'type':group.typeStr,
                         'holds': ('field' if group.holdsFields else 'text'),
