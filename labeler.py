@@ -857,7 +857,7 @@ class Control:
 
                 indecies = list(range(len(self.fieldBBs)))
                 shuffle(indecies)
-                indecies.sort(key=lambda a: int(self.fieldBBs[a][8]==codeMap['fieldCol'] or self.fieldBBs[a][8]==codeMap['fieldRow']))
+                indecies.sort(key=lambda a: int(self.fieldBBs[self.fieldBBs.keys()[a]][8]==codeMap['fieldCol'] or self.fieldBBs[self.fieldBBs.keys()[a]][8]==codeMap['fieldRow']))
                 for index in indecies:
                     id = self.fieldBBs.keys()[index]
                     if self.checkInside(x,y,self.fieldBBs[id]):
