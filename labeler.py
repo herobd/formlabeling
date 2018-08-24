@@ -1917,8 +1917,8 @@ class Control:
                 pointsTop=[]
                 pointsBot=[]
                 rot=None
+                sel=False
                 for lid in link:
-                    sel=False
                     id=int(lid[1:])
                     if lid[0]=='t':
                         bbs=self.textBBs
