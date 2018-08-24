@@ -156,7 +156,7 @@ for groupName in sorted(groupNames):
                 samePairsT=read['samePairs']
                 groupsT=read['groups']
                 cornersT=read['page_corners']
-                if 'horzLinks' in read:
+                if 'horzLinks' in read  and not skipHLinks:
                     horzLinksT=read['horzLinks']
                 #cornersActualT=read['actualPage_corners']
                 imageTemplate=read['imageFilename']
