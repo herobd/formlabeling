@@ -21,7 +21,7 @@ def exitGracefully(sig, frame):
 signal.signal(signal.SIGINT, exitGracefully)
 
 if len(sys.argv)<2:
-    print 'usage: '+sys.argv[0]+' directory (startingGroup) (startingImage)'
+    print 'usage: '+sys.argv[0]+' directory [startingGroup] [startingImage] [n(dont load horz links)]'
     exit()
 
 directory = sys.argv[1]
@@ -44,6 +44,10 @@ if len(sys.argv)>3:
 else:
     startHereImage=None
     goingImage=True
+
+skipHLinks=False
+if len(sys.argv)>4 and sys.argv[4][0]=='n':
+    skipHLinks=True
 
 if directory[-1]!='/':
     directory=directory+'/'
@@ -211,7 +215,7 @@ for groupName in sorted(groupNames):
                     pairs=read['pairs']
                     samePairs=read['samePairs']
                     groups=read['groups']
-                    if 'horzLinks' in read:
+                    if 'horzLinks' in read and not skipHLinks:
                         horzLinks=read['horzLinks']
                     if 'page_corners' in read and 'actualPage_corners' in read:
                         page_corners=read['page_corners']
