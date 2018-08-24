@@ -282,9 +282,11 @@ class Control:
                 #endX = (new_points[0,1]+new_points[0,2])/2.0 #average x of new tr and br
                 #endY = (new_points[1,2]+new_points[1,3])/2.0 #average y of new br and bl
                 #self.textBBs[self.bbCurId] = (int(round(startX)),int(round(startY)),int(round(endX)),int(round(endY)),para,0)
-                self.textBBs[self.textBBCurId] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,0)
-                self.textBBCurId+=1
+                id = int(bb['id'][1:])
+                self.textBBs[id] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,0)
+                self.textBBCurId=max(self.textBBCurId,id+1)
             for bb in self.preFields:
+                id = int(bb['id'][1:])
                 tlX,tlY = bb['poly_points'][0]
                 trX,trY = bb['poly_points'][1]
                 brX,brY = bb['poly_points'][2]
@@ -296,8 +298,8 @@ class Control:
                                         [1,1,1,1]])
                 new_points = np.matmul(trans,old_corners)
                 new_points/=new_points[2,:]
-                self.fieldBBs[self.fieldBBCurId] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,blank)
-                self.fieldBBCurId+=1
+                self.fieldBBs[id] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,blank)
+                self.fieldBBCurId=max(self.fieldBBCurId,id+1)
             #self.pairing=pairs
         self.mode='text'
         self.modeRect = patches.Rectangle((0,0),TOOL_WIDTH,toolH,linewidth=2,edgecolor=(1,0,1),facecolor='none')
