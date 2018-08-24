@@ -1268,6 +1268,7 @@ class Control:
                 self.setMode('pair')
             elif key=='h':
                 self.setMode('horzLink')
+                self.draw()
             elif key=='j':
                 self.rotateOrien()
             elif key=='k': #K copy selected
@@ -1917,11 +1918,14 @@ class Control:
                 pointsBot=[]
                 rot=None
                 for lid in link:
+                    sel=False
                     id=int(lid[1:])
                     if lid[0]=='t':
                         bbs=self.textBBs
+                        sel = self.selected=='text' and self.selectedId==id
                     elif lid[0]=='f':
                         bbs=self.fieldBBs
+                        sel = self.selected=='field' and self.selectedId==id
                     if id in bbs:
                         if rot is None:
                             rot=self.getRotation(bbs[id])
@@ -1952,7 +1956,16 @@ class Control:
                 pointsBot.reverse()
                 #print(pointsTop)
                 #print(pointsBot)
-                self.pairLines[lineId] = patches.Polygon(np.array(pointsTop+pointsBot),linewidth=3,edgecolor=(0,1,0,0.2),fill=False)
+                if self.mode=='horzLink':
+                    if sel:
+                        color=(0,1,0,0.8)
+                    else:
+                        color=(0,1,0,0.6)
+                    if sel:
+                        color=(0,1,0,0.4)
+                    else:
+                        color=(0,1,0,0.2)
+                self.pairLines[lineId] = patches.Polygon(np.array(pointsTop+pointsBot),linewidth=3,edgecolor=color,fill=False)
                 self.ax_im.add_patch(self.pairLines[lineId])
                 lineId+=1
 
@@ -2223,22 +2236,24 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,horzLinks,groups,pre_corne
     plt.show()
 
     allIds=set()
-    idToIdxText={}
+    #idToIdxText={}
     textBBs=[]
     for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in control.textBBs.iteritems():
-        idToIdxText[id]=len(textBBs)
+        #idToIdxText[id]=len(textBBs)
         textBBs.append({
-                        'id': 't'+str(idToIdxText[id]),
+            #'id': 't'+str(idToIdxText[id]),
+                        'id': 't'+str(id),
                         'poly_points':[[int(round(tlX)),int(round(tlY))],[int(round(trX)),int(round(trY))],[int(round(brX)),int(round(brY))],[int(round(blX)),int(round(blY))]],
                         'type':RcodeMap[para]
                        })
         allIds.add(textBBs[-1]['id'])
-    idToIdxField={}
+    #idToIdxField={}
     fieldBBs=[]
     for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in control.fieldBBs.iteritems():
-        idToIdxField[id]=len(fieldBBs)
+        #idToIdxField[id]=len(fieldBBs)
         fieldBBs.append({
-                        'id': 'f'+str(idToIdxField[id]),
+            #'id': 'f'+str(idToIdxField[id]),
+                        'id': 'f'+str(id),
                         'poly_points':[[int(round(tlX)),int(round(tlY))],[int(round(trX)),int(round(trY))],[int(round(brX)),int(round(brY))],[int(round(blX)),int(round(blY))]],
                         'type':RcodeMap[para],
                         'isBlank':blank,
@@ -2246,20 +2261,25 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,horzLinks,groups,pre_corne
         allIds.add(fieldBBs[-1]['id'])
     pairing=[]
     for text,field in control.pairing:
-        pairing.append(('t'+str(idToIdxText[text]),'f'+str(idToIdxField[field])))
+        #pairing.append(('t'+str(idToIdxText[text]),'f'+str(idToIdxField[field])))
+        pairing.append(('t'+str(text),'f'+str(field)))
     samePairing=[]
     for a,b,field in control.samePairing:
         if field:
-            idToIdx = idToIdxField
+            #idToIdx = idToIdxField
             typ='f'
         else:
-            idToIdx = idToIdxText
+            #idToIdx = idToIdxText
             typ='t'
-        samePairing.append((typ+str(idToIdx[a]),typ+str(idToIdx[b])))
+        #samePairing.append((typ+str(idToIdx[a]),typ+str(idToIdx[b])))
+        samePairing.append((typ+str(a),typ+str(b)))
     #horzLinks=[link for hid,link in control.horzLinks.iteritems()]
     horzLinks=[]
     for hid,link in control.horzLinks.iteritems():
         newLink = [id for id in link if id in allIds] #we don't ever remove deleted bb ids, do it here
+        #newLink = []
+        #for id in link:
+        #    if id in allIds
         horzLinks.append(newLink)
         
 

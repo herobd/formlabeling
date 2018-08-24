@@ -145,7 +145,7 @@ if populate:
                 if f[-5:]=='.json' and 'template' not in f:
                     with open(os.path.join(directory,groupName,f)) as annFile:
                         read = json.loads(annFile.read())
-                    if 'horzLinks' not in read:
+                    if 'horzLinks' not in read or len(read['horzLinks'])==0:
                         allIds = set()
                         #for bb in read['textBBs']:
                         #    addIds.add(bb['id'])
