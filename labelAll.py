@@ -246,6 +246,7 @@ for groupName in sorted(groupNames):
                     gtFileName+='.nf'
                 with open(gtFileName,'w') as out:
                     out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime, "height":height, "width":width}))
+                skipHLinks=False
                 #os.chown(gtFileName,-1,groupId)
                 if not complete:
                     lock.release()
