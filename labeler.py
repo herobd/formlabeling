@@ -857,7 +857,7 @@ class Control:
 
                 indecies = list(range(len(self.fieldBBs)))
                 shuffle(indecies)
-                indecies.sort(key=lambda a: int(self.fieldBBs[self.fieldBBs.keys()[a]][8]==codeMap['fieldCol'] or self.fieldBBs[self.fieldBBs.keys()[a]][8]==codeMap['fieldRow']))
+                indecies.sort(key=lambda a: int(self.fieldBBs[self.fieldBBs.keys()[a]][8]==codeMap['fieldCol'] or self.fieldBBs[self.fieldBBs.keys()[a]][8]==codeMap['fieldRow'] or self.fieldBBs[self.fieldBBs.keys()[a]][8]==codeMap['fieldRegion']))
                 for index in indecies:
                     id = self.fieldBBs.keys()[index]
                     if self.checkInside(x,y,self.fieldBBs[id]):
@@ -1970,8 +1970,12 @@ class Control:
                 self.pairLines[lineId] = patches.Polygon(np.array(pointsTop+pointsBot),linewidth=3,edgecolor=color,fill=False)
                 self.ax_im.add_patch(self.pairLines[lineId])
                 lineId+=1
-
+            
+            toRemove=[]
             for text,field in self.pairing:
+                if text not in self.textBBs or field not in self.fieldBBs:
+                    toRemove.append((text,field))
+                    continue
                 x1=(self.textBBs[text][0]+self.textBBs[text][2]+self.textBBs[text][4]+self.textBBs[text][6])/4
                 y1=(self.textBBs[text][1]+self.textBBs[text][3]+self.textBBs[text][5]+self.textBBs[text][7])/4
                 x2=(self.fieldBBs[field][0]+self.fieldBBs[field][2]+self.fieldBBs[field][4]+self.fieldBBs[field][6])/4
@@ -1980,12 +1984,18 @@ class Control:
                 self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='g',facecolor='none')
                 self.ax_im.add_patch(self.pairLines[lineId])
                 lineId+=1
+            for inst in toRemove:
+                self.pairing.remove(inst)
 
+            toRemove=[]
             for a,b,field in self.samePairing:
                 if field:
                     bbs=self.fieldBBs
                 else:
                     bbs=self.textBBs
+                if a not in bbs or b not in bbs:
+                    toRemove.append((a,b,field))
+                    continue
                 x1=(bbs[a][0]+bbs[a][2]+bbs[a][4]+bbs[a][6])/4
                 y1=(bbs[a][1]+bbs[a][3]+bbs[a][5]+bbs[a][7])/4
                 x2=(bbs[b][0]+bbs[b][2]+bbs[b][4]+bbs[b][6])/4
@@ -1994,6 +2004,8 @@ class Control:
                 self.pairLines[lineId]=patches.Arrow(x1,y1,x2-x1,y2-y1,2,edgecolor='purple',facecolor='none')
                 self.ax_im.add_patch(self.pairLines[lineId])
                 lineId+=1
+            for inst in toRemove:
+                self.selfPairing.remove(inst)
         if self.mode=='move':
             self.drawSelected(clear=False)
         else:
