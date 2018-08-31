@@ -184,6 +184,7 @@ class Control:
         self.mode='corners' #this indicates the 'state'
         self.secondaryMode=None
         self.resizeMode='edges'
+        self.shiftAmount=4
         self.textBBs={} #this holds each text box as (x1,y1,x2,y2,x3,y3,x4,y4,type_code,filltype).  filltype is always 0
         self.textRects={} #this holds the drawing patches
         self.fieldBBs={} #this holds each field box as (x1,y1,x2,y2,x3,y3,x4,y4,type_code,filltype). filltype is according to ftypeMap
@@ -1283,21 +1284,21 @@ class Control:
                 self.setSecondaryMode('col')
             elif key=='up':
                 trans = np.array([[1,0,0],
-                                  [0,1,-4],
+                                  [0,1,-self.shiftAmount],
                                   [0,0,1]])
                 self.transAll(trans)
             elif key=='down':
                 trans = np.array([[1,0,0],
-                                  [0,1,4],
+                                  [0,1,self.shiftAmount],
                                   [0,0,1]])
                 self.transAll(trans)
             elif key=='left':
-                trans = np.array([[1,0,-4],
+                trans = np.array([[1,0,-self.shiftAmount],
                                   [0,1,0],
                                   [0,0,1]])
                 self.transAll(trans)
             elif key=='right':
-                trans = np.array([[1,0,4],
+                trans = np.array([[1,0,self.shiftAmount],
                                   [0,1,0],
                                   [0,0,1]])
                 self.transAll(trans)
@@ -1357,11 +1358,13 @@ class Control:
                     out.write(json.dumps({'textBBs':textBBs, 'fieldBBs':fieldBBs}))
             elif key=='shift':
                 self.resizeMode='corners'
+                self.shiftAmount=40
 
     
     def doKeyUp(self,event):
         if event.key=='shift':
             self.resizeMode='edges'
+            self.shiftAmount=4
     #def updatePairLines(self):
     #    for i, pair in enumerate(self.pairing):
     #        if (self.selected=='text' and pair[0]==self.selectedId) or (self.selected=='field' and pair[1]==self.selectedId):

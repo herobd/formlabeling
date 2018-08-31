@@ -9,7 +9,7 @@ import numpy as np
 NUM_PER_GROUP=5
 
 if len(sys.argv)<2:
-    print 'usage: '+sys.argv[0]+' directory [+:add] [-[-]:progress] [c:create split] [f:poputate info from template]'
+    print 'usage: '+sys.argv[0]+' directory [+:add] [-[-]:progress] [c:create split] [f:poputate info from template [group]]'
     exit()
 
 directory = sys.argv[1]
@@ -18,6 +18,7 @@ add=False
 makesplit=False
 saveall=False
 populate=False
+onlyGroup=None
 if len(sys.argv)>2:
     if sys.argv[2][0]=='-' or sys.argv[2][0]=='p':
         progress=True
@@ -29,6 +30,8 @@ if len(sys.argv)>2:
         saveall=True
     elif sys.argv[2][0]=='f':
         populate=True
+        if len(sys.argv)>3:
+            onlyGroup=sys.argv[3]
     else:
         startHere = sys.argv[2]
         going=False
@@ -117,6 +120,7 @@ if add:
         files = imageGroups[groupName]
         for f in files:
             if f[-5:]=='.json' and 'template' not in f:
+                #print('{} / {}'.format(groupName,f))
                 with open(os.path.join(directory,groupName,f)) as annFile:
                     read = json.loads(annFile.read())
                 if 'height' not in read or 'width' not in read:
@@ -131,6 +135,8 @@ if add:
 if populate:
     count=0
     for groupName in sorted(groupNames):
+        if onlyGroup is not None and groupName!=onlyGroup:
+            continue
         files = imageGroups[groupName]
         tempHorz=None
         for f in files:

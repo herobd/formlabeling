@@ -9,7 +9,7 @@ import grp
 #import Tkinter
 #import tkMessageBox
 
-NUM_PER_GROUP=5
+NUM_PER_GROUP=50
 lock=None
 #groupId = grp.getgrnam("pairing").gr_gid
 
@@ -20,8 +20,26 @@ def exitGracefully(sig, frame):
         exit()
 signal.signal(signal.SIGINT, exitGracefully)
 
+def combineFields(gtFields,tempFields):
+    toRemove=[]
+    maxId=0
+    for i in range(len(tempFields)):
+        if tempFields[i]['type']=='fieldCol' or tempFields[i]['type']=='fieldRow':
+            toRemove.append(i)
+        else:
+            maxId = max(maxId,int(tempFields[i]['id'][1:]))
+    toRemove.sort(reverse=True)
+    for i in toRemove:
+        del tempFields[i]
+    newId=maxId
+    for bb in gtFields:
+        bb['id']='f'+str(newId)
+        newId+=1
+    print('combining {} and {}'.format(len(gtFields),len(tempFields)))
+    return gtFields+tempFields
+
 if len(sys.argv)<2:
-    print 'usage: '+sys.argv[0]+' directory [startingGroup] [startingImage] [n(dont load horz links)]'
+    print 'usage: '+sys.argv[0]+' directory [startingGroup] [startingImage] [n(dont load horz links)]/[t (add template, skipping tables)]'
     exit()
 
 directory = sys.argv[1]
@@ -46,8 +64,12 @@ else:
     goingImage=True
 
 skipHLinks=False
-if len(sys.argv)>4 and sys.argv[4][0]=='n':
-    skipHLinks=True
+applyTemplate=False
+if len(sys.argv)>4:
+    if sys.argv[4][0]=='n':
+        skipHLinks=True
+    elif sys.argv[4][0]=='t':
+        applyTemplate=True
 
 if directory[-1]!='/':
     directory=directory+'/'
@@ -226,6 +248,13 @@ for groupName in sorted(groupNames):
                         labelTime = None
                     assert f==read['imageFilename']
                     print 'g:'+groupName+', image: '+f+', gt found'
+                    if applyTemplate:
+                        texts+=textsT
+                        fields = combineFields(fields,fieldsT)
+                        pairs=pairsT
+                        samePairs=samePairsT
+                        groups=groupsT
+                        horzLinks=horzLinksT
                     if labelTime is not None:
                         timeStart = timeit.default_timer()
                     texts,fields,pairs,samePairs,horzLinks,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),texts,fields,pairs,samePairs,horzLinks,groups,None,page_corners,page_cornersActual)
