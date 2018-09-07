@@ -149,19 +149,31 @@ elif addOnly:
                         count+=1
     print 'added to '+str(count)+' jsons'
     exit()
-
+groupIndex=-1
+groupsDone=[False]*len(groupNames)
 for groupName in sorted(groupNames):
+    groupIndex+=1
     files = imageGroups[groupName]
     if not going:
         if startHere==groupName:
             going=True
         else:
             continue
+    print(groupName+' ho')
     template = None
+    numImages=0
+    numDone=0
     for f in files:
         if 'template' in f and f[-5:]=='.json':
             template = os.path.join(directory,groupName,f)
-
+        elif f[-4:]=='.jpg':
+            numImages+=1
+        elif f[-5:]=='.json':
+            numDone+=1
+    numImages = min(numImages,NUM_PER_GROUP)
+    if numDone>=numImages:
+        groupsDone[groupIndex]=True
+        #continue
 
     #print 'group '+groupName+', template image: '+imageTemplate                   
     #templateFile=os.path.join(directory,groupName,template)
@@ -275,6 +287,13 @@ for groupName in sorted(groupNames):
                     gtFileName+='.nf'
                 with open(gtFileName,'w') as out:
                     out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime, "height":height, "width":width}))
+                    if complete and (startHere is None or startHere!=groupName):
+                        if countInGroup==numImages:
+                            groupsDone[groupIndex]=True
+                            print groupName+' progress:['+('X'*numImages)+'] COMPLETE!'
+                            print 'Overall group progress:['+''.join(['X' if x else '.' for x in groupsDone])+']'
+                        else:
+                            print groupName+' progress:['+('X'*countInGroup)+('.'*(numImages-countInGroup))+']'
                 skipHLinks=False
                 #os.chown(gtFileName,-1,groupId)
                 if not complete:

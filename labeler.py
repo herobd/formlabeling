@@ -1122,6 +1122,8 @@ class Control:
               ('-mv' == self.mode[-3:] ))):
             self.endX=event.xdata
             self.endY=event.ydata
+            if self.endX is None or self.endY is None:
+                return
             tlX=bbs[self.selectedId][0]
             tlY=bbs[self.selectedId][1]
             trX=bbs[self.selectedId][2]
