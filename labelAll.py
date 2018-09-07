@@ -159,7 +159,7 @@ for groupName in sorted(groupNames):
             going=True
         else:
             continue
-    print(groupName+' ho')
+    #print(groupName+' ho')
     template = None
     numImages=0
     numDone=0

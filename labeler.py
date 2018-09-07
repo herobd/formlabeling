@@ -1284,22 +1284,22 @@ class Control:
                 self.setSecondaryMode('row')
             elif key==';': #col
                 self.setSecondaryMode('col')
-            elif key=='up':
+            elif key=='up' or key=='shift+up':
                 trans = np.array([[1,0,0],
                                   [0,1,-self.shiftAmount],
                                   [0,0,1]])
                 self.transAll(trans)
-            elif key=='down':
+            elif key=='down' or key=='shift+down':
                 trans = np.array([[1,0,0],
                                   [0,1,self.shiftAmount],
                                   [0,0,1]])
                 self.transAll(trans)
-            elif key=='left':
+            elif key=='left' or key=='shift+left':
                 trans = np.array([[1,0,-self.shiftAmount],
                                   [0,1,0],
                                   [0,0,1]])
                 self.transAll(trans)
-            elif key=='right':
+            elif key=='right' or key=='shift+right':
                 trans = np.array([[1,0,self.shiftAmount],
                                   [0,1,0],
                                   [0,0,1]])
