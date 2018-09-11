@@ -45,6 +45,26 @@ modes = ['text', 'textP', 'textMinor', 'textInst', 'textNumber', 'field', 'field
 ftypeMap = {'text':0, 'handwriting':1, 'print':2, 'blank':3, 'signature':4} #print:typewriter or stamp
 RftypeMap = {v: k for k, v in ftypeMap.iteritems()}
 
+def invalidPoly(points):
+    #we check if every angle is positive
+    for i in range(len(points)):
+        m = np.array(points[i])
+        f = np.array(points[i-1])
+        s = np.array(points[(i+1)%len(points)])
+        f-=m #conver to vector
+        s-=m
+        a1 = math.atan2(f[1],f[0])
+        a2 = math.atan2(s[1],s[0])
+        #print('{} and {}'.format(f,s))
+        #c = np.dot(f,s)/np.linalg.norm(f)/np.linalg.norm(s)
+        #angle = np.arccos(c)
+        #print('c {}, a {}'.format(c,angle))
+        #if not angle>0:
+        if a2-a1>0 and a2-a1<math.pi:
+            return True
+    return False
+
+
 def get_side(a, b):
     x = x_product(a, b)
     if x < 0:
@@ -268,6 +288,8 @@ class Control:
             #point_new = trans point_old, done with homogeneour cords
 
             for bb in self.preTexts:
+                if invalidPoly(bb['poly_points']):
+                    continue
                 tlX,tlY = bb['poly_points'][0]
                 trX,trY = bb['poly_points'][1]
                 brX,brY = bb['poly_points'][2]
@@ -287,6 +309,8 @@ class Control:
                 self.textBBs[id] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,0)
                 self.textBBCurId=max(self.textBBCurId,id+1)
             for bb in self.preFields:
+                if invalidPoly(bb['poly_points']):
+                    continue
                 id = int(bb['id'][1:])
                 tlX,tlY = bb['poly_points'][0]
                 trX,trY = bb['poly_points'][1]
