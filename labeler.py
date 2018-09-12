@@ -46,6 +46,15 @@ ftypeMap = {'text':0, 'handwriting':1, 'print':2, 'blank':3, 'signature':4} #pri
 RftypeMap = {v: k for k, v in ftypeMap.iteritems()}
 
 def invalidPoly(points):
+    def getQuad(a):
+        if a<-0.5*math.pi:
+            return 0
+        elif a<0:
+            return 1
+        elif a<0.5*math.pi:
+            return 2
+        else:
+            return 3
     #we check if every angle is positive
     for i in range(len(points)):
         m = np.array(points[i])
@@ -53,14 +62,23 @@ def invalidPoly(points):
         s = np.array(points[(i+1)%len(points)])
         f-=m #conver to vector
         s-=m
-        a1 = math.atan2(f[1],f[0])
-        a2 = math.atan2(s[1],s[0])
+        a2 = math.atan2(f[1],f[0])
+        a1 = math.atan2(s[1],s[0])
         #print('{} and {}'.format(f,s))
         #c = np.dot(f,s)/np.linalg.norm(f)/np.linalg.norm(s)
         #angle = np.arccos(c)
         #print('c {}, a {}'.format(c,angle))
         #if not angle>0:
-        if a2-a1>0 and a2-a1<math.pi:
+        q1 = getQuad(a1)
+        q2 = getQuad(a2)
+        if q2>q1 or (q1<2 and q2<2) or (q1>1 and q2>1):
+            diff = a2-a1
+        elif (q1==3 or q1==2) and (q2==1 or q2==0):
+            diff = (a2+2*math.pi)-a1
+        else:
+            print('error, unaccounted quads: q1={} q2={}'.format(q1,q2))
+            exit()
+        if diff<=0 or diff>=math.pi:
             return True
     return False
 
@@ -2293,11 +2311,14 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,horzLinks,groups,pre_corne
     #idToIdxField={}
     fieldBBs=[]
     for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in control.fieldBBs.iteritems():
+        pp=[[int(round(tlX)),int(round(tlY))],[int(round(trX)),int(round(trY))],[int(round(brX)),int(round(brY))],[int(round(blX)),int(round(blY))]]
+        if invalidPoly(pp):
+            continue
         #idToIdxField[id]=len(fieldBBs)
         fieldBBs.append({
             #'id': 'f'+str(idToIdxField[id]),
                         'id': 'f'+str(id),
-                        'poly_points':[[int(round(tlX)),int(round(tlY))],[int(round(trX)),int(round(trY))],[int(round(brX)),int(round(brY))],[int(round(blX)),int(round(blY))]],
+                        'poly_points': pp,
                         'type':RcodeMap[para],
                         'isBlank':blank,
                        })
