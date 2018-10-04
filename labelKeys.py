@@ -6,7 +6,7 @@ import json
 import timeit
 import grp
 
-iains_groups=['145','146','146_1','153','153_1','153_2','155','158','159','16','163','171','172','173','174','182','187','189','193','194','197','199','200','29','30','34','34_1','35','35_1','39','4','42','46','46_1','46_2','5','52','53','53_1','58','58_1','6','60','60_1','60_2','60_3','61','62','62_1','65','68','69','70','71','71_1','72','75_1','78','79','8','81','81_1','86','86_1','88','89','89_1','89_2','93','96','98']
+iains_groups=['171','172','173','174','182','187','189','193','194','197','199','200','29','30','34','34_1','35','35_1','39','4','42','46','46_1','46_2','5','52','53','53_1','58','58_1','6','60','60_1','60_2','60_3','61','62','62_1','65','68','69','70','71','71_1','72','75_1','78','79','8','81','81_1','86','86_1','88','89','89_1','89_2','93','96','98']
 #groupId = grp.getgrnam("pairing").gr_gid
 if len(sys.argv)<2:
     print 'usage: '+sys.argv[0]+' directory (startingGroup)'
@@ -66,7 +66,7 @@ for groupName in sorted(groupNames):
     outFile=os.path.join(directory,groupName,'template'+groupName+'.json')
     lock = FileLock(outFile, timeout=None)
     try:
-        lock.acquire()
+        ###lock.acquire()
         texts=fields=pairs=samePairs=horzLinks=groups=page_corners=page_cornersActual=None
         if template is not None or nfExists:
             if template is not None:
@@ -104,10 +104,12 @@ for groupName in sorted(groupNames):
             break
         if not complete:
             outFile+='.nf'
+        elif len(horzLinks)==0:
+            print('Did you forget horz links?')
         with open(outFile,'w') as out:
             out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "imageFilename":imageTemplate, "labelTime": labelTime}))
         #os.chown(outFile,-1,groupId)
-        lock.release()
+        ###lock.release()
         lock=None
         if not complete:
             exit()

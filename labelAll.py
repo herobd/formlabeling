@@ -9,7 +9,7 @@ import grp
 #import Tkinter
 #import tkMessageBox
 
-NUM_PER_GROUP=5
+NUM_PER_GROUP=2
 lock=None
 #groupId = grp.getgrnam("pairing").gr_gid
 

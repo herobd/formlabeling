@@ -6,7 +6,7 @@ from random import shuffle
 #import tkMessageBox
 import numpy as np
 
-NUM_PER_GROUP=5
+NUM_PER_GROUP=2
 
 if len(sys.argv)<2:
     print 'usage: '+sys.argv[0]+' directory [+:add] [-[-]:progress] [c:create split] [f:poputate info from template [group]]'
@@ -19,6 +19,7 @@ makesplit=False
 saveall=False
 populate=False
 onlyGroup=None
+tableList=False
 if len(sys.argv)>2:
     if sys.argv[2][0]=='-' or sys.argv[2][0]=='p':
         progress=True
@@ -32,6 +33,8 @@ if len(sys.argv)>2:
         populate=True
         if len(sys.argv)>3:
             onlyGroup=sys.argv[3]
+    elif sys.argv[2][0]=='t':
+        tableList=True
     else:
         startHere = sys.argv[2]
         going=False
@@ -67,6 +70,8 @@ if progress:
     numTotal=0
     numTimed=0
     timed=[]
+    timedAlign=[]
+    timedIsTemp=[]
     timeTotal=0
     numTempTimed=0
     timeTemp=0
@@ -77,6 +82,9 @@ if progress:
     for groupName in sorted(groupNames):
         files = imageGroups[groupName]
         imagesInGroup=0
+        numDoneG=0
+        templateImage=None
+        timesByImage={}
         for f in files:
             if 'lock' not in f:
                 if f[-4:]=='.jpg' or f[-5:]=='.jpeg' or f[-4:]=='.png':
@@ -90,8 +98,10 @@ if progress:
                                 numTempTimed+=1
                                 temped.append(read['labelTime'])
                                 timeTemp+=read['labelTime']
+                            assert templateImage is None
+                            templateImage = read['imageFilename']
                 elif f[-5:]=='.json':
-                    numDoneTotal+=1
+                    numDoneG+=1
                     if doTime:
                         with open(os.path.join(directory,groupName,f)) as annFile:
                             read = json.loads(annFile.read())
@@ -99,7 +109,13 @@ if progress:
                                 numTimed+=1
                                 timeTotal+=read['labelTime']
                                 timed.append(read['labelTime'])
-
+                                timesByImage[read['imageFilename']]=read['labelTime']
+        for image,time in timesByImage.iteritems():
+            if image!=templateImage:
+                timedAlign.append(time)
+            else:
+                timedIsTemp.append(time)
+        numDoneTotal += min(numDoneG,NUM_PER_GROUP)
         numTotal += min(imagesInGroup,NUM_PER_GROUP)
     print('Templates: {}/{}  {}'.format(numTemplateDone,len(groupNames),float(numTemplateDone)/len(groupNames)))
     print('Images:    {}/{}  {}'.format(numDoneTotal,numTotal,float(numDoneTotal)/numTotal))
@@ -110,8 +126,39 @@ if progress:
         med = np.median(temped)
         print (' Templates(Med) take {} secs, or {} minutes   ({} samples)'.format(med,med/60,numTempTimed))
         print ('Alignment(Mean) takes {} secs, or {} minutes   ({} samples)'.format(timeTotal,timeTotal/60,numTimed))
+        stddev = np.std(timed)
+        print ('   std dev {} secs, or {} minutes'.format(stddev,stddev/60))
         med = np.median(timed)
         print ('Alignment(Med) takes {} secs, or {} minutes   ({} samples)'.format(med,med/60,numTimed))
+
+        print ('\nThresholding long times...')
+        thresh = stddev*2 + timeTotal
+        new_time=[t for t in timed if t<thresh and t>0]
+        new_temped=[t for t in temped if t<thresh and t>0]
+        new_timeA=[t for t in timedAlign if t<thresh and t>0]
+        new_timeT=[t for t in timedIsTemp if t<thresh and t>0]
+
+        mean = np.mean(new_temped)
+        print ('Templating(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_temped)))
+        stddev = np.std(new_temped)
+        print ('   std dev {} secs, or {} minutes'.format(stddev,stddev/60))
+
+        mean = np.mean(new_time)
+        print ('Alignment(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_time)))
+        stddev = np.std(new_time)
+        print ('   std dev {} secs, or {} minutes'.format(stddev,stddev/60))
+
+        
+        mean = np.mean(new_timeA)
+        print ('Alignment not temp(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_timeA)))
+        stddev = np.std(new_timeA)
+        print ('   std dev {} secs, or {} minutes'.format(stddev,stddev/60))
+
+        mean = np.mean(new_timeT)
+        print ('Alignment is temp(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_timeT)))
+        stddev = np.std(new_timeT)
+        print ('   std dev {} secs, or {} minutes'.format(stddev,stddev/60))
+
     
 if add:
     import matplotlib.image as mpimg
@@ -164,6 +211,38 @@ if populate:
     print 'added to '+str(count)+' jsons'
 
 
+if tableList:
+    groupImages={}#defaultdict(list)
+    groupTablePresence={}
+    for groupName in sorted(groupNames):
+        files = imageGroups[groupName]
+        imageFiles=[]
+        tempFound=False
+        hasTable=False
+        for f in files:
+            if 'lock' not in f:
+                if f[-4:]=='.jpg' or f[-5:]=='.jpeg' or f[-4:]=='.png':
+                    imageFiles.append(f)
+                elif 'template' in f and f[-5:]=='.json':
+                    tempFound=True
+                    validTemp=False
+                    with open(os.path.join(directory,groupName,f)) as annFile:
+                        read = json.loads(annFile.read())
+                    for bb in read['fieldBBs']:
+                        if bb['type']=='fieldCol' or bb['type']=='fieldRow':
+                            hasTable=True
+                            if validTemp:
+                                break
+                        if bb['type']!='fieldCol' and bb['type']!='fieldRow':
+                            validTemp=True
+                            if hasTable:
+                                break
+                #elif f[-5:]=='.json' and 'temp' not in f:
+
+        if tempFound and validTemp and hasTable:
+            print(groupName)
+            #groupImages[groupName]=imageFiles
+            #groupTablePresence[groupName]=hasTable
 if makesplit:
     groupImages={}#defaultdict(list)
     groupTablePresence={}

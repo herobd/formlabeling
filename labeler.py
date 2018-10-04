@@ -16,7 +16,7 @@ TOOL_WIDTH=320
 toolH=40
 MAX_ARR_LEN=200
 BOX_MIN_AREA=600
-MIN_MOVE_DIST=8
+MIN_MOVE_DIST=6
 colorMap = {'text':(0/255.0,0/255.0,255/255.0,0.51), 'textP':(0/255.0,150/255.0,255/255.0,0.51), 'textMinor':(80/255.0,170/255.0,190/255.0,0.65), 'textInst':(170/255.0,160/255.0,225/255.0,0.71), 'textNumber':(0/255.0,160/255.0,100/255.0,0.51), 'fieldCircle':(255/255.0,190/255.0,210/255.0,0.61), 'field':(255/255.0,0/255.0,0/255.0,0.51), 'fieldP':(255/255.0,120/255.0,0/255.0,0.51), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0,0.51), 'graphic':(255/255.0,105/255.0,250/255.0,0.51), 'comment':(165/255.0,10/255.0,15/255.0,0.51), 'pair':(15/255.0,150/255.0,15/255.0,0.51), 'col':(5/255.0,70/255.0,5/255.0,0.35), 'row':(25/255.0,5/255.0,75/255.0,0.35), 'fieldRegion':(15/255.0,15/255.0,75/255.0,0.51), 'fieldCol':(65/255.0,70/255.0,5/255.0,0.65), 'fieldRow':(65/255.0,5/255.0,75/255.0,0.65), 'move':(1,0,1,0.5)}
 DRAW_COLOR=(1,0.7,1)
 codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11, 'fieldCol':12, 'fieldRow':13}
@@ -1403,6 +1403,32 @@ class Control:
             elif key=='shift':
                 self.resizeMode='corners'
                 self.shiftAmount=40
+            elif key=='f8' and self.selected!='none':
+                if self.selected == 'field':
+                    bbs=self.fieldBBs
+                elif self.selected == 'text':
+                    bbs=self.textBBs
+                nTop, nBot = self.getDividingLine(self.startX,self.startY,*bbs[self.selectedId][0:8])
+                bb = bbs[self.selectedId]
+                self.didAction(('drag-'+self.selected,self.selectedId)+bbs[self.selectedId][0:8])
+                bbs[self.selectedId] = bbs[self.selectedId][0:2]+(nTop[0],nTop[1],nBot[0],nBot[1])+bbs[self.selectedId][6:]
+                new_bb = (nTop[0], nTop[1], bb[2], bb[3], bb[4], bb[5], nBot[0], nBot[1],) + bb[8:]
+                if 'text'==self.selected:
+                    self.textBBs[self.textBBCurId]=new_bb
+                    self.didAction(('add-text',self.textBBCurId,)+new_bb+(None,None,))
+                    if self.secondaryMode is None:
+                        self.selectedId=self.textBBCurId
+                        self.selected='text'
+                    self.textBBCurId+=1
+                elif 'field'==self.selected:
+                    self.fieldBBs[self.fieldBBCurId]=new_bb
+                    self.didAction(('add-field',self.fieldBBCurId,)+new_bb+(None,None,))
+                    if self.secondaryMode is None:
+                        self.selectedId=self.fieldBBCurId
+                        self.selected='field'
+                    self.fieldBBCurId+=1
+                self.draw()
+
 
     
     def doKeyUp(self,event):
@@ -2097,6 +2123,22 @@ class Control:
         bY = lY - h*(rX-lX)/d
         color = color[0:3]+(color[3]/2.0,)
         return patches.Polygon(np.array([[lX,lY],[tX,tY],[pX,pY],[bX,bY],[lX,lY],[pX,pY]]),linewidth=2,edgecolor=color,facecolor='none')
+
+    def getDividingLine(self,mX,mY,tlX,tlY,trX,trY,brX,brY,blX,blY):
+        vTop = np.array([trY-tlY,trX-tlX])
+        vTop=vTop/np.linalg.norm(vTop)
+        vmTop = np.array([mY-tlY,mX-tlX])
+        dTop = vTop.dot(vmTop)
+        print('vTop:{}, vmTop:{}, dTop:{}'.format(vTop,vmTop,dTop))
+        pointTop = np.array([tlY,tlX]) + dTop*vTop
+        print(pointTop)
+        vBot = np.array([brY-blY,brX-blX])
+        vBot=vBot/np.linalg.norm(vBot)
+        vmBot = np.array([mY-blY,mX-blX])
+        dBot = vBot.dot(vmBot)
+        pointBot = np.array([blY,blX]) + dBot*vBot
+        return (pointTop[1],pointTop[0]), (pointBot[1],pointBot[0])
+
 
 def drawToolbar(ax):
     #im[0:,-TOOL_WIDTH:]=(140,140,140)
