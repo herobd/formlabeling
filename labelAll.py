@@ -160,11 +160,14 @@ for groupName in sorted(groupNames):
         else:
             continue
     template = None
+    templateNF = None
     numImages=0
     numDone=0
     for f in files:
         if 'template' in f and f[-5:]=='.json':
             template = os.path.join(directory,groupName,f)
+        elif 'template' in f and f[-8:]=='.json.nf':
+            templateNF = os.path.join(directory,groupName,f)
         elif f[-4:]=='.jpg':
             numImages+=1
         elif f[-5:]=='.json':
@@ -194,13 +197,33 @@ for groupName in sorted(groupNames):
                 #cornersActualT=read['actualPage_corners']
                 imageTemplate=read['imageFilename']
         else:
+            print '!!!!!!!!!!!!!!!!!!!!!!!!!'
+            labelTime = None
+            if templateNF is not None:
+                with open(templateNF) as f:
+                    read = json.loads(f.read())
+                    textsT=read['textBBs']
+                    fieldsT=read['fieldBBs']
+                    pairsT=read['pairs']
+                    samePairsT=read['samePairs']
+                    groupsT=read['groups']
+                    cornersT=read['page_corners']
+                    if 'horzLinks' in read  and not skipHLinks:
+                        horzLinksT=read['horzLinks']
+                    #cornersActualT=read['actualPage_corners']
+                    imageTemplate=read['imageFilename']
+                    if 'labelTime' in read:
+                        labelTime = read['labelTime']
+                print "There is an incomplete template for group "+groupName+", editing it"
+            else:
+                print "A template doesn't exist for group "+groupName+", creating one"
+                imageTemplate=files[0]
+            print '!!!!!!!!!!!!!!!!!!!!!!!!!'
             template = os.path.join(directory,groupName,'template'+groupName+'.json')
             #tkMessageBox.showinfo("Template", "A template doesn't exist for group "+groupName+", creating one")
-            print '!!!!!!!!!!!!!!!!!!!!!!!!!'
-            print "A template doesn't exist for group "+groupName+", creating one"
             timeStart = timeit.default_timer()
-            textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,cornersT, actualCornersT, complete, height, width = labelImage(os.path.join(directory,groupName,files[0]),textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,None,cornersT,cornersActualT)
-            timeElapsed = timeit.default_timer()-timeStart
+            textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,cornersT, actualCornersT, complete, height, width = labelImage(os.path.join(directory,groupName,imageTemplate),textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,None,cornersT,cornersActualT)
+            timeElapsed = timeit.default_timer()-timeStart + (labelTime if labelTime is not None else 0)
             if (len(textsT)==0 and len(fieldsT)==0):
                 lock.release()
                 lock=None
