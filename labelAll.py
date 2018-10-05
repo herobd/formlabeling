@@ -86,69 +86,8 @@ for root, dirs, files in os.walk(directory):
     imageGroups[groupName]=sorted(files)
     groupNames.append(groupName)
 
-if progressOnly:
-    numTemplateDone=0
-    numDoneTotal=0
-    numTotal=0
-    numTimed=0
-    timeTotal=0
-    numTempTimed=0
-    timeTemp=0
-    if len(sys.argv[2])>1:
-        doTime=True
-    else:
-        doTime=False
-    for groupName in sorted(groupNames):
-        files = imageGroups[groupName]
-        imagesInGroup=0
-        for f in files:
-            if 'lock' not in f:
-                if f[-4:]=='.jpg' or f[-5:]=='.jpeg' or f[-4:]=='.png':
-                    imagesInGroup+=1
-                elif 'templa' in f and f[-5:]=='.json':
-                    numTemplateDone+=1
-                    if doTime:
-                        with open(os.path.join(directory,groupName,f)) as annFile:
-                            read = json.loads(annFile.read())
-                            if 'labelTime' in read and read['labelTime'] is not None:
-                                numTempTimed+=1
-                                timeTemp+=read['labelTime']
-                elif f[-5:]=='.json':
-                    numDoneTotal+=1
-                    if doTime:
-                        with open(os.path.join(directory,groupName,f)) as annFile:
-                            read = json.loads(annFile.read())
-                            if 'labelTime' in read and read['labelTime'] is not None:
-                                numTimed+=1
-                                timeTotal+=read['labelTime']
-
-        numTotal += min(imagesInGroup,NUM_PER_GROUP)
-    print('Templates: {}/{}  {}'.format(numTemplateDone,len(groupNames),float(numTemplateDone)/len(groupNames)))
-    print('Images:    {}/{}  {}'.format(numDoneTotal,numTotal,float(numDoneTotal)/numTotal))
-    if doTime:
-        timeTotal/=numTimed
-        timeTemp/=numTempTimed
-        print (' Templates take {} secs, or {} minutes   ({} samples)'.format(timeTemp,timeTemp/60,numTempTimed))
-        print ('Alignment takes {} secs, or {} minutes   ({} samples)'.format(timeTotal,timeTotal/60,numTimed))
-    exit()
-elif addOnly:
-    import matplotlib.image as mpimg
-    count=0
-    for groupName in sorted(groupNames):
-        files = imageGroups[groupName]
-        for f in files:
-            if f[-5:]=='.json' and 'templa' not in f:
-                with open(os.path.join(directory,groupName,f)) as annFile:
-                    read = json.loads(annFile.read())
-                if 'height' not in read or 'width' not in read:
-                    image = mpimg.imread(os.path.join(directory,groupName,f[:-5]+'.jpg'))
-                    read['height']=image.shape[0]
-                    read['width']=image.shape[1]
-                    with open(os.path.join(directory,groupName,f),'w') as annFile:
-                        annFile.write(json.dumps(read))
-                        count+=1
-    print 'added to '+str(count)+' jsons'
-    exit()
+if progressOnly or addOnly:
+    print 'removed, use scandata.py'
 groupIndex=-1
 groupsDone=[False]*len(groupNames)
 for groupName in sorted(groupNames):
@@ -163,6 +102,7 @@ for groupName in sorted(groupNames):
     templateNF = None
     numImages=0
     numDone=0
+    unfinished=[]
     for f in files:
         if 'template' in f and f[-5:]=='.json':
             template = os.path.join(directory,groupName,f)
@@ -172,10 +112,13 @@ for groupName in sorted(groupNames):
             numImages+=1
         elif f[-5:]=='.json':
             numDone+=1
+        elif f[-8:]=='.json.nf':
+            unfinished.append(f[0:-8]+'.jpg')
     numImages = min(numImages,NUM_PER_GROUP)
     if numDone>=numImages:
         groupsDone[groupIndex]=True
-        #continue
+        if startHere is None:
+            continue
 
     #print 'group '+groupName+', template image: '+imageTemplate                   
     #templateFile=os.path.join(directory,groupName,template)
@@ -239,7 +182,7 @@ for groupName in sorted(groupNames):
                     exit()
 
         countInGroup=0
-        for f in files:
+        for f in unfinished+files:
             ind = f.rfind('.')
             if f[ind:]=='.jpg' or f[ind:]=='.png' or f[ind:]=='.jpeg':
                 countInGroup+=1
