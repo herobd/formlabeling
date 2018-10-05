@@ -186,7 +186,7 @@ for groupName in sorted(groupNames):
             ind = f.rfind('.')
             if f[ind:]=='.jpg' or f[ind:]=='.png' or f[ind:]=='.jpeg':
                 countInGroup+=1
-                if countInGroup>NUM_PER_GROUP:
+                if countInGroup>NUM_PER_GROUP and (startHereImage is None or goingImage):
                     break
                 if not goingImage:
                     if f==startHereImage:
