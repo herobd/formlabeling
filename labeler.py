@@ -1404,6 +1404,7 @@ class Control:
                 self.resizeMode='corners'
                 self.shiftAmount=40
             elif key=='f8' and self.selected!='none':
+                #split selected at click point
                 if self.selected == 'field':
                     bbs=self.fieldBBs
                 elif self.selected == 'text':
@@ -1428,6 +1429,10 @@ class Control:
                         self.selected='field'
                     self.fieldBBCurId+=1
                 self.draw()
+            elif key=='f9':
+                self.pairing=self.transformAllToRect()
+                self.samePairing=[]
+                self.draw()
 
 
     
@@ -1435,6 +1440,146 @@ class Control:
         if event.key=='shift':
             self.resizeMode='edges'
             self.shiftAmount=4
+    
+    def transformAllToRect(self):
+        fields=[]
+        fieldIds=[]
+        for id in self.fieldBBs:
+            self.fieldBBs[id], ang = self.transformToRect(self.fieldBBs[id])
+            fields.append(ang)
+            fieldIds.append(id)
+        predictions = np.array([fields])
+        texts=[]
+        textIds=[]
+        for id in self.textBBs:
+            self.textBBs[id], ang = self.transformToRect(self.textBBs[id])
+            texts.append(ang)
+            textIds.append(id)
+        targets = np.array([texts])
+
+        #print 'ang pred'
+        pred_points = self.convPoints(predictions)
+        pred_heights = predictions[:,:,4]
+        pred_widths = predictions[:,:,5]
+        #print 'ang targ'
+        target_points = self.convPoints(targets)
+        target_heights = targets[:,:,3]
+        target_widths = targets[:,:,4]
+        #print 'pred field'
+        #print pred_points
+        #print 'target text'
+        #print target_points
+        expanded_pred_points = pred_points[:,:,None]
+        expanded_pred_heights = pred_heights[:,:,None]
+        expanded_pred_widths = pred_widths[:,:,None]
+
+        expanded_target_points = target_points[:,None,:]
+        expanded_target_heights = target_heights[:,None,:]
+        expanded_target_widths = target_widths[:,None,:]
+
+        #expanded_pred_points = expanded_pred_points.expand(pred_points.shape[0], pred_points.shape[1], target_points.shape[1], pred_points.shape[2])
+        expanded_pred_points = np.tile(expanded_pred_points,(1,1,target_points.shape[1],1))
+        expanded_pred_heights = np.tile(expanded_pred_heights,(1,1,target_heights.shape[1]))
+        expanded_pred_widths = np.tile(expanded_pred_widths,(1,1,target_widths.shape[1]))
+        #expanded_target_points = expanded_target_points.expand(target_points.shape[0], pred_points.shape[1], target_points.shape[1], target_points.shape[2])
+        expanded_target_points = np.tile(expanded_target_points,(1,pred_points.shape[1],1,1))
+        expanded_target_heights = np.tile(expanded_target_heights,(1,pred_heights.shape[1],1))
+        expanded_target_widths = np.tile(expanded_target_widths,(1,pred_widths.shape[1],1))
+
+        point_deltas = (expanded_pred_points - expanded_target_points)
+        #avg_heights = ((expanded_target_heights+expanded_pred_heights)/2)
+        #avg_widths = ((expanded_target_widths+expanded_pred_widths)/2)
+        avg_heights=avg_widths = (expanded_target_heights+expanded_pred_heights+expanded_target_widths+expanded_pred_widths)/4
+        #print point_deltas
+
+        normed_difference = (
+            np.linalg.norm(point_deltas[:,:,:,0:2],2,3)/avg_widths +
+            np.linalg.norm(point_deltas[:,:,:,2:4],2,3)/avg_widths +
+            np.linalg.norm(point_deltas[:,:,:,4:6],2,3)/avg_heights +
+            np.linalg.norm(point_deltas[:,:,:,6:8],2,3)/avg_heights
+            )**2
+        #print normed_difference
+
+        best = normed_difference.argmin(1)
+        minV = normed_difference.min(1)
+
+        pairs=[]
+        for i in range(best.shape[1]):
+            pairs.append((textIds[i],fieldIds[best[0,i]]))
+        bb1=self.textBBs[textIds[0]]
+        bb2=self.fieldBBs[fieldIds[best[0,0]]]
+        #get IOU
+        minX = min(bb1[0],bb1[2],bb1[4],bb1[6],
+                bb2[0],bb2[2],bb2[4],bb2[6])
+        maxX = max(bb1[0],bb1[2],bb1[4],bb1[6],
+                bb2[0],bb2[2],bb2[4],bb2[6])
+        minY = min(bb1[1],bb1[3],bb1[5],bb1[7],
+                bb2[1],bb2[3],bb2[5],bb2[7])
+        maxY = max(bb1[1],bb1[3],bb1[5],bb1[7],
+                bb2[1],bb2[3],bb2[5],bb2[7])
+        import cv2
+        draw1 = np.zeros((maxY-minY,maxX-minX))#,dtype=np.int)
+        cv2.fillConvexPoly(draw1,np.array([[bb1[0]-minX,bb1[1]-minY],[bb1[2]-minX, bb1[3]-minY],[bb1[4]-minX,bb1[5]-minY],[bb1[6]-minX,bb1[7]-minY]],dtype=np.int),1)
+        draw2 = np.zeros((maxY-minY,maxX-minX))#,dtype=np.int)
+        cv2.fillConvexPoly(draw2,np.array([[bb2[0]-minX,bb2[1]-minY],[bb2[2]-minX, bb2[3]-minY],[bb2[4]-minX,bb2[5]-minY],[bb2[6]-minX,bb2[7]-minY]],dtype=np.int),1)
+        intersection = (draw1*draw2).sum()
+        union = (draw1+draw2).sum()-intersection
+        print 'IOU:'+str(float(intersection)/union)
+        print 'sum dist:'+str(minV[0,0])
+        return pairs
+
+    def transformToRect(self,bb):
+        
+        tlX = bb[0]
+        tlY = bb[1]
+        trX = bb[2]
+        trY = bb[3]
+        brX = bb[4]
+        brY = bb[5]
+        blX = bb[6]
+        blY = bb[7]
+
+        lX = (tlX+blX)/2.0
+        lY = (tlY+blY)/2.0
+        rX = (trX+brX)/2.0
+        rY = (trY+brY)/2.0
+        d=math.sqrt((lX-rX)**2 + (lY-rY)**2)
+
+        hl = ((tlX-lX)*-(rY-lY) + (tlY-lY)*(rX-lX))/d #projection of half-left edge onto transpose horz run
+        hr = ((brX-rX)*-(lY-rY) + (brY-rY)*(lX-rX))/d #projection of half-right edge onto transpose horz run
+        h = (hl+hr)/2.0
+
+        tX = lX + h*-(rY-lY)/d
+        tY = lY + h*(rX-lX)/d
+        bX = lX - h*-(rY-lY)/d
+        bY = lY - h*(rX-lX)/d
+
+        etX =tX + rX-lX
+        etY =tY + rY-lY
+        ebX =bX + rX-lX
+        ebY =bY + rY-lY
+
+        cX = (lX+rX)/2.0
+        cY = (lY+rY)/2.0
+        rot = math.atan2((rY-lY),rX-lX) #flip y so angle is true to image
+        height = abs(h)    #this is half height ##abs
+        width = d/2.0 #and half width
+
+        return (tX,tY,etX,etY,ebX,ebY,bX,bY)+bb[8:], [-1,cX,cY,rot,height,width]
+    def convPoints(self,ang):
+        #print ang
+        cos_rot = np.cos(ang[:,:,3])
+        sin_rot = np.sin(ang[:,:,3])
+        p_left_x = ang[:,:,1]-cos_rot*ang[:,:,5] ##*
+        p_left_y = ang[:,:,2]-sin_rot*ang[:,:,5]
+        p_right_x = ang[:,:,1]+cos_rot*ang[:,:,5]
+        p_right_y = ang[:,:,2]+sin_rot*ang[:,:,5]
+        p_top_x = ang[:,:,1]+sin_rot*ang[:,:,4]
+        p_top_y = ang[:,:,2]-cos_rot*ang[:,:,4]
+        p_bot_x = ang[:,:,1]-sin_rot*ang[:,:,4]
+        p_bot_y = ang[:,:,2]+cos_rot*ang[:,:,4]
+        return np.stack([p_left_x,p_left_y,p_right_x,p_right_y,p_top_x,p_top_y,p_bot_x,p_bot_y],axis=2)
+        
     #def updatePairLines(self):
     #    for i, pair in enumerate(self.pairing):
     #        if (self.selected=='text' and pair[0]==self.selectedId) or (self.selected=='field' and pair[1]==self.selectedId):
