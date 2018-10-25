@@ -2225,7 +2225,7 @@ class Control:
                 self.ax_im.add_patch(self.pairLines[lineId])
                 lineId+=1
             for inst in toRemove:
-                self.selfPairing.remove(inst)
+                self.samePairing.remove(inst)
         if self.mode=='move':
             self.drawSelected(clear=False)
         else:

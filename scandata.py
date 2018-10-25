@@ -9,7 +9,7 @@ import numpy as np
 NUM_PER_GROUP=2
 
 if len(sys.argv)<2:
-    print 'usage: '+sys.argv[0]+' directory [+:add] [-[-]:progress] [c:create split] [f:poputate info from template [group]]'
+    print 'usage: '+sys.argv[0]+' directory [+:add] [-[-]:progress] [c:create split] [f:poputate info from template [group]] [s:stats]'
     exit()
 
 directory = sys.argv[1]
@@ -20,15 +20,18 @@ saveall=False
 populate=False
 onlyGroup=None
 tableList=False
+getStats=False
 if len(sys.argv)>2:
     if sys.argv[2][0]=='-' or sys.argv[2][0]=='p':
         progress=True
     elif sys.argv[2][0]=='+':
         add=True
-    elif sys.argv[2][0]=='c' or sys.argv[2][0]=='s' :
+    elif sys.argv[2][0]=='c':# or sys.argv[2][0]=='s' :
         makesplit=True
     elif sys.argv[2][0]=='a':
         saveall=True
+    elif sys.argv[2][0]=='s':
+        getStats=True
     elif sys.argv[2][0]=='f':
         populate=True
         if len(sys.argv)>3:
@@ -39,14 +42,7 @@ if len(sys.argv)>2:
         startHere = sys.argv[2]
         going=False
 else:
-    startHere=None
-    going=True
-if len(sys.argv)>3:
-    startHereImage = sys.argv[3]
-    goingImage=False
-else:
-    startHereImage=None
-    goingImage=True
+    progress=True
 
 if directory[-1]!='/':
     directory=directory+'/'
@@ -75,7 +71,7 @@ if progress:
     timeTotal=0
     numTempTimed=0
     timeTemp=0
-    if len(sys.argv[2])>1:
+    if len(sys.argv)>2 and len(sys.argv[2])>1:
         doTime=True
     else:
         doTime=False
@@ -214,6 +210,9 @@ if populate:
 if tableList:
     groupImages={}#defaultdict(list)
     groupTablePresence={}
+    sumCountField =0
+    sumCountText =0
+    count=0
     for groupName in sorted(groupNames):
         files = imageGroups[groupName]
         imageFiles=[]
@@ -243,6 +242,23 @@ if tableList:
             print(groupName)
             #groupImages[groupName]=imageFiles
             #groupTablePresence[groupName]=hasTable
+if getStats:
+    groupImages={}#defaultdict(list)
+    sumCountField =0
+    sumCountText =0
+    count=0
+    for groupName in sorted(groupNames):
+        files = imageGroups[groupName]
+        imageFiles=[]
+        for f in files:
+            if 'lock' not in f:
+                if 'template' not in f and f[-5:]=='.json':
+                    with open(os.path.join(directory,groupName,f)) as annFile:
+                        read = json.loads(annFile.read())
+                    sumCountField += len(read['fieldBBs'])
+                    sumCountText += len(read['textBBs'])
+                    count+=1
+    print 'avg boxes: {}'.format((sumCountField+sumCountText)/float(count))
 if makesplit:
     groupImages={}#defaultdict(list)
     groupTablePresence={}

@@ -45,11 +45,18 @@ if len(sys.argv)<2:
 directory = sys.argv[1]
 progressOnly=False
 addOnly=False
+checking=False
+if sys.argv[-1][0]=='C':
+    checking=True
+    print 'CHECKING'
 if len(sys.argv)>2:
     if sys.argv[2][0]=='-':
         progressOnly=True
     elif sys.argv[2][0]=='+':
         addOnly=True
+    elif  sys.argv[2][0]=='C':
+        going=True
+        startHere=None
     else:
         startHere = sys.argv[2]
         going=False
@@ -117,7 +124,8 @@ for groupName in sorted(groupNames):
     numImages = min(numImages,NUM_PER_GROUP)
     if numDone>=numImages:
         groupsDone[groupIndex]=True
-        if startHere is None:
+        if startHere is None and not checking:
+            import pdb; pdb.set_trace()
             continue
 
     #print 'group '+groupName+', template image: '+imageTemplate                   
@@ -140,6 +148,8 @@ for groupName in sorted(groupNames):
                 #cornersActualT=read['actualPage_corners']
                 imageTemplate=read['imageFilename']
         else:
+            if checking:
+                continue
             print '!!!!!!!!!!!!!!!!!!!!!!!!!'
             labelTime = None
             if templateNF is not None:
@@ -182,11 +192,12 @@ for groupName in sorted(groupNames):
                     exit()
 
         countInGroup=0
+        
         for f in unfinished+files:
             ind = f.rfind('.')
             if f[ind:]=='.jpg' or f[ind:]=='.png' or f[ind:]=='.jpeg':
                 countInGroup+=1
-                if countInGroup>NUM_PER_GROUP and (startHereImage is None or goingImage):
+                if countInGroup>NUM_PER_GROUP and (startHereImage is None or goingImage) and not checking:
                     break
                 if not goingImage:
                     if f==startHereImage:
@@ -196,7 +207,7 @@ for groupName in sorted(groupNames):
                 name=f[:ind]
                 gtFileName = os.path.join(directory,groupName,name+'.json')
                 gtFileNameExists = os.path.exists(gtFileName)
-                if gtFileNameExists and startHereImage is None:
+                if gtFileNameExists and startHereImage is None and not checking:
                     continue
                 nfGtFileNameExists = os.path.exists(gtFileName+'.nf')
                 
@@ -239,6 +250,8 @@ for groupName in sorted(groupNames):
                         labelTime += timeit.default_timer()-timeStart
                     gtF.close()
                 else:
+                    if checking:
+                        continue
                     print 'g:'+groupName+', image: '+f+', from template'
                     timeStart = timeit.default_timer()
                     texts,fields,pairs,samePairs,horzLinks,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,cornersT,page_corners,page_cornersActual)
