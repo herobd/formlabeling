@@ -125,7 +125,7 @@ for groupName in sorted(groupNames):
     if numDone>=numImages:
         groupsDone[groupIndex]=True
         if startHere is None and not checking:
-            import pdb; pdb.set_trace()
+            #import pdb; pdb.set_trace()
             continue
 
     #print 'group '+groupName+', template image: '+imageTemplate                   
