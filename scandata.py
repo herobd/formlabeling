@@ -2,9 +2,11 @@ import os
 import sys
 import json
 from random import shuffle
+import random
 #import Tkinter
 #import tkMessageBox
 import numpy as np
+import math
 
 NUM_PER_GROUP=2
 
@@ -246,8 +248,21 @@ if getStats:
     groupImages={}#defaultdict(list)
     sumCountField =0
     sumCountText =0
+    maxBoxes=0
     count=0
+    widths=[]
+    heights=[]
+    ratios=[]
+    rots=[]
+    widths_norot=[]
+    heights_norot=[]
+    ratios_norot=[]
+    page_heights=[]
+    page_widths=[]
+    page_areas=[]
     for groupName in sorted(groupNames):
+        if groupName=='121':
+            continue
         files = imageGroups[groupName]
         imageFiles=[]
         for f in files:
@@ -258,20 +273,75 @@ if getStats:
                     sumCountField += len(read['fieldBBs'])
                     sumCountText += len(read['textBBs'])
                     count+=1
+                    maxBoxes = max(maxBoxes,len(read['fieldBBs'])+len(read['textBBs']))
+                    page_heights.append(read['height'])
+                    page_widths.append(read['width'])
+                    page_areas.append(read['height']*read['width'])
+                    for bb in read['fieldBBs']+read['textBBs']:
+                        if bb['type']=='fieldRow' or bb['type']=='fieldCol' or bb['type']=='fieldRegion' or bb['type']=='textRegion' or bb['type']=='graphic':
+                            continue
+                        tlX = bb['poly_points'][0][0]
+                        tlY = bb['poly_points'][0][1]
+                        trX = bb['poly_points'][1][0]
+                        trY = bb['poly_points'][1][1]
+                        brX = bb['poly_points'][2][0]
+                        brY = bb['poly_points'][2][1]
+                        blX = bb['poly_points'][3][0]
+                        blY = bb['poly_points'][3][1]
+                        lX = (tlX+blX)/2.0
+                        lY = (tlY+blY)/2.0
+                        rX = (trX+brX)/2.0
+                        rY = (trY+brY)/2.0
+                        height =  math.sqrt( ((blX+brX)/2.0 - (tlX+trX)/2.0)**2 + ((blY+brY)/2.0 - (tlY+trY)/2.0)**2 )
+                        if height>300:
+                            print '{} {}'.format(groupName,f)
+                            print bb
+                            continue
+                        widths.append( math.sqrt( (rX - lX)**2 + (rY - lY)**2 ) )
+                        heights.append( height)
+                        ratios.append(widths[-1]/heights[-1])
+                        rots.append(np.arctan2((rY-lY),rX-lX))
+
+                        widths_norot.append( np.maximum.reduce((tlX,blX,trX,brX))-np.minimum.reduce((tlX,blX,trX,brX)) )
+                        heights_norot.append( np.maximum.reduce((tlY,blY,trY,brY))-np.minimum.reduce((tlY,blY,trY,brY)) )
+                        ratios_norot.append(widths_norot[-1]/heights_norot[-1])
+
+    print('image mean height: {}, width: {}, area: {}'.format(np.mean(page_heights),np.mean(page_widths),np.mean(page_areas)))
+    print('image std height: {}, width: {}, area: {}'.format(np.std(page_heights),np.std(page_widths),np.std(page_areas)))
+    print('image max height: {}, width: {}, area: {}'.format(max(page_heights),max(page_widths),max(page_areas)))
+    print('image min height: {}, width: {}, area: {}'.format(min(page_heights),min(page_widths),min(page_areas)))
     print 'avg boxes: {}'.format((sumCountField+sumCountText)/float(count))
+    print 'max boxes: {}'.format(maxBoxes)
+    print 'With rotation'
+    print 'width mean: {}, std: {}'.format(np.mean(widths),np.std(widths))
+    print 'width min: {}, max: {}'.format(min(widths),max(widths))
+    print 'height mean: {}, std: {}'.format(np.mean(heights),np.std(heights))
+    print 'height min: {}, max: {}'.format(min(heights),max(heights))
+    print 'ratio mean: {}, std: {}'.format(np.mean(ratios),np.std(ratios))
+    print 'rot mean: {}, std: {}'.format(np.mean(rots),np.std(rots))
+    print 'No rotation'
+    print 'width mean: {}, std: {}'.format(np.mean(widths_norot),np.std(widths_norot))
+    print 'width min: {}, max: {}'.format(min(widths_norot),max(widths_norot))
+    print 'height mean: {}, std: {}'.format(np.mean(heights_norot),np.std(heights_norot))
+    print 'height min: {}, max: {}'.format(min(heights_norot),max(heights_norot))
+    print 'ratio mean: {}, std: {}'.format(np.mean(ratios_norot),np.std(ratios_norot))
+
 if makesplit:
     groupImages={}#defaultdict(list)
     groupTablePresence={}
+    groupParaPresence={}
     for groupName in sorted(groupNames):
         files = imageGroups[groupName]
         imageFiles=[]
         tempFound=False
         hasTable=False
+        isPara=False
         for f in files:
             if 'lock' not in f:
                 if f[-4:]=='.jpg' or f[-5:]=='.jpeg' or f[-4:]=='.png':
                     imageFiles.append(f)
                 elif 'template' in f and f[-5:]=='.json':
+                    paraCount=0
                     tempFound=True
                     validTemp=False
                     with open(os.path.join(directory,groupName,f)) as annFile:
@@ -279,39 +349,57 @@ if makesplit:
                     for bb in read['fieldBBs']:
                         if bb['type']=='fieldCol' or bb['type']=='fieldRow':
                             hasTable=True
-                            if validTemp:
+                            if isPara:
                                 break
-                        if bb['type']!='fieldCol' and bb['type']!='fieldRow':
-                            validTemp=True
-                            if hasTable:
-                                break
+                        if bb['type']=='fieldP':
+                            paraCount+=1
+                            if paraCount>4:
+                                isPara=True
+                                if hasTable:
+                                    break
                 #elif f[-5:]=='.json' and 'temp' not in f:
 
-        if tempFound and validTemp:
-            groupImages[groupName]=imageFiles
-            groupTablePresence[groupName]=hasTable
+        groupImages[groupName]=imageFiles
+        groupTablePresence[groupName]=hasTable
+        groupParaPresence[groupName]=isPara
 
-    groupsWith=[]
+    groupsWithTable=[]
+    groupsWithPara=[]
     groupsWithout=[]
+    both=0
     for groupName in sorted(groupNames):
         if groupName in groupImages:
-            if groupTablePresence[groupName]:
-                groupsWith.append(groupName)
+            if groupParaPresence[groupName] and  groupTablePresence[groupName]:
+                both+=1
+                if random.random()>0.5:
+                    groupsWithTable.append(groupName)
+                else:
+                    groupsWithPara.append(groupName)
+            elif groupParaPresence[groupName]:
+                groupsWithPara.append(groupName)
+            elif groupTablePresence[groupName]:
+                groupsWithTable.append(groupName)
             else:
                 groupsWithout.append(groupName)
             #print groupName
             #print '  {}'.format(len(groupImages[groupName]))
             #print '  {}'.format(groupTablePresence[groupName])
-    shuffle(groupsWith)
+    print('Without: {}, table: {}, para: {}, (both:{})'.format(len(groupsWithout),len(groupsWithTable),len(groupsWithPara),both))
+    shuffle(groupsWithTable)
+    shuffle(groupsWithPara)
     shuffle(groupsWithout)
-    splitWith = int(len(groupsWith)*0.1)
+    splitWithTable = int(len(groupsWithTable)*0.1)
+    splitWithPara = int(len(groupsWithPara)*0.1)
     splitWithout = int(len(groupsWithout)*0.1)
 
     ret={'train':{}, 'valid':{}, 'test':{}}
-    for groupName in (groupsWith[:splitWith]+groupsWithout[:splitWithout]):
+    for groupName in (groupsWithPara[:splitWithPara]+groupsWithTable[:splitWithTable]+groupsWithout[:splitWithout]):
         ret['valid'][groupName]=groupImages[groupName]
-    for groupName in (groupsWith[splitWith:]+groupsWithout[splitWithout:]):
+    for groupName in (groupsWithPara[-splitWithPara:]+groupsWithTable[-splitWithTable:]+groupsWithout[-splitWithout:]):
+        ret['test'][groupName]=groupImages[groupName]
+    for groupName in (groupsWithPara[splitWithPara:-splitWithPara]+groupsWithTable[splitWithTable:-splitWithTable]+groupsWithout[splitWithout:-splitWithout]):
         ret['train'][groupName]=groupImages[groupName]
+    print('train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
     with open('train_valid_test_split.json', 'w') as out:
         out.write(json.dumps(ret,indent=4, sort_keys=True))
 

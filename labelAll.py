@@ -10,6 +10,7 @@ import grp
 #import tkMessageBox
 
 NUM_PER_GROUP=2
+NUM_CHECKS=2
 lock=None
 #groupId = grp.getgrnam("pairing").gr_gid
 
@@ -39,7 +40,7 @@ def combineFields(gtFields,tempFields):
     return gtFields+tempFields
 
 if len(sys.argv)<2:
-    print 'usage: '+sys.argv[0]+' directory [startingGroup] [startingImage] [n(dont load horz links)]/[t (add template, skipping tables)]'
+    print 'usage: '+sys.argv[0]+' directory [startingGroup] [startingImage] [n(dont load horz links)]/[t (add template, skipping tables)] [C:checking]'
     exit()
 
 directory = sys.argv[1]
@@ -48,7 +49,10 @@ addOnly=False
 checking=False
 if sys.argv[-1][0]=='C':
     checking=True
-    print 'CHECKING'
+    myName=sys.argv[-1][1:]
+    if len(myName)==0:
+        myName=raw_input("Enter name: ")
+    print 'CHECKING '+myName
 if len(sys.argv)>2:
     if sys.argv[2][0]=='-':
         progressOnly=True
@@ -210,6 +214,7 @@ for groupName in sorted(groupNames):
                 if gtFileNameExists and startHereImage is None and not checking:
                     continue
                 nfGtFileNameExists = os.path.exists(gtFileName+'.nf')
+                checkedBy = []
                 
                 texts=fields=pairs=samePairs=horzLinks=groups=page_corners=page_cornersActual=None
                 if f == imageTemplate:
@@ -234,6 +239,11 @@ for groupName in sorted(groupNames):
                         labelTime = read['labelTime']
                     else:
                         labelTime = None
+                    if 'checkedBy' in read:
+                        checkedBy = read['checkedBy']
+                    
+                    if checking and (len(checkedBy)>=NUM_CHECKS or myName in checkedBy):
+                        continue
                     assert f==read['imageFilename']
                     print 'g:'+groupName+', image: '+f+', gt found'
                     if applyTemplate:
@@ -249,6 +259,8 @@ for groupName in sorted(groupNames):
                     if labelTime is not None:
                         labelTime += timeit.default_timer()-timeStart
                     gtF.close()
+                    if complete and checking:
+                        checkedBy.append(myName)
                 else:
                     if checking:
                         continue
@@ -264,7 +276,7 @@ for groupName in sorted(groupNames):
                 if not complete:
                     gtFileName+='.nf'
                 with open(gtFileName,'w') as out:
-                    out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime, "height":height, "width":width}))
+                    out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime, "height":height, "width":width, "checkedBy":checkedBy}))
                     if complete and (startHere is None or startHere!=groupName):
                         if countInGroup==numImages:
                             groupsDone[groupIndex]=True
