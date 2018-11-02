@@ -120,12 +120,16 @@ for groupName in sorted(groupNames):
         elif 'template' in f and f[-8:]=='.json.nf':
             templateNF = os.path.join(directory,groupName,f)
         elif f[-4:]=='.jpg':
-            numImages+=1
+            if not checking:
+                numImages+=1
         elif f[-5:]=='.json':
             numDone+=1
+            if checking:
+                numImages+=1
         elif f[-8:]=='.json.nf':
             unfinished.append(f[0:-8]+'.jpg')
-    numImages = min(numImages,NUM_PER_GROUP)
+    if not checking:
+        numImages = min(numImages,NUM_PER_GROUP)
     if numDone>=numImages:
         groupsDone[groupIndex]=True
         if startHere is None and not checking:
