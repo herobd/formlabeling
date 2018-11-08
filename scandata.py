@@ -30,6 +30,10 @@ if len(sys.argv)>2:
         add=True
     elif sys.argv[2][0]=='c':# or sys.argv[2][0]=='s' :
         makesplit=True
+        if len(sys.argv[2])>1 and sys.argv[2][1]=='s':
+            simpleDataset=True
+        else:
+            simpleDataset=False
     elif sys.argv[2][0]=='a':
         saveall=True
     elif sys.argv[2][0]=='s':
@@ -215,11 +219,14 @@ if tableList:
     sumCountField =0
     sumCountText =0
     count=0
+    tableGroups=[]
+    circleGroups=[]
     for groupName in sorted(groupNames):
         files = imageGroups[groupName]
         imageFiles=[]
         tempFound=False
         hasTable=False
+        circleFound=False
         for f in files:
             if 'lock' not in f:
                 if f[-4:]=='.jpg' or f[-5:]=='.jpeg' or f[-4:]=='.png':
@@ -238,12 +245,18 @@ if tableList:
                             validTemp=True
                             if hasTable:
                                 break
+                        if bb['type']=='fieldCircle':
+                            circleFound=True
                 #elif f[-5:]=='.json' and 'temp' not in f:
 
         if tempFound and validTemp and hasTable:
-            print(groupName)
+            tableGroups.append(groupName)
             #groupImages[groupName]=imageFiles
             #groupTablePresence[groupName]=hasTable
+        if tempFound and circleFound:
+            circleGroups.append(groupName)
+    print('Tables: {}'.format(tableGroups))
+    print('Circles: {}'.format(circleGroups))
 if getStats:
     groupImages={}#defaultdict(list)
     sumCountField =0
@@ -336,6 +349,7 @@ if makesplit:
         tempFound=False
         hasTable=False
         isPara=False
+        paraCount=0
         for f in files:
             if 'lock' not in f:
                 if f[-4:]=='.jpg' or f[-5:]=='.jpeg' or f[-4:]=='.png':
@@ -353,15 +367,23 @@ if makesplit:
                                 break
                         if bb['type']=='fieldP':
                             paraCount+=1
-                            if paraCount>4:
+                            if paraCount>2:
                                 isPara=True
                                 if hasTable:
                                     break
+                    #for bb in read['textBBs']:
+                    #    if bb['type']=='textP':
+                    #        paraCount+=1
+                    #        if paraCount>4:
+                    #            isPara=True
+                    #            if hasTable:
+                    #                break
                 #elif f[-5:]=='.json' and 'temp' not in f:
 
         groupImages[groupName]=imageFiles
         groupTablePresence[groupName]=hasTable
         groupParaPresence[groupName]=isPara
+        print('group {}, table:{}, para:{} {}'.format(groupName,hasTable,isPara,'?? para' if paraCount>0 and not isPara else ''))
 
     groupsWithTable=[]
     groupsWithPara=[]
@@ -393,14 +415,24 @@ if makesplit:
     splitWithout = int(len(groupsWithout)*0.1)
 
     ret={'train':{}, 'valid':{}, 'test':{}}
-    for groupName in (groupsWithPara[:splitWithPara]+groupsWithTable[:splitWithTable]+groupsWithout[:splitWithout]):
-        ret['valid'][groupName]=groupImages[groupName]
-    for groupName in (groupsWithPara[-splitWithPara:]+groupsWithTable[-splitWithTable:]+groupsWithout[-splitWithout:]):
-        ret['test'][groupName]=groupImages[groupName]
-    for groupName in (groupsWithPara[splitWithPara:-splitWithPara]+groupsWithTable[splitWithTable:-splitWithTable]+groupsWithout[splitWithout:-splitWithout]):
-        ret['train'][groupName]=groupImages[groupName]
+    if simpleDataset:
+        for groupName in (groupsWithout[:splitWithout]):
+            ret['valid'][groupName]=groupImages[groupName]
+        for groupName in (groupsWithout[-splitWithout:]):
+            ret['test'][groupName]=groupImages[groupName]
+        for groupName in (groupsWithout[splitWithout:-splitWithout]):
+            ret['train'][groupName]=groupImages[groupName]
+        fileName='simple_train_valid_test_split.json'
+    else:
+        for groupName in (groupsWithPara[:splitWithPara]+groupsWithTable[:splitWithTable]+groupsWithout[:splitWithout]):
+            ret['valid'][groupName]=groupImages[groupName]
+        for groupName in (groupsWithPara[-splitWithPara:]+groupsWithTable[-splitWithTable:]+groupsWithout[-splitWithout:]):
+            ret['test'][groupName]=groupImages[groupName]
+        for groupName in (groupsWithPara[splitWithPara:-splitWithPara]+groupsWithTable[splitWithTable:-splitWithTable]+groupsWithout[splitWithout:-splitWithout]):
+            ret['train'][groupName]=groupImages[groupName]
+        fileName='train_valid_test_split.json'
     print('train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
-    with open('train_valid_test_split.json', 'w') as out:
+    with open(fileName, 'w') as out:
         out.write(json.dumps(ret,indent=4, sort_keys=True))
 
 if saveall:

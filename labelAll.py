@@ -11,6 +11,7 @@ import grp
 
 NUM_PER_GROUP=2
 NUM_CHECKS=2
+USE_SIMPLE=True
 lock=None
 #groupId = grp.getgrnam("pairing").gr_gid
 
@@ -82,6 +83,12 @@ if len(sys.argv)>4:
     elif sys.argv[4][0]=='t':
         applyTemplate=True
 
+if USE_SIMPLE:
+    with open(os.path.join(directory,'simple_train_valid_test_split.json')) as f:
+        simpleSplit = json.load(f)
+    simpleFiles = dict(simpleSplit['train'].items()+ simpleSplit['test'].items()+ simpleSplit['valid'].items())
+    #print(simpleFiles)
+
 if directory[-1]!='/':
     directory=directory+'/'
 rr=directory[directory[:-1].rindex('/')+1:-1]
@@ -94,8 +101,9 @@ for root, dirs, files in os.walk(directory):
     groupName = root[root.rindex('/')+1:]
     if rr==groupName:
         continue
-    imageGroups[groupName]=sorted(files)
-    groupNames.append(groupName)
+    if not USE_SIMPLE or groupName in simpleFiles:
+        imageGroups[groupName]=sorted(files)
+        groupNames.append(groupName)
 
 if progressOnly or addOnly:
     print 'removed, use scandata.py'
@@ -144,7 +152,7 @@ for groupName in sorted(groupNames):
         textsT=fieldsT=pairsT=samePairsT=horzLinksT=groupsT=cornersT=cornersActualT=None
         if template is not None:
             with open(template) as f:
-                read = json.loads(f.read())
+                read = json.loads(f)
                 textsT=read['textBBs']
                 fieldsT=read['fieldBBs']
                 pairsT=read['pairs']
