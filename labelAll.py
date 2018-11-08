@@ -152,7 +152,7 @@ for groupName in sorted(groupNames):
         textsT=fieldsT=pairsT=samePairsT=horzLinksT=groupsT=cornersT=cornersActualT=None
         if template is not None:
             with open(template) as f:
-                read = json.loads(f)
+                read = json.load(f)
                 textsT=read['textBBs']
                 fieldsT=read['fieldBBs']
                 pairsT=read['pairs']
