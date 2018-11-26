@@ -48,18 +48,27 @@ directory = sys.argv[1]
 progressOnly=False
 addOnly=False
 checking=False
+doubleCheck=False
 if sys.argv[-1][0]=='C':
     checking=True
     myName=sys.argv[-1][1:]
     if len(myName)==0:
         myName=raw_input("Enter name: ")
     print 'CHECKING '+myName
+    USE_SIMPLE=False
+if sys.argv[-1][0]=='A':
+    USE_SIMPLE=False
+if sys.argv[-1][0]=='D':
+    USE_SIMPLE=False
+    doubleCheck=True
+    checking=True
+    myName='doublecheck'
 if len(sys.argv)>2:
     if sys.argv[2][0]=='-':
         progressOnly=True
     elif sys.argv[2][0]=='+':
         addOnly=True
-    elif  sys.argv[2][0]=='C':
+    elif  sys.argv[2][0]=='C' or sys.argv[2][0]=='A' or sys.argv[2][0]=='D':
         going=True
         startHere=None
     else:
@@ -254,7 +263,13 @@ for groupName in sorted(groupNames):
                     if 'checkedBy' in read:
                         checkedBy = read['checkedBy']
                     
-                    if checking and (len(checkedBy)>=NUM_CHECKS or myName in checkedBy):
+                    if doubleCheck:
+                        #if len(checkedBy)>=NUM_CHECKS:
+                        #    print 'checked by {}'.format(checkedBy)
+                        #else:
+                            print '{} checked by {}'.format(name,checkedBy)
+                            continue
+                    elif checking and (len(checkedBy)>=NUM_CHECKS or myName in checkedBy):
                         continue
                     assert f==read['imageFilename']
                     print 'g:'+groupName+', image: '+f+', gt found'

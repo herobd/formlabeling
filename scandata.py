@@ -221,6 +221,7 @@ if tableList:
     count=0
     tableGroups=[]
     circleGroups=[]
+    upsidedown=[]
     for groupName in sorted(groupNames):
         files = imageGroups[groupName]
         imageFiles=[]
@@ -247,6 +248,50 @@ if tableList:
                                 break
                         if bb['type']=='fieldCircle':
                             circleFound=True
+                elif f[-5:]=='.json':
+                    with open(os.path.join(directory,groupName,f)) as annFile:
+                        read = json.loads(annFile.read())
+                    upsideDownCount=0
+                    total=0
+                    for bb in read['fieldBBs']:
+                        if bb['type']=='fieldRow' or bb['type']=='fieldCol' or bb['type']=='fieldRegion' or bb['type']=='textRegion' or bb['type']=='graphic':
+                            continue
+                        tlX = bb['poly_points'][0][0]
+                        tlY = bb['poly_points'][0][1]
+                        trX = bb['poly_points'][1][0]
+                        trY = bb['poly_points'][1][1]
+                        brX = bb['poly_points'][2][0]
+                        brY = bb['poly_points'][2][1]
+                        blX = bb['poly_points'][3][0]
+                        blY = bb['poly_points'][3][1]
+                        lX = (tlX+blX)/2.0
+                        lY = (tlY+blY)/2.0
+                        rX = (trX+brX)/2.0
+                        rY = (trY+brY)/2.0
+                        rot=np.arctan2((rY-lY),rX-lX)
+                        total+=1
+                        if rot>1 and rot<2:
+                            upsideDownCount+=1
+                    for bb in read['textBBs']:
+                        tlX = bb['poly_points'][0][0]
+                        tlY = bb['poly_points'][0][1]
+                        trX = bb['poly_points'][1][0]
+                        trY = bb['poly_points'][1][1]
+                        brX = bb['poly_points'][2][0]
+                        brY = bb['poly_points'][2][1]
+                        blX = bb['poly_points'][3][0]
+                        blY = bb['poly_points'][3][1]
+                        lX = (tlX+blX)/2.0
+                        lY = (tlY+blY)/2.0
+                        rX = (trX+brX)/2.0
+                        rY = (trY+brY)/2.0
+                        rot=np.arctan2((rY-lY),rX-lX)
+                        total+=1
+                        if rot>1 and rot<2:
+                            upsideDownCount+=1
+                    if upsideDownCount/float(total) > 0.4:
+                        upsidedown.append(groupName+'/'+f)
+
                 #elif f[-5:]=='.json' and 'temp' not in f:
 
         if tempFound and validTemp and hasTable:
@@ -257,6 +302,7 @@ if tableList:
             circleGroups.append(groupName)
     print('Tables: {}'.format(tableGroups))
     print('Circles: {}'.format(circleGroups))
+    print('Upsidedown: {}'.format(upsidedown))
 if getStats:
     groupImages={}#defaultdict(list)
     sumCountField =0
@@ -270,6 +316,7 @@ if getStats:
     widths_norot=[]
     heights_norot=[]
     ratios_norot=[]
+    bbs=[]
     page_heights=[]
     page_widths=[]
     page_areas=[]
@@ -313,7 +360,10 @@ if getStats:
                         widths.append( math.sqrt( (rX - lX)**2 + (rY - lY)**2 ) )
                         heights.append( height)
                         ratios.append(widths[-1]/heights[-1])
-                        rots.append(np.arctan2((rY-lY),rX-lX))
+                        rot=np.arctan2((rY-lY),rX-lX)
+                        if rot<0:
+                            rot+=2*math.pi
+                        rots.append(rot)
 
                         widths_norot.append( np.maximum.reduce((tlX,blX,trX,brX))-np.minimum.reduce((tlX,blX,trX,brX)) )
                         heights_norot.append( np.maximum.reduce((tlY,blY,trY,brY))-np.minimum.reduce((tlY,blY,trY,brY)) )
@@ -338,6 +388,61 @@ if getStats:
     print 'height mean: {}, std: {}'.format(np.mean(heights_norot),np.std(heights_norot))
     print 'height min: {}, max: {}'.format(min(heights_norot),max(heights_norot))
     print 'ratio mean: {}, std: {}'.format(np.mean(ratios_norot),np.std(ratios_norot))
+
+    import matplotlib.pyplot as plt
+    from matplotlib.ticker import NullFormatter
+    #x=np.array(widths)#[:200]
+    #y=np.array(heights)#[:200]
+    x=np.array(ratios)#[:200]
+    y=np.array(rots)#[:200]
+    nullfmt = NullFormatter()         # no labels
+
+    # definitions for the axes
+    left, width = 0.1, 0.65
+    bottom, height = 0.1, 0.65
+    bottom_h = left_h = left + width + 0.02
+
+    rect_scatter = [left, bottom, width, height]
+    rect_histx = [left, bottom_h, width, 0.2]
+    rect_histy = [left_h, bottom, 0.2, height]
+    # start with a rectangular Figure
+    plt.figure(1, figsize=(12,12))
+
+    axScatter = plt.axes(rect_scatter)
+    axHistx = plt.axes(rect_histx)
+    axHisty = plt.axes(rect_histy)
+
+    # no labels
+    axHistx.xaxis.set_major_formatter(nullfmt)
+    axHisty.yaxis.set_major_formatter(nullfmt)
+
+    # the scatter plot:
+    axScatter.scatter(x, y)
+
+    # now determine nice limits by hand:
+    binwidthX = 3
+    binwidthY = math.pi/30
+    xmax = x.max()
+    ymax = y.max()
+    limX = (int(xmax/binwidthX) + 1) * binwidthX
+    limY = (int(ymax/binwidthY) + 1) * binwidthY
+
+    axScatter.set_xlim((0, limX))
+    axScatter.set_ylim((0, limY))
+
+    binsX = np.arange(0, limX + binwidthX, binwidthX)
+    binsY = np.arange(0, limY + binwidthY, binwidthY)
+    axHistx.hist(x, bins=binsX)
+    axHisty.hist(y, bins=binsY, orientation='horizontal')
+
+
+
+
+
+    axHistx.set_xlim(axScatter.get_xlim())
+    axHisty.set_ylim(axScatter.get_ylim())
+    plt.show()
+
 
 if makesplit:
     groupImages={}#defaultdict(list)
