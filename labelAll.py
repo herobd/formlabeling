@@ -1,4 +1,5 @@
 from labeler import labelImage
+from checker import checkProblem
 from filelock import FileLock, FileLockException
 import os
 import sys
@@ -49,6 +50,8 @@ progressOnly=False
 addOnly=False
 checking=False
 doubleCheck=False
+autochecking=False
+
 if sys.argv[-1][0]=='C':
     checking=True
     myName=sys.argv[-1][1:]
@@ -56,19 +59,25 @@ if sys.argv[-1][0]=='C':
         myName=raw_input("Enter name: ")
     print 'CHECKING '+myName
     USE_SIMPLE=False
-if sys.argv[-1][0]=='A':
+elif sys.argv[-1][0]=='A':
     USE_SIMPLE=False
-if sys.argv[-1][0]=='D':
+elif sys.argv[-1][0]=='a':
+    autochecking=True
+    USE_SIMPLE=False
+    goingImage=True
+    print 'AUTO CHECKING'
+elif sys.argv[-1][0]=='D':
     USE_SIMPLE=False
     doubleCheck=True
     checking=True
     myName='doublecheck'
+
 if len(sys.argv)>2:
     if sys.argv[2][0]=='-':
         progressOnly=True
     elif sys.argv[2][0]=='+':
         addOnly=True
-    elif  sys.argv[2][0]=='C' or sys.argv[2][0]=='A' or sys.argv[2][0]=='D':
+    elif  sys.argv[2][0]=='C' or sys.argv[2][0]=='A' or sys.argv[2][0]=='D' or sys.argv[2][0]=='a':
         going=True
         startHere=None
     else:
@@ -131,6 +140,8 @@ for groupName in sorted(groupNames):
     numImages=0
     numDone=0
     unfinished=[]
+    if autochecking:
+        problems=[]
     for f in files:
         if 'template' in f and f[-5:]=='.json':
             template = os.path.join(directory,groupName,f)
@@ -143,10 +154,24 @@ for groupName in sorted(groupNames):
             numDone+=1
             if checking:
                 numImages+=1
+            if autochecking:
+                prob,reason = checkProblem(os.path.join(directory,groupName,f))
+                if prob:
+                    ind = f.find('.')
+                    f = f[:ind]+'.jpg'
+                    problems.append((f,reason))
         elif f[-8:]=='.json.nf':
-            unfinished.append(f[0:-8]+'.jpg')
+            if not autochecking:
+                unfinished.append(f[0:-8]+'.jpg')
+            else:
+                prob, reason = checkProblem(os.path.join(directory,groupName,f))
+                ind = f.find('.')
+                f = f[:ind]+'.jpg'
+                problems.append((f,reason))
     if not checking:
         numImages = min(numImages,NUM_PER_GROUP)
+    if autochecking:
+        files=problems
     if numDone>=numImages:
         groupsDone[groupIndex]=True
         if startHere is None and not checking:
@@ -173,7 +198,7 @@ for groupName in sorted(groupNames):
                 #cornersActualT=read['actualPage_corners']
                 imageTemplate=read['imageFilename']
         else:
-            if checking:
+            if checking or autochecking:
                 continue
             print '!!!!!!!!!!!!!!!!!!!!!!!!!'
             labelTime = None
@@ -219,10 +244,13 @@ for groupName in sorted(groupNames):
         countInGroup=0
         
         for f in unfinished+files:
+            if autochecking:
+                f,reason = f
+                print reason
             ind = f.rfind('.')
             if f[ind:]=='.jpg' or f[ind:]=='.png' or f[ind:]=='.jpeg':
                 countInGroup+=1
-                if countInGroup>NUM_PER_GROUP and (startHereImage is None or goingImage) and not checking:
+                if countInGroup>NUM_PER_GROUP and (startHereImage is None or goingImage) and not checking and not autochecking:
                     break
                 if not goingImage:
                     if f==startHereImage:
@@ -232,7 +260,7 @@ for groupName in sorted(groupNames):
                 name=f[:ind]
                 gtFileName = os.path.join(directory,groupName,name+'.json')
                 gtFileNameExists = os.path.exists(gtFileName)
-                if gtFileNameExists and startHereImage is None and not checking:
+                if gtFileNameExists and startHereImage is None and not checking and not autochecking:
                     continue
                 nfGtFileNameExists = os.path.exists(gtFileName+'.nf')
                 checkedBy = []
@@ -264,9 +292,9 @@ for groupName in sorted(groupNames):
                         checkedBy = read['checkedBy']
                     
                     if doubleCheck:
-                        #if len(checkedBy)>=NUM_CHECKS:
-                        #    print 'checked by {}'.format(checkedBy)
-                        #else:
+                        if len(checkedBy)>=NUM_CHECKS:
+                            print '{} checked by {}'.format(name,checkedBy)
+                        else:
                             print '{} checked by {}'.format(name,checkedBy)
                             continue
                     elif checking and (len(checkedBy)>=NUM_CHECKS or myName in checkedBy):
@@ -289,7 +317,7 @@ for groupName in sorted(groupNames):
                     if complete and checking:
                         checkedBy.append(myName)
                 else:
-                    if checking:
+                    if checking or autochecking:
                         continue
                     print 'g:'+groupName+', image: '+f+', from template'
                     timeStart = timeit.default_timer()

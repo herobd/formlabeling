@@ -1226,10 +1226,10 @@ class Control:
             for mode in keyMap:
                 if key==keyMap[mode] and self.selected[:4]==mode[:4] or (mode=='comment' and self.selected=='field'):
                     if self.selected=='text':
-                        self.didAction(('change-text',self.selectedId,self.textBBs[self.selectedId][4]))
+                        self.didAction(('change-text',self.selectedId,self.textBBs[self.selectedId][8]))
                         self.textBBs[self.selectedId]=self.textBBs[self.selectedId][0:8]+(codeMap[mode],)+self.textBBs[self.selectedId][9:]
                     elif self.selected=='field':
-                        self.didAction(('change-field',self.selectedId,self.fieldBBs[self.selectedId][4]))
+                        self.didAction(('change-field',self.selectedId,self.fieldBBs[self.selectedId][8]))
                         self.fieldBBs[self.selectedId]=self.fieldBBs[self.selectedId][0:8]+(codeMap[mode],)+self.fieldBBs[self.selectedId][9:]
                     self.draw()
 
@@ -1870,12 +1870,12 @@ class Control:
             return toRet
         elif action[0] == 'change-text':
             label,id,code = action
-            toRet = (label,id,self.textBBs[id][4])
+            toRet = (label,id,self.textBBs[id][8])
             self.textBBs[id] = self.textBBs[id][0:8]+(code,)+self.textBBs[id][9:]
             return toRet
         elif action[0] == 'change-field':
             label,id,code = action
-            toRet = (label,id,self.fieldBBs[id][4])
+            toRet = (label,id,self.fieldBBs[id][8])
             self.fieldBBs[id] = self.fieldBBs[id][0:8]+(code,)+self.fieldBBs[id][9:]
             return toRet
         elif action[0] == 'set-field-type':#only occurs with fields

@@ -19,3 +19,18 @@ Usage: `python labelAll.py directory-of-image-groups [start-at-group] [start-at-
 
 This creates annotations for each image, starting with the annotations provided with the template. If not start group or image is provided it automatically goes to the next image.
 
+
+
+## scandata.py
+
+This is an auxilary function for collecting statistics, making global changes, and creating the split
+
+Current split stats:
+
+Without: 71, table: 77, para: 137, (both:52)
+trainCountTable:181,    validCountTable:16  testCountTable:15
+trainCountPara:320, validCountPara:47   testCountPara:29
+trainCountWithout:149,  validCountWithout:17    testCountWithout:14
+trainCountTotal:650,    validCountTotal:80  testCountTotal:58
+simple train: 53, valid: 10, test: 8
+train: 209, valid: 41, test: 35

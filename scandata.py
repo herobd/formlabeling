@@ -7,8 +7,10 @@ import random
 #import tkMessageBox
 import numpy as np
 import math
+from collections import defaultdict
 
 NUM_PER_GROUP=2
+NUM_CHECKS=2
 
 if len(sys.argv)<2:
     print 'usage: '+sys.argv[0]+' directory [+:add] [-[-]:progress] [c:create split] [f:poputate info from template [group]] [s:stats]'
@@ -69,6 +71,8 @@ if progress:
     numTemplateDone=0
     temped=[]
     numDoneTotal=0
+    numCheckedTotal=0
+    realDoneTotal=0
     numTotal=0
     numTimed=0
     timed=[]
@@ -112,6 +116,8 @@ if progress:
                                 timeTotal+=read['labelTime']
                                 timed.append(read['labelTime'])
                                 timesByImage[read['imageFilename']]=read['labelTime']
+                            if 'checkedBy' in read:
+                                numCheckedTotal+=len(read['checkedBy'])
         for image,time in timesByImage.iteritems():
             if image!=templateImage:
                 timedAlign.append(time)
@@ -119,8 +125,11 @@ if progress:
                 timedIsTemp.append(time)
         numDoneTotal += min(numDoneG,NUM_PER_GROUP)
         numTotal += min(imagesInGroup,NUM_PER_GROUP)
+        realDoneTotal += max(numDoneG,NUM_PER_GROUP)
+    checksNeeded = NUM_CHECKS*realDoneTotal
     print('Templates: {}/{}  {}'.format(numTemplateDone,len(groupNames),float(numTemplateDone)/len(groupNames)))
     print('Images:    {}/{}  {}'.format(numDoneTotal,numTotal,float(numDoneTotal)/numTotal))
+    print('Checking:    {}/{}  {}'.format(numCheckedTotal,checksNeeded,float(numCheckedTotal)/checksNeeded))
     if doTime:
         timeTotal/=numTimed
         timeTemp/=numTempTimed
@@ -446,8 +455,11 @@ if getStats:
 
 if makesplit:
     groupImages={}#defaultdict(list)
+    groupCount={}
+    totalJson=0
     groupTablePresence={}
     groupParaPresence={}
+    paraThresh=2
     for groupName in sorted(groupNames):
         files = imageGroups[groupName]
         imageFiles=[]
@@ -455,6 +467,7 @@ if makesplit:
         hasTable=False
         isPara=False
         paraCount=0
+        jsonCount=0
         for f in files:
             if 'lock' not in f:
                 if f[-4:]=='.jpg' or f[-5:]=='.jpeg' or f[-4:]=='.png':
@@ -472,7 +485,7 @@ if makesplit:
                                 break
                         if bb['type']=='fieldP':
                             paraCount+=1
-                            if paraCount>2:
+                            if paraCount>paraThresh:
                                 isPara=True
                                 if hasTable:
                                     break
@@ -483,12 +496,26 @@ if makesplit:
                     #            isPara=True
                     #            if hasTable:
                     #                break
-                #elif f[-5:]=='.json' and 'temp' not in f:
+                elif f[-5:]=='.json' and 'temp' not in f:
+                    jsonCount+=1
+                    totalJson+=1
+                    if not isPara:
+                        with open(os.path.join(directory,groupName,f)) as annFile:
+                            read = json.loads(annFile.read())
+                        for bb in read['fieldBBs']:
+                            if bb['type']=='fieldP':
+                                paraCount+=1
+                                if paraCount>paraThresh:
+                                    isPara=True
+                                    break
 
         groupImages[groupName]=imageFiles
+        groupCount[groupName]=jsonCount
         groupTablePresence[groupName]=hasTable
         groupParaPresence[groupName]=isPara
-        print('group {}, table:{}, para:{} {}'.format(groupName,hasTable,isPara,'?? para' if paraCount>0 and not isPara else ''))
+        #print('group {}, table:{}, para:{} {}'.format(groupName,hasTable,isPara,'?? para' if paraCount>0 and not isPara else ''))
+    
+
 
     groupsWithTable=[]
     groupsWithPara=[]
@@ -512,30 +539,94 @@ if makesplit:
             #print '  {}'.format(len(groupImages[groupName]))
             #print '  {}'.format(groupTablePresence[groupName])
     print('Without: {}, table: {}, para: {}, (both:{})'.format(len(groupsWithout),len(groupsWithTable),len(groupsWithPara),both))
-    shuffle(groupsWithTable)
-    shuffle(groupsWithPara)
-    shuffle(groupsWithout)
-    splitWithTable = int(len(groupsWithTable)*0.1)
-    splitWithPara = int(len(groupsWithPara)*0.1)
-    splitWithout = int(len(groupsWithout)*0.1)
+
+    
+    def split(groups,groupsCount):
+        total=0
+        for name in groups:
+            total+=groupCount[name]
+        numSub = 0.07*total
+
+        metagroups=defaultdict(list)
+        metagroupsCount=defaultdict(lambda:0)
+        for g in groups:
+            if '_' in g:
+                mg = g[g.find('_')]
+            else:
+                mg =g
+            metagroups[mg].append(g)
+            metagroupsCount[mg] += groupsCount[g]
+
+
+        counts = [(name,metagroupsCount[name]) for name in metagroups]
+        shuffle(counts)
+        counts.sort(key=lambda x: x[1])
+
+        test=[]
+        testCount=0
+        valid=[]
+        validCount=0
+        train=[]
+        trainCount=0
+
+        mI=0
+        while testCount<numSub or validCount<numSub:
+            probTrain = 0.33#+0.75*(float(mI)/len(metagroups))
+            if random.random()<probTrain:
+               train += metagroups[counts[mI][0]]
+               trainCount += metagroupsCount[counts[mI][0]]
+            else:
+                toValid = random.random()<0.5
+                if testCount>=numSub or toValid:
+                    valid += metagroups[counts[mI][0]]
+                    validCount += metagroupsCount[counts[mI][0]]
+                else:
+                    test += metagroups[counts[mI][0]]
+                    testCount += metagroupsCount[counts[mI][0]]
+            mI+=1
+        for i in range(mI,len(metagroups)):
+            train += metagroups[counts[i][0]]
+            trainCount += metagroupsCount[counts[i][0]]
+
+        return train, trainCount, valid, validCount, test, testCount
+    
+    trainTable, trainCountTable, validTable, validCountTable, testTable, testCountTable = split(groupsWithTable,groupCount)
+    trainPara, trainCountPara, validPara, validCountPara, testPara, testCountPara = split(groupsWithPara,groupCount)
+    trainWithout, trainCountWithout, validWithout, validCountWithout, testWithout, testCountWithout = split(groupsWithout,groupCount)
+
+    print('trainCountTable:{},\tvalidCountTable:{}\ttestCountTable:{}'.format(trainCountTable,validCountTable,testCountTable))
+    print('trainCountPara:{},\tvalidCountPara:{}\ttestCountPara:{}'.format(trainCountPara,validCountPara,testCountPara))
+    print('trainCountWithout:{},\tvalidCountWithout:{}\ttestCountWithout:{}'.format(trainCountWithout,validCountWithout,testCountWithout))
+    trainCountTotal = trainCountTable+trainCountPara+trainCountWithout
+    validCountTotal = validCountTable+validCountPara+validCountWithout
+    testCountTotal = testCountTable+testCountPara+testCountWithout
+    print('trainCountTotal:{},\tvalidCountTotal:{}\ttestCountTotal:{}'.format(trainCountTotal,validCountTotal,testCountTotal))
+
 
     ret={'train':{}, 'valid':{}, 'test':{}}
-    if simpleDataset:
-        for groupName in (groupsWithout[:splitWithout]):
-            ret['valid'][groupName]=groupImages[groupName]
-        for groupName in (groupsWithout[-splitWithout:]):
-            ret['test'][groupName]=groupImages[groupName]
-        for groupName in (groupsWithout[splitWithout:-splitWithout]):
-            ret['train'][groupName]=groupImages[groupName]
-        fileName='simple_train_valid_test_split.json'
-    else:
-        for groupName in (groupsWithPara[:splitWithPara]+groupsWithTable[:splitWithTable]+groupsWithout[:splitWithout]):
-            ret['valid'][groupName]=groupImages[groupName]
-        for groupName in (groupsWithPara[-splitWithPara:]+groupsWithTable[-splitWithTable:]+groupsWithout[-splitWithout:]):
-            ret['test'][groupName]=groupImages[groupName]
-        for groupName in (groupsWithPara[splitWithPara:-splitWithPara]+groupsWithTable[splitWithTable:-splitWithTable]+groupsWithout[splitWithout:-splitWithout]):
-            ret['train'][groupName]=groupImages[groupName]
-        fileName='train_valid_test_split.json'
+    #if simpleDataset:
+    for groupName in validWithout:
+        ret['valid'][groupName]=groupImages[groupName]
+    for groupName in testWithout:
+        ret['test'][groupName]=groupImages[groupName]
+    for groupName in trainWithout:
+        ret['train'][groupName]=groupImages[groupName]
+    fileName='simple_train_valid_test_split.json'
+    print('simple train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
+    with open(fileName, 'w') as out:
+        out.write(json.dumps(ret,indent=4, sort_keys=True))
+    #else:
+
+
+
+    ret={'train':{}, 'valid':{}, 'test':{}}
+    for groupName in validWithout+validTable+validPara:
+        ret['valid'][groupName]=groupImages[groupName]
+    for groupName in testWithout+testTable+testPara:
+        ret['test'][groupName]=groupImages[groupName]
+    for groupName in trainWithout+trainTable+trainPara:
+        ret['train'][groupName]=groupImages[groupName]
+    fileName='train_valid_test_split.json'
     print('train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
     with open(fileName, 'w') as out:
         out.write(json.dumps(ret,indent=4, sort_keys=True))
