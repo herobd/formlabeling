@@ -11,6 +11,7 @@ from collections import defaultdict
 
 NUM_PER_GROUP=2
 NUM_CHECKS=2
+USE_SIMPLE=True
 
 if len(sys.argv)<2:
     print 'usage: '+sys.argv[0]+' directory [+:add] [-[-]:progress] [c:create split] [f:poputate info from template [group]] [s:stats]'
@@ -55,6 +56,10 @@ else:
 if directory[-1]!='/':
     directory=directory+'/'
 rr=directory[directory[:-1].rindex('/')+1:-1]
+if USE_SIMPLE:
+    with open(os.path.join(directory,'simple_train_valid_test_split.json')) as f:
+        simpleSplit = json.load(f)
+    simpleFiles = dict(simpleSplit['train'].items()+ simpleSplit['test'].items()+ simpleSplit['valid'].items())
 imageGroups={}
 groupNames=[]
 for root, dirs, files in os.walk(directory):
@@ -64,8 +69,9 @@ for root, dirs, files in os.walk(directory):
     groupName = root[root.rindex('/')+1:]
     if rr==groupName:
         continue
-    imageGroups[groupName]=sorted(files)
-    groupNames.append(groupName)
+    if not USE_SIMPLE or groupName in simpleFiles:
+        imageGroups[groupName]=sorted(files)
+        groupNames.append(groupName)
 
 if progress:
     numTemplateDone=0
@@ -117,7 +123,9 @@ if progress:
                                 timed.append(read['labelTime'])
                                 timesByImage[read['imageFilename']]=read['labelTime']
                             if 'checkedBy' in read:
-                                numCheckedTotal+=len(read['checkedBy'])
+                                #print(read['checkedBy'])
+                                #numCheckedTotal+=len(read['checkedBy'])
+                                numCheckedTotal += len( [x for x in read['checkedBy'] if x!='doublecheck'])
         for image,time in timesByImage.iteritems():
             if image!=templateImage:
                 timedAlign.append(time)
@@ -329,6 +337,7 @@ if getStats:
     page_heights=[]
     page_widths=[]
     page_areas=[]
+    numBBs=[]
     for groupName in sorted(groupNames):
         if groupName=='121':
             continue
@@ -346,6 +355,7 @@ if getStats:
                     page_heights.append(read['height'])
                     page_widths.append(read['width'])
                     page_areas.append(read['height']*read['width'])
+                    numBBs.append(len(read['fieldBBs'])+len(read['textBBs']))
                     for bb in read['fieldBBs']+read['textBBs']:
                         if bb['type']=='fieldRow' or bb['type']=='fieldCol' or bb['type']=='fieldRegion' or bb['type']=='textRegion' or bb['type']=='graphic':
                             continue
@@ -377,7 +387,7 @@ if getStats:
                         widths_norot.append( np.maximum.reduce((tlX,blX,trX,brX))-np.minimum.reduce((tlX,blX,trX,brX)) )
                         heights_norot.append( np.maximum.reduce((tlY,blY,trY,brY))-np.minimum.reduce((tlY,blY,trY,brY)) )
                         ratios_norot.append(widths_norot[-1]/heights_norot[-1])
-
+    print('BB count mean:{}, max: {}'.format(np.mean(numBBs),np.max(numBBs)))
     print('image mean height: {}, width: {}, area: {}'.format(np.mean(page_heights),np.mean(page_widths),np.mean(page_areas)))
     print('image std height: {}, width: {}, area: {}'.format(np.std(page_heights),np.std(page_widths),np.std(page_areas)))
     print('image max height: {}, width: {}, area: {}'.format(max(page_heights),max(page_widths),max(page_areas)))

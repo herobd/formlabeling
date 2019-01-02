@@ -1916,7 +1916,7 @@ class Control:
             toRet = ('unmerge-horzLink',hlid1,hlid2,self.horzLinks[hlid1])
             self.horzLinks[hlid1]=link1
             self.horzLinks[hlid2]=link2
-            return toReg
+            return toRet
         elif action[0]=='unmerge-horzLink':
             label,hlid1,hlid2,merged = action
             toRet = ('merge-horzLink',hlid1,self.horzLinks[hlid1],hlid2,self.horzLinks[hlid2])
