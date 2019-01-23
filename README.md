@@ -34,3 +34,6 @@ trainCountWithout:149,  validCountWithout:17    testCountWithout:14
 trainCountTotal:650,    validCountTotal:80  testCountTotal:58
 simple train: 53, valid: 10, test: 8
 train: 209, valid: 41, test: 35
+
+mix split (does not seperate images by group):
+mix train: 1299, valid: 162, test: 162 (images)

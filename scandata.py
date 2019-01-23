@@ -33,7 +33,10 @@ if len(sys.argv)>2:
         add=True
     elif sys.argv[2][0]=='c':# or sys.argv[2][0]=='s' :
         makesplit=True
-        if len(sys.argv[2])>1 and sys.argv[2][1]=='s':
+        mixsplit=False
+        if len(sys.argv[2])>1 and sys.argv[2][1]=='m':
+            mixsplit=True
+        elif len(sys.argv[2])>1 and sys.argv[2][1]=='s':
             simpleDataset=True
         else:
             simpleDataset=False
@@ -463,6 +466,7 @@ if getStats:
     plt.show()
 
 
+
 if makesplit:
     groupImages={}#defaultdict(list)
     groupCount={}
@@ -470,6 +474,7 @@ if makesplit:
     groupTablePresence={}
     groupParaPresence={}
     paraThresh=2
+    jsons=set()
     for groupName in sorted(groupNames):
         files = imageGroups[groupName]
         imageFiles=[]
@@ -508,6 +513,7 @@ if makesplit:
                     #                break
                 elif f[-5:]=='.json' and 'temp' not in f:
                     jsonCount+=1
+                    jsons.add(f[:-5])
                     totalJson+=1
                     if not isPara:
                         with open(os.path.join(directory,groupName,f)) as annFile:
@@ -550,96 +556,128 @@ if makesplit:
             #print '  {}'.format(groupTablePresence[groupName])
     print('Without: {}, table: {}, para: {}, (both:{})'.format(len(groupsWithout),len(groupsWithTable),len(groupsWithPara),both))
 
-    
-    def split(groups,groupsCount):
-        total=0
-        for name in groups:
-            total+=groupCount[name]
-        numSub = 0.07*total
-
-        metagroups=defaultdict(list)
-        metagroupsCount=defaultdict(lambda:0)
-        for g in groups:
-            if '_' in g:
-                mg = g[g.find('_')]
-            else:
-                mg =g
-            metagroups[mg].append(g)
-            metagroupsCount[mg] += groupsCount[g]
-
-
-        counts = [(name,metagroupsCount[name]) for name in metagroups]
-        shuffle(counts)
-        counts.sort(key=lambda x: x[1])
-
-        test=[]
-        testCount=0
-        valid=[]
-        validCount=0
-        train=[]
-        trainCount=0
-
-        mI=0
-        while testCount<numSub or validCount<numSub:
-            probTrain = 0.33#+0.75*(float(mI)/len(metagroups))
-            if random.random()<probTrain:
-               train += metagroups[counts[mI][0]]
-               trainCount += metagroupsCount[counts[mI][0]]
-            else:
-                toValid = random.random()<0.5
-                if testCount>=numSub or toValid:
-                    valid += metagroups[counts[mI][0]]
-                    validCount += metagroupsCount[counts[mI][0]]
+    if mixsplit:
+        imagesGT=[]
+        imagesNo=[]
+        for groupName in groupsWithout:
+            for f in groupImages[groupName]:
+                name = f[:f.rfind('.')]
+                if name in jsons:
+                    imagesGT.append((groupName,f))
                 else:
-                    test += metagroups[counts[mI][0]]
-                    testCount += metagroupsCount[counts[mI][0]]
-            mI+=1
-        for i in range(mI,len(metagroups)):
-            train += metagroups[counts[i][0]]
-            trainCount += metagroupsCount[counts[i][0]]
+                    imagesNo.append((groupName,f))
+            #images += [(groupName,f) for f in groupImages[groupName]]
+        split = int(0.1*len(imagesGT))
+        testImages = imagesGT[:split]
+        validImages = imagesGT[split:2*split]
+        trainImages = imagesGT[2*split:]
+        split = int(0.1*len(imagesNo))
+        testImages += imagesNo[:split]
+        validImages += imagesNo[split:2*split]
+        trainImages += imagesNo[2*split:]
+        ret={'train':defaultdict(list), 'valid':defaultdict(list), 'test':defaultdict(list)}
+        #if simpleDataset:
+        for groupName,f in validImages:
+            ret['valid'][groupName].append(f)
+        for groupName,f in testImages:
+            ret['test'][groupName].append(f)
+        for groupName,f in trainImages:
+            ret['train'][groupName].append(f)
+        fileName='mix_train_valid_test_split.json'
+        print('mix train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
+        print('mix train: {}, valid: {}, test: {}'.format(len(trainImages), len(validImages), len(testImages)))
+        with open(fileName, 'w') as out:
+            out.write(json.dumps(ret,indent=4, sort_keys=True))
+    else:
+        def split(groups,groupsCount): #prevents colliding groups of slightly different type
+            total=0
+            for name in groups:
+                total+=groupCount[name]
+            numSub = 0.07*total
 
-        return train, trainCount, valid, validCount, test, testCount
-    
-    trainTable, trainCountTable, validTable, validCountTable, testTable, testCountTable = split(groupsWithTable,groupCount)
-    trainPara, trainCountPara, validPara, validCountPara, testPara, testCountPara = split(groupsWithPara,groupCount)
-    trainWithout, trainCountWithout, validWithout, validCountWithout, testWithout, testCountWithout = split(groupsWithout,groupCount)
-
-    print('trainCountTable:{},\tvalidCountTable:{}\ttestCountTable:{}'.format(trainCountTable,validCountTable,testCountTable))
-    print('trainCountPara:{},\tvalidCountPara:{}\ttestCountPara:{}'.format(trainCountPara,validCountPara,testCountPara))
-    print('trainCountWithout:{},\tvalidCountWithout:{}\ttestCountWithout:{}'.format(trainCountWithout,validCountWithout,testCountWithout))
-    trainCountTotal = trainCountTable+trainCountPara+trainCountWithout
-    validCountTotal = validCountTable+validCountPara+validCountWithout
-    testCountTotal = testCountTable+testCountPara+testCountWithout
-    print('trainCountTotal:{},\tvalidCountTotal:{}\ttestCountTotal:{}'.format(trainCountTotal,validCountTotal,testCountTotal))
+            metagroups=defaultdict(list)
+            metagroupsCount=defaultdict(lambda:0)
+            for g in groups:
+                if '_' in g:
+                    mg = g[g.find('_')]
+                else:
+                    mg =g
+                metagroups[mg].append(g)
+                metagroupsCount[mg] += groupsCount[g]
 
 
-    ret={'train':{}, 'valid':{}, 'test':{}}
-    #if simpleDataset:
-    for groupName in validWithout:
-        ret['valid'][groupName]=groupImages[groupName]
-    for groupName in testWithout:
-        ret['test'][groupName]=groupImages[groupName]
-    for groupName in trainWithout:
-        ret['train'][groupName]=groupImages[groupName]
-    fileName='simple_train_valid_test_split.json'
-    print('simple train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
-    with open(fileName, 'w') as out:
-        out.write(json.dumps(ret,indent=4, sort_keys=True))
-    #else:
+            counts = [(name,metagroupsCount[name]) for name in metagroups]
+            shuffle(counts)
+            counts.sort(key=lambda x: x[1])
+
+            test=[]
+            testCount=0
+            valid=[]
+            validCount=0
+            train=[]
+            trainCount=0
+
+            mI=0
+            while testCount<numSub or validCount<numSub:
+                probTrain = 0.33#+0.75*(float(mI)/len(metagroups))
+                if random.random()<probTrain:
+                   train += metagroups[counts[mI][0]]
+                   trainCount += metagroupsCount[counts[mI][0]]
+                else:
+                    toValid = random.random()<0.5
+                    if testCount>=numSub or toValid:
+                        valid += metagroups[counts[mI][0]]
+                        validCount += metagroupsCount[counts[mI][0]]
+                    else:
+                        test += metagroups[counts[mI][0]]
+                        testCount += metagroupsCount[counts[mI][0]]
+                mI+=1
+            for i in range(mI,len(metagroups)):
+                train += metagroups[counts[i][0]]
+                trainCount += metagroupsCount[counts[i][0]]
+
+            return train, trainCount, valid, validCount, test, testCount
+        
+        trainTable, trainCountTable, validTable, validCountTable, testTable, testCountTable = split(groupsWithTable,groupCount)
+        trainPara, trainCountPara, validPara, validCountPara, testPara, testCountPara = split(groupsWithPara,groupCount)
+        trainWithout, trainCountWithout, validWithout, validCountWithout, testWithout, testCountWithout = split(groupsWithout,groupCount)
+
+        print('trainCountTable:{},\tvalidCountTable:{}\ttestCountTable:{}'.format(trainCountTable,validCountTable,testCountTable))
+        print('trainCountPara:{},\tvalidCountPara:{}\ttestCountPara:{}'.format(trainCountPara,validCountPara,testCountPara))
+        print('trainCountWithout:{},\tvalidCountWithout:{}\ttestCountWithout:{}'.format(trainCountWithout,validCountWithout,testCountWithout))
+        trainCountTotal = trainCountTable+trainCountPara+trainCountWithout
+        validCountTotal = validCountTable+validCountPara+validCountWithout
+        testCountTotal = testCountTable+testCountPara+testCountWithout
+        print('trainCountTotal:{},\tvalidCountTotal:{}\ttestCountTotal:{}'.format(trainCountTotal,validCountTotal,testCountTotal))
+
+
+        ret={'train':{}, 'valid':{}, 'test':{}}
+        #if simpleDataset:
+        for groupName in validWithout:
+            ret['valid'][groupName]=groupImages[groupName]
+        for groupName in testWithout:
+            ret['test'][groupName]=groupImages[groupName]
+        for groupName in trainWithout:
+            ret['train'][groupName]=groupImages[groupName]
+        fileName='simple_train_valid_test_split.json'
+        print('simple train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
+        with open(fileName, 'w') as out:
+            out.write(json.dumps(ret,indent=4, sort_keys=True))
+        #else:
 
 
 
-    ret={'train':{}, 'valid':{}, 'test':{}}
-    for groupName in validWithout+validTable+validPara:
-        ret['valid'][groupName]=groupImages[groupName]
-    for groupName in testWithout+testTable+testPara:
-        ret['test'][groupName]=groupImages[groupName]
-    for groupName in trainWithout+trainTable+trainPara:
-        ret['train'][groupName]=groupImages[groupName]
-    fileName='train_valid_test_split.json'
-    print('train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
-    with open(fileName, 'w') as out:
-        out.write(json.dumps(ret,indent=4, sort_keys=True))
+        ret={'train':{}, 'valid':{}, 'test':{}}
+        for groupName in validWithout+validTable+validPara:
+            ret['valid'][groupName]=groupImages[groupName]
+        for groupName in testWithout+testTable+testPara:
+            ret['test'][groupName]=groupImages[groupName]
+        for groupName in trainWithout+trainTable+trainPara:
+            ret['train'][groupName]=groupImages[groupName]
+        fileName='train_valid_test_split.json'
+        print('train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
+        with open(fileName, 'w') as out:
+            out.write(json.dumps(ret,indent=4, sort_keys=True))
 
 if saveall:
     with open('all.json','w') as out:

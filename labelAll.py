@@ -58,16 +58,16 @@ if sys.argv[-1][0]=='C':
     if len(myName)==0:
         myName=raw_input("Enter name: ")
     print 'CHECKING '+myName
-    USE_SIMPLE=False
+    #USE_SIMPLE=False
 elif sys.argv[-1][0]=='A':
     USE_SIMPLE=False
 elif sys.argv[-1][0]=='a':
     autochecking=True
-    USE_SIMPLE=False
+    #USE_SIMPLE=False
     goingImage=True
     print 'AUTO CHECKING'
 elif sys.argv[-1][0]=='D':
-    USE_SIMPLE=False
+    #USE_SIMPLE=False
     doubleCheck=True
     checking=True
     myName='doublecheck'
