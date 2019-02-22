@@ -10,7 +10,7 @@ import grp
 #import Tkinter
 #import tkMessageBox
 
-NUM_PER_GROUP=2
+NUM_PER_GROUP=3
 NUM_CHECKS=2
 USE_SIMPLE=True
 lock=None
@@ -277,8 +277,14 @@ for groupName in sorted(groupNames):
                     texts=read['textBBs']
                     fields=read['fieldBBs']
                     pairs=read['pairs']
-                    samePairs=read['samePairs']
-                    groups=read['groups']
+                    if 'samePairs' in read:
+                        samePairs=read['samePairs']
+                    else:
+                        samaPairs=[]
+                    if 'groups' in read:
+                        groups=read['groups']
+                    else:
+                        groups=[]
                     if 'horzLinks' in read and not skipHLinks:
                         horzLinks=read['horzLinks']
                     if 'page_corners' in read and 'actualPage_corners' in read:
@@ -299,7 +305,8 @@ for groupName in sorted(groupNames):
                             continue
                     elif checking and (len(checkedBy)>=NUM_CHECKS or myName in checkedBy):
                         continue
-                    assert f==read['imageFilename']
+                    if 'imageFilename' in read:
+                        assert f==read['imageFilename']
                     print 'g:'+groupName+', image: '+f+', gt found'
                     if applyTemplate:
                         texts+=textsT

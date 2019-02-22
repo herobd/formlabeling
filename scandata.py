@@ -8,7 +8,7 @@ import random
 import numpy as np
 import math
 from collections import defaultdict
-
+from forms_annotations import fixAnnotations
 NUM_PER_GROUP=2
 NUM_CHECKS=2
 USE_SIMPLE=True
@@ -44,6 +44,24 @@ if len(sys.argv)>2:
         saveall=True
     elif sys.argv[2][0]=='s':
         getStats=True
+        if len(sys.argv[2])>1 and sys.argv[2][1]=='m':
+            mimic_dataset=True
+            mimic_object=type('test', (object,), {})()
+            mimic_object.no_blanks=True
+            mimic_object.no_print_fields=False
+            mimic_object.no_graphics=True
+            mimic_object.only_opposite_pairs=True
+            mimic_object.swapCircle=True
+            if len(sys.argv[2])>2 and sys.argv[2][2]=='t':
+                doTest=True
+            else:
+                doTest=False
+        else:
+            if len(sys.argv[2])>1 and sys.argv[2][1]=='t':
+                doTest=True
+            else:
+                doTest=False
+            mimic_dataset=False
     elif sys.argv[2][0]=='f':
         populate=True
         if len(sys.argv)>3:
@@ -61,8 +79,17 @@ if directory[-1]!='/':
 rr=directory[directory[:-1].rindex('/')+1:-1]
 if USE_SIMPLE:
     with open(os.path.join(directory,'simple_train_valid_test_split.json')) as f:
-        simpleSplit = json.load(f)
-    simpleFiles = dict(simpleSplit['train'].items()+ simpleSplit['test'].items()+ simpleSplit['valid'].items())
+        splitFile = json.load(f)
+    if getStats:
+        if doTest:
+            simpleFiles = splitFile['test']
+        else:
+            simpleFiles = dict(splitFile['train'].items()+ splitFile['valid'].items())
+    else:
+        simpleFiles = dict(splitFile['train'].items()+ splitFile['test'].items()+ splitFile['valid'].items())
+else:
+    with open(os.path.join(directory,'train_valid_test_split.json')) as f:
+        splitFile = json.load(f)
 imageGroups={}
 groupNames=[]
 for root, dirs, files in os.walk(directory):
@@ -90,6 +117,9 @@ if progress:
     timeTotal=0
     numTempTimed=0
     timeTemp=0
+    numDoneTrain=0
+    numDoneTest=0
+    numDoneValid=0
     if len(sys.argv)>2 and len(sys.argv[2])>1:
         doTime=True
     else:
@@ -117,6 +147,12 @@ if progress:
                             templateImage = read['imageFilename']
                 elif f[-5:]=='.json':
                     numDoneG+=1
+                    if groupName in splitFile['train']:
+                        numDoneTrain+=1
+                    elif groupName in splitFile['test']:
+                        numDoneTest+=1
+                    elif groupName in splitFile['valid']:
+                        numDoneValid+=1
                     if doTime:
                         with open(os.path.join(directory,groupName,f)) as annFile:
                             read = json.loads(annFile.read())
@@ -141,6 +177,7 @@ if progress:
     print('Templates: {}/{}  {}'.format(numTemplateDone,len(groupNames),float(numTemplateDone)/len(groupNames)))
     print('Images:    {}/{}  {}'.format(numDoneTotal,numTotal,float(numDoneTotal)/numTotal))
     print('Checking:    {}/{}  {}'.format(numCheckedTotal,checksNeeded,float(numCheckedTotal)/checksNeeded))
+    print('Num train:{}, valid:{}, test:{}'.format(numDoneTrain,numDoneValid,numDoneTest))
     if doTime:
         timeTotal/=numTimed
         timeTemp/=numTempTimed
@@ -325,8 +362,7 @@ if tableList:
     print('Upsidedown: {}'.format(upsidedown))
 if getStats:
     groupImages={}#defaultdict(list)
-    sumCountField =0
-    sumCountText =0
+    sumCountTotal =0
     maxBoxes=0
     count=0
     widths=[]
@@ -341,6 +377,13 @@ if getStats:
     page_widths=[]
     page_areas=[]
     numBBs=[]
+    numNeighbors=([],[])
+    neighborXDiff=([],[])
+    neighborYDiff=([],[])
+    numNeighbors_same=([],[])
+    neighborXDiff_same=([],[])
+    neighborYDiff_same=([],[])
+    numNeighborsHist = [0]*10
     for groupName in sorted(groupNames):
         if groupName=='121':
             continue
@@ -351,15 +394,27 @@ if getStats:
                 if 'template' not in f and f[-5:]=='.json':
                     with open(os.path.join(directory,groupName,f)) as annFile:
                         read = json.loads(annFile.read())
-                    sumCountField += len(read['fieldBBs'])
-                    sumCountText += len(read['textBBs'])
+                    if mimic_dataset:
+                        fixAnnotations(mimic_object,read)
+                        countTotal = len(read['byId'])
+                        bbs = read['byId'].values()
+                    else:
+                        sumCountField = len(read['fieldBBs'])
+                        sumCountText = len(read['textBBs'])
+                        countTotal = sumCountField + sumCountText
+                        bbs = read['fieldBBs']+read['textBBs']
+                    sumCountTotal+=countTotal
                     count+=1
-                    maxBoxes = max(maxBoxes,len(read['fieldBBs'])+len(read['textBBs']))
+                    maxBoxes = max(maxBoxes,countTotal)
                     page_heights.append(read['height'])
                     page_widths.append(read['width'])
                     page_areas.append(read['height']*read['width'])
-                    numBBs.append(len(read['fieldBBs'])+len(read['textBBs']))
-                    for bb in read['fieldBBs']+read['textBBs']:
+                    numBBs.append(countTotal)
+                    byId={}
+                    nn=defaultdict(lambda:0)
+                    for bb in bbs:
+                        byId[bb['id']]=bb
+                        nn[bb['id']]=0
                         if bb['type']=='fieldRow' or bb['type']=='fieldCol' or bb['type']=='fieldRegion' or bb['type']=='textRegion' or bb['type']=='graphic':
                             continue
                         tlX = bb['poly_points'][0][0]
@@ -390,12 +445,78 @@ if getStats:
                         widths_norot.append( np.maximum.reduce((tlX,blX,trX,brX))-np.minimum.reduce((tlX,blX,trX,brX)) )
                         heights_norot.append( np.maximum.reduce((tlY,blY,trY,brY))-np.minimum.reduce((tlY,blY,trY,brY)) )
                         ratios_norot.append(widths_norot[-1]/heights_norot[-1])
+                    nn_init=nn.copy()
+                    for id1,id2 in read['pairs']:
+                        bb1=byId[id1]
+                        bb2=byId[id2]
+                        isText1=bb1['type'][0:4]=='text'
+                        isText2=bb2['type'][0:4]=='text'
+                        nn[id1]+=1
+                        nn[id2]+=1
+
+                        bb1X=(bb1['poly_points'][0][0]+bb1['poly_points'][1][0]+bb1['poly_points'][2][0]+bb1['poly_points'][3][0])/4
+                        bb1Y=(bb1['poly_points'][0][1]+bb1['poly_points'][1][1]+bb1['poly_points'][2][1]+bb1['poly_points'][3][1])/4
+                        bb2X=(bb2['poly_points'][0][0]+bb2['poly_points'][1][0]+bb2['poly_points'][2][0]+bb2['poly_points'][3][0])/4
+                        bb2Y=(bb2['poly_points'][0][1]+bb2['poly_points'][1][1]+bb2['poly_points'][2][1]+bb2['poly_points'][3][1])/4
+
+                        neighborXDiff[isText2].append(bb1X-bb2X)
+                        neighborXDiff[isText1].append(bb2X-bb1X)
+                        neighborYDiff[isText2].append(bb1Y-bb2Y)
+                        neighborYDiff[isText1].append(bb2Y-bb1Y)
+                    for id,countNN in nn.items():
+                        isText=byId[id]['type'][0:4]=='text'
+                        numNeighbors[isText].append(countNN)
+                        #countNN = max(coutNN,3)
+                        numNeighborsHist[countNN]+=1
+                        if countNN>1:
+                            print('{}/{} : nn {}'.format(groupName,f,countNN))
+                    nn=nn_init
+                    if 'samePairs' in read:
+                        for id1,id2 in read['samePairs']:
+                            bb1=byId[id1]
+                            bb2=byId[id2]
+                            isText1=bb1['type'][0:4]=='text'
+                            isText2=bb2['type'][0:4]=='text'
+                            nn[id1]+=1
+                            nn[id2]+=1
+
+                            bb1X=(bb1['poly_points'][0][0]+bb1['poly_points'][1][0]+bb1['poly_points'][2][0]+bb1['poly_points'][3][0])/4
+                            bb1Y=(bb1['poly_points'][0][1]+bb1['poly_points'][1][1]+bb1['poly_points'][2][1]+bb1['poly_points'][3][1])/4
+                            bb2X=(bb2['poly_points'][0][0]+bb2['poly_points'][1][0]+bb2['poly_points'][2][0]+bb2['poly_points'][3][0])/4
+                            bb2Y=(bb2['poly_points'][0][1]+bb2['poly_points'][1][1]+bb2['poly_points'][2][1]+bb2['poly_points'][3][1])/4
+
+                            neighborXDiff_same[isText1].append(bb1X-bb2X)
+                            neighborXDiff_same[isText2].append(bb2X-bb1X)
+                            neighborYDiff_same[isText1].append(bb1Y-bb2Y)
+                            neighborYDiff_same[isText2].append(bb2Y-bb1Y)
+                    for id,countNN in nn.items():
+                        isText=byId[id]['type'][0:4]=='text'
+                        numNeighbors_same[isText].append(countNN)
+                        numNeighborsHist[countNN]+=1
+
+    print('\nNum Neighbor stuff:')
+    print('NN hist {}'.format(numNeighborsHist))
+    print('text num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[1]),np.std(numNeighbors[1])))
+    print('text neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff[1]),np.std(neighborXDiff[1])))
+    print('text neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff[1]),np.std(neighborYDiff[1])))
+    print('field num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[0]),np.std(numNeighbors[0])))
+    print('field neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff[0]),np.std(neighborXDiff[0])))
+    print('field neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff[0]),np.std(neighborYDiff[0])))
+    print('SAME text num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[1]),np.std(numNeighbors[1])))
+    print('SAME text neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff_same[1]),np.std(neighborXDiff_same[1])))
+    print('SAME text neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff_same[1]),np.std(neighborYDiff_same[1])))
+    print('SAME field num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[0]),np.std(numNeighbors[0])))
+    print('SAME field neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff_same[0]),np.std(neighborXDiff_same[0])))
+    print('SAME field neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff_same[0]),np.std(neighborYDiff_same[0])))
+
+
+    print('\nOld Stats:')
     print('BB count mean:{}, max: {}'.format(np.mean(numBBs),np.max(numBBs)))
     print('image mean height: {}, width: {}, area: {}'.format(np.mean(page_heights),np.mean(page_widths),np.mean(page_areas)))
     print('image std height: {}, width: {}, area: {}'.format(np.std(page_heights),np.std(page_widths),np.std(page_areas)))
     print('image max height: {}, width: {}, area: {}'.format(max(page_heights),max(page_widths),max(page_areas)))
     print('image min height: {}, width: {}, area: {}'.format(min(page_heights),min(page_widths),min(page_areas)))
-    print 'avg boxes: {}'.format((sumCountField+sumCountText)/float(count))
+    print 'avg boxes: {}'.format((sumCountTotal)/float(count))
     print 'max boxes: {}'.format(maxBoxes)
     print 'With rotation'
     print 'width mean: {}, std: {}'.format(np.mean(widths),np.std(widths))
@@ -415,56 +536,104 @@ if getStats:
     from matplotlib.ticker import NullFormatter
     #x=np.array(widths)#[:200]
     #y=np.array(heights)#[:200]
-    x=np.array(ratios)#[:200]
-    y=np.array(rots)#[:200]
-    nullfmt = NullFormatter()         # no labels
+    if False:
+        x=np.array(ratios)#[:200]
+        y=np.array(rots)#[:200]
+        nullfmt = NullFormatter()         # no labels
 
-    # definitions for the axes
-    left, width = 0.1, 0.65
-    bottom, height = 0.1, 0.65
-    bottom_h = left_h = left + width + 0.02
+        # definitions for the axes
+        left, width = 0.1, 0.65
+        bottom, height = 0.1, 0.65
+        bottom_h = left_h = left + width + 0.02
 
-    rect_scatter = [left, bottom, width, height]
-    rect_histx = [left, bottom_h, width, 0.2]
-    rect_histy = [left_h, bottom, 0.2, height]
-    # start with a rectangular Figure
-    plt.figure(1, figsize=(12,12))
+        rect_scatter = [left, bottom, width, height]
+        rect_histx = [left, bottom_h, width, 0.2]
+        rect_histy = [left_h, bottom, 0.2, height]
+        # start with a rectangular Figure
+        plt.figure(1, figsize=(12,12))
 
-    axScatter = plt.axes(rect_scatter)
-    axHistx = plt.axes(rect_histx)
-    axHisty = plt.axes(rect_histy)
+        axScatter = plt.axes(rect_scatter)
+        axHistx = plt.axes(rect_histx)
+        axHisty = plt.axes(rect_histy)
 
-    # no labels
-    axHistx.xaxis.set_major_formatter(nullfmt)
-    axHisty.yaxis.set_major_formatter(nullfmt)
+        # no labels
+        axHistx.xaxis.set_major_formatter(nullfmt)
+        axHisty.yaxis.set_major_formatter(nullfmt)
 
-    # the scatter plot:
-    axScatter.scatter(x, y)
+        # the scatter plot:
+        axScatter.scatter(x, y)
 
-    # now determine nice limits by hand:
-    binwidthX = 3
-    binwidthY = math.pi/30
-    xmax = x.max()
-    ymax = y.max()
-    limX = (int(xmax/binwidthX) + 1) * binwidthX
-    limY = (int(ymax/binwidthY) + 1) * binwidthY
+        # now determine nice limits by hand:
+        binwidthX = 3
+        binwidthY = math.pi/30
+        xmax = x.max()
+        ymax = y.max()
+        limX = (int(xmax/binwidthX) + 1) * binwidthX
+        limY = (int(ymax/binwidthY) + 1) * binwidthY
 
-    axScatter.set_xlim((0, limX))
-    axScatter.set_ylim((0, limY))
+        axScatter.set_xlim((0, limX))
+        axScatter.set_ylim((0, limY))
 
-    binsX = np.arange(0, limX + binwidthX, binwidthX)
-    binsY = np.arange(0, limY + binwidthY, binwidthY)
-    axHistx.hist(x, bins=binsX)
-    axHisty.hist(y, bins=binsY, orientation='horizontal')
+        binsX = np.arange(0, limX + binwidthX, binwidthX)
+        binsY = np.arange(0, limY + binwidthY, binwidthY)
+        axHistx.hist(x, bins=binsX)
+        axHisty.hist(y, bins=binsY, orientation='horizontal')
 
+        axHistx.set_xlim(axScatter.get_xlim())
+        axHisty.set_ylim(axScatter.get_ylim())
+        plt.show()
+    def showScatter(data1,data2,binwidthX,binwidthY):
+        x=np.array(data1)#[:200]
+        y=np.array(data2)#[:200]
+        nullfmt = NullFormatter()         # no labels
 
+        # definitions for the axes
+        left, width = 0.1, 0.65
+        bottom, height = 0.1, 0.65
+        bottom_h = left_h = left + width + 0.02
 
+        rect_scatter = [left, bottom, width, height]
+        rect_histx = [left, bottom_h, width, 0.2]
+        rect_histy = [left_h, bottom, 0.2, height]
+        # start with a rectangular Figure
+        plt.figure(1, figsize=(12,12))
 
+        axScatter = plt.axes(rect_scatter)
+        axHistx = plt.axes(rect_histx)
+        axHisty = plt.axes(rect_histy)
 
-    axHistx.set_xlim(axScatter.get_xlim())
-    axHisty.set_ylim(axScatter.get_ylim())
-    plt.show()
+        # no labels
+        axHistx.xaxis.set_major_formatter(nullfmt)
+        axHisty.yaxis.set_major_formatter(nullfmt)
 
+        # the scatter plot:
+        axScatter.scatter(x, y)
+
+        # now determine nice limits by hand:
+        #binwidthX = 30
+        #binwidthY = 15
+        xmax = x.max()
+        ymax = y.max()
+        limX = (int(xmax/binwidthX) + 1) * binwidthX
+        limY = (int(ymax/binwidthY) + 1) * binwidthY
+        xmin = x.min()
+        ymin = y.min()
+        startX = (int(xmin/binwidthX)) * binwidthX
+        startY = (int(ymin/binwidthY)) * binwidthY
+
+        axScatter.set_xlim((startX, limX))
+        axScatter.set_ylim((startY, limY))
+
+        binsX = np.arange(startX, limX + binwidthX, binwidthX)
+        binsY = np.arange(startY, limY + binwidthY, binwidthY)
+        axHistx.hist(x, bins=binsX)
+        axHisty.hist(y, bins=binsY, orientation='horizontal')
+
+        axHistx.set_xlim(axScatter.get_xlim())
+        axHisty.set_ylim(axScatter.get_ylim())
+        plt.show()
+    showScatter(neighborXDiff[1],neighborYDiff[1],30,15)
+    showScatter(numNeighbors[1],len(numNeighbors[1])*[0],0.5,1)
 
 
 if makesplit:

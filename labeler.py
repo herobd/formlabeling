@@ -19,7 +19,7 @@ BOX_MIN_AREA=400
 MIN_MOVE_DIST=5
 colorMap = {'text':(0/255.0,0/255.0,255/255.0,0.51), 'textP':(0/255.0,150/255.0,255/255.0,0.51), 'textMinor':(80/255.0,170/255.0,190/255.0,0.65), 'textInst':(170/255.0,160/255.0,225/255.0,0.71), 'textNumber':(0/255.0,160/255.0,100/255.0,0.51), 'fieldCircle':(255/255.0,190/255.0,210/255.0,0.61), 'field':(255/255.0,0/255.0,0/255.0,0.51), 'fieldP':(255/255.0,120/255.0,0/255.0,0.51), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0,0.51), 'graphic':(255/255.0,105/255.0,250/255.0,0.51), 'comment':(165/255.0,10/255.0,15/255.0,0.51), 'pair':(15/255.0,150/255.0,15/255.0,0.51), 'col':(5/255.0,70/255.0,5/255.0,0.35), 'row':(25/255.0,5/255.0,75/255.0,0.35), 'fieldRegion':(15/255.0,15/255.0,75/255.0,0.51), 'fieldCol':(65/255.0,70/255.0,5/255.0,0.65), 'fieldRow':(65/255.0,5/255.0,75/255.0,0.65), 'move':(1,0,1,0.5)}
 DRAW_COLOR=(1,0.7,1)
-codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11, 'fieldCol':12, 'fieldRow':13}
+codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11, 'fieldCol':12, 'fieldRow':13, 'detectorPrediction':11}
 RcodeMap = {v: k for k, v in codeMap.iteritems()}
 keyMap = {'text':'1',
           'textP':'2',
@@ -258,7 +258,7 @@ class Control:
         self.preCorners=pre_corners
         self.complete=False #this is for returning whether the user is done labeling
         if pairs is not None:
-            self.pairing=[(int(x[1:]),int(y[1:])) for (x,y) in pairs if (x[0]=='t' and y[0]=='f')]
+            self.pairing=[(int(x[1:]),int(y[1:])) for (x,y) in pairs if ((x[0]=='t' and y[0]=='f') or (x[0]=='m' and u[0]=='m'))]
             switched = [(int(y[1:]),int(x[1:])) for (x,y) in pairs if (x[0]=='f' and y[0]=='t')]
             if len(switched)>0:
                 self.pairing += switched
@@ -284,6 +284,8 @@ class Control:
             self.preCorners=page_corners
             self.cornersActual=page_cornersActual
             self.init()
+        #elif TEST:
+        #    self.corners=[
 
 
     def init(self):
@@ -2040,7 +2042,7 @@ class Control:
             self.setSelectedPoly(self.groups[self.selectedId].getPoly(self))
         else:
             self.setSelectedRectOff()
-
+        
         #clear all
         for id,rect in self.textRects.iteritems():
             rect.remove()
