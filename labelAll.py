@@ -10,7 +10,7 @@ import grp
 #import Tkinter
 #import tkMessageBox
 
-NUM_PER_GROUP=3
+NUM_PER_GROUP=2
 NUM_CHECKS=2
 USE_SIMPLE=True
 lock=None

@@ -42,6 +42,7 @@ if len(sys.argv)>2:
             simpleDataset=False
     elif sys.argv[2][0]=='a':
         saveall=True
+        USE_SIMPLE=False
     elif sys.argv[2][0]=='s':
         getStats=True
         if len(sys.argv[2])>1 and sys.argv[2][1]=='m':
@@ -52,15 +53,15 @@ if len(sys.argv)>2:
             mimic_object.no_graphics=True
             mimic_object.only_opposite_pairs=True
             mimic_object.swapCircle=True
-            if len(sys.argv[2])>2 and sys.argv[2][2]=='t':
-                doTest=True
+            if len(sys.argv[2])>2:
+                doSplit=sys.argv[2][2:]
             else:
-                doTest=False
+                doSplit=False
         else:
-            if len(sys.argv[2])>1 and sys.argv[2][1]=='t':
-                doTest=True
+            if len(sys.argv[2])>1:
+                doSplit=sys.argv[2][1:]
             else:
-                doTest=False
+                doSplit=False
             mimic_dataset=False
     elif sys.argv[2][0]=='f':
         populate=True
@@ -80,16 +81,16 @@ rr=directory[directory[:-1].rindex('/')+1:-1]
 if USE_SIMPLE:
     with open(os.path.join(directory,'simple_train_valid_test_split.json')) as f:
         splitFile = json.load(f)
-    if getStats:
-        if doTest:
-            simpleFiles = splitFile['test']
-        else:
-            simpleFiles = dict(splitFile['train'].items()+ splitFile['valid'].items())
-    else:
-        simpleFiles = dict(splitFile['train'].items()+ splitFile['test'].items()+ splitFile['valid'].items())
 else:
     with open(os.path.join(directory,'train_valid_test_split.json')) as f:
         splitFile = json.load(f)
+if getStats:
+    if doSplit:
+        simpleFiles = splitFile[doSplit]
+    else:
+        simpleFiles = dict(splitFile['train'].items()+ splitFile['valid'].items())
+else:
+    simpleFiles = dict(splitFile['train'].items()+ splitFile['test'].items()+ splitFile['valid'].items())
 imageGroups={}
 groupNames=[]
 for root, dirs, files in os.walk(directory):
@@ -99,7 +100,7 @@ for root, dirs, files in os.walk(directory):
     groupName = root[root.rindex('/')+1:]
     if rr==groupName:
         continue
-    if not USE_SIMPLE or groupName in simpleFiles:
+    if (not USE_SIMPLE and not getStats) or groupName in simpleFiles:
         imageGroups[groupName]=sorted(files)
         groupNames.append(groupName)
 
@@ -384,14 +385,28 @@ if getStats:
     neighborXDiff_same=([],[])
     neighborYDiff_same=([],[])
     numNeighborsHist = [0]*10
+    totalText=0
+    totalField=0
+    totalRelationships=0
+    totalRelationshipsSame=0
+    numGroupsUsed=0
+    numImagesUsed=0
+    maxPairDist=0
+    maxPairDistX=0
+    maxPairDistY=0
     for groupName in sorted(groupNames):
         if groupName=='121':
             continue
         files = imageGroups[groupName]
+        usedGroup=False
         imageFiles=[]
         for f in files:
             if 'lock' not in f:
                 if 'template' not in f and f[-5:]=='.json':
+                    if not usedGroup:
+                        numGroupsUsed+=1
+                        usedGroup=True
+                    numImagesUsed+=1
                     with open(os.path.join(directory,groupName,f)) as annFile:
                         read = json.loads(annFile.read())
                     if mimic_dataset:
@@ -416,7 +431,15 @@ if getStats:
                         byId[bb['id']]=bb
                         nn[bb['id']]=0
                         if bb['type']=='fieldRow' or bb['type']=='fieldCol' or bb['type']=='fieldRegion' or bb['type']=='textRegion' or bb['type']=='graphic':
+                            if bb['type']=='graphic':
+                                print('has graphic: {}/{}'.format(groupName,f))
                             continue
+                        if  bb['type'][:4]=='text':
+                            totalText+=1
+                        else:
+                            totalField+=1
+                        #elif !='fieldCheckBox':
+
                         tlX = bb['poly_points'][0][0]
                         tlY = bb['poly_points'][0][1]
                         trX = bb['poly_points'][1][0]
@@ -446,6 +469,7 @@ if getStats:
                         heights_norot.append( np.maximum.reduce((tlY,blY,trY,brY))-np.minimum.reduce((tlY,blY,trY,brY)) )
                         ratios_norot.append(widths_norot[-1]/heights_norot[-1])
                     nn_init=nn.copy()
+                    totalRelationships+=len(read['pairs'])
                     for id1,id2 in read['pairs']:
                         bb1=byId[id1]
                         bb2=byId[id2]
@@ -463,15 +487,19 @@ if getStats:
                         neighborXDiff[isText1].append(bb2X-bb1X)
                         neighborYDiff[isText2].append(bb1Y-bb2Y)
                         neighborYDiff[isText1].append(bb2Y-bb1Y)
+                        maxPairDist = max(maxPairDist,math.sqrt((bb1X-bb2X)**2 + (bb1Y-bb2Y)**2))
+                        maxPairDistX = max(maxPairDistX,abs(bb1X-bb2X))
+                        maxPairDistY = max(maxPairDistY,abs(bb1Y-bb2Y))
                     for id,countNN in nn.items():
                         isText=byId[id]['type'][0:4]=='text'
                         numNeighbors[isText].append(countNN)
-                        #countNN = max(coutNN,3)
+                        countNN = min(countNN,9)
                         numNeighborsHist[countNN]+=1
-                        if countNN>1:
-                            print('{}/{} : nn {}'.format(groupName,f,countNN))
+                        #if countNN>1:
+                        #    print('{} {} : nn {}'.format(groupName,f,countNN))
                     nn=nn_init
                     if 'samePairs' in read:
+                        totalRelationshipsSame+=len(read['samePairs'])
                         for id1,id2 in read['samePairs']:
                             bb1=byId[id1]
                             bb2=byId[id2]
@@ -489,10 +517,25 @@ if getStats:
                             neighborXDiff_same[isText2].append(bb2X-bb1X)
                             neighborYDiff_same[isText1].append(bb1Y-bb2Y)
                             neighborYDiff_same[isText2].append(bb2Y-bb1Y)
+                            maxPairDist = max(maxPairDist,math.sqrt((bb1X-bb2X)**2 + (bb1Y-bb2Y)**2))
+                            maxPairDistX = max(maxPairDistX,abs(bb1X-bb2X))
+                            maxPairDistY = max(maxPairDistY,abs(bb1Y-bb2Y))
                     for id,countNN in nn.items():
                         isText=byId[id]['type'][0:4]=='text'
                         numNeighbors_same[isText].append(countNN)
+                        countNN = min(countNN,9)
                         numNeighborsHist[countNN]+=1
+
+    print('Number of images: {}'.format(numImagesUsed))
+    print('Number of groups: {}'.format(numGroupsUsed))
+    print('Number of text lines: {}'.format(totalText))
+    print('Number of field lines: {}'.format(totalField))
+    print('Number of relationships diff: {}'.format(totalRelationships))
+    print('Number of relationships same: {}'.format(totalRelationshipsSame))
+
+    print('\nMax pair dist: {}'.format(maxPairDist))
+    print('\nMax pair distX: {}'.format(maxPairDistX))
+    print('\nMax pair distY: {}'.format(maxPairDistY))
 
     print('\nNum Neighbor stuff:')
     print('NN hist {}'.format(numNeighborsHist))
