@@ -13,6 +13,7 @@ import grp
 NUM_PER_GROUP=2
 NUM_CHECKS=2
 USE_SIMPLE=True
+doTrans=True
 lock=None
 #groupId = grp.getgrnam("pairing").gr_gid
 
@@ -61,8 +62,10 @@ if sys.argv[-1][0]=='C':
     #USE_SIMPLE=False
 elif sys.argv[-1][0]=='A':
     USE_SIMPLE=False
+    #doTrans=False
 elif sys.argv[-1][0]=='a':
     autochecking=True
+    doTrans=False
     #USE_SIMPLE=False
     goingImage=True
     print 'AUTO CHECKING'
@@ -70,6 +73,7 @@ elif sys.argv[-1][0]=='D':
     #USE_SIMPLE=False
     doubleCheck=True
     checking=True
+    doTrans=False
     myName='doublecheck'
 
 if len(sys.argv)>2:
@@ -104,7 +108,10 @@ if len(sys.argv)>4:
 if USE_SIMPLE:
     with open(os.path.join(directory,'simple_train_valid_test_split.json')) as f:
         simpleSplit = json.load(f)
-    simpleFiles = dict(simpleSplit['train'].items()+ simpleSplit['test'].items()+ simpleSplit['valid'].items())
+    if doTrans:
+        simpleFiles = dict(simpleSplit['test'].items()+ simpleSplit['valid'].items())
+    else:
+        simpleFiles = dict(simpleSplit['train'].items()+ simpleSplit['test'].items()+ simpleSplit['valid'].items())
     #print(simpleFiles)
 
 if directory[-1]!='/':
@@ -174,16 +181,15 @@ for groupName in sorted(groupNames):
         files=problems
     if numDone>=numImages:
         groupsDone[groupIndex]=True
-        if startHere is None and not checking:
+        if startHere is None and not checking and not doTrans:
             #import pdb; pdb.set_trace()
             continue
-
     #print 'group '+groupName+', template image: '+imageTemplate                   
     #templateFile=os.path.join(directory,groupName,template)
     lock = FileLock(template, timeout=None)
     try:
         lock.acquire()
-        textsT=fieldsT=pairsT=samePairsT=horzLinksT=groupsT=cornersT=cornersActualT=None
+        textsT=fieldsT=pairsT=samePairsT=horzLinksT=groupsT=transcriptionsT=cornersT=cornersActualT=None
         if template is not None:
             with open(template) as f:
                 read = json.load(f)
@@ -192,6 +198,8 @@ for groupName in sorted(groupNames):
                 pairsT=read['pairs']
                 samePairsT=read['samePairs']
                 groupsT=read['groups']
+                if 'transcriptions' in read:
+                    transcriptionsT = read['transcriptions']
                 cornersT=read['page_corners']
                 if 'horzLinks' in read  and not skipHLinks:
                     horzLinksT=read['horzLinks']
@@ -210,6 +218,8 @@ for groupName in sorted(groupNames):
                     pairsT=read['pairs']
                     samePairsT=read['samePairs']
                     groupsT=read['groups']
+                    if 'transcriptions' in read:
+                        transcriptionsT = read['transcriptions']
                     cornersT=read['page_corners']
                     if 'horzLinks' in read  and not skipHLinks:
                         horzLinksT=read['horzLinks']
@@ -225,7 +235,7 @@ for groupName in sorted(groupNames):
             template = os.path.join(directory,groupName,'template'+groupName+'.json')
             #tkMessageBox.showinfo("Template", "A template doesn't exist for group "+groupName+", creating one")
             timeStart = timeit.default_timer()
-            textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,cornersT, actualCornersT, complete, height, width = labelImage(os.path.join(directory,groupName,imageTemplate),textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,None,cornersT,cornersActualT)
+            textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,transcriptionsT,cornersT, actualCornersT, complete, height, width = labelImage(os.path.join(directory,groupName,imageTemplate),textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,transcriptionsT,None,cornersT,cornersActualT)
             timeElapsed = timeit.default_timer()-timeStart + (labelTime if labelTime is not None else 0)
             if (len(textsT)==0 and len(fieldsT)==0):
                 lock.release()
@@ -260,19 +270,19 @@ for groupName in sorted(groupNames):
                 name=f[:ind]
                 gtFileName = os.path.join(directory,groupName,name+'.json')
                 gtFileNameExists = os.path.exists(gtFileName)
-                if gtFileNameExists and startHereImage is None and not checking and not autochecking:
-                    continue
                 nfGtFileNameExists = os.path.exists(gtFileName+'.nf')
+                if gtFileNameExists and startHereImage is None and not checking and not autochecking and not nfGtFileNameExists and not doTrans:
+                    continue
                 checkedBy = []
                 
-                texts=fields=pairs=samePairs=horzLinks=groups=page_corners=page_cornersActual=None
+                texts=fields=pairs=samePairs=horzLinks=groups=transcriptions=page_corners=page_cornersActual=None
                 if f == imageTemplate:
                     page_corners=page_cornersActual=cornersT
                 if gtFileNameExists or nfGtFileNameExists:
-                    if gtFileNameExists:
-                        gtF = open(gtFileName)
-                    elif nfGtFileNameExists:
+                    if nfGtFileNameExists:
                         gtF = open(gtFileName+'.nf')
+                    elif gtFileNameExists:
+                        gtF = open(gtFileName)
                     read = json.loads(gtF.read())
                     texts=read['textBBs']
                     fields=read['fieldBBs']
@@ -285,6 +295,8 @@ for groupName in sorted(groupNames):
                         groups=read['groups']
                     else:
                         groups=[]
+                    if 'transcriptions' in read:
+                        transcriptions = read['transcriptions']
                     if 'horzLinks' in read and not skipHLinks:
                         horzLinks=read['horzLinks']
                     if 'page_corners' in read and 'actualPage_corners' in read:
@@ -305,6 +317,8 @@ for groupName in sorted(groupNames):
                             continue
                     elif checking and (len(checkedBy)>=NUM_CHECKS or myName in checkedBy):
                         continue
+                    elif doTrans and (transcriptions is not None and not nfGtFileNameExists):
+                        continue
                     if 'imageFilename' in read:
                         assert f==read['imageFilename']
                     print 'g:'+groupName+', image: '+f+', gt found'
@@ -317,7 +331,7 @@ for groupName in sorted(groupNames):
                         horzLinks=horzLinksT
                     if labelTime is not None:
                         timeStart = timeit.default_timer()
-                    texts,fields,pairs,samePairs,horzLinks,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),texts,fields,pairs,samePairs,horzLinks,groups,None,page_corners,page_cornersActual)
+                    texts,fields,pairs,samePairs,horzLinks,groups,transcriptions,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),texts,fields,pairs,samePairs,horzLinks,groups,transcriptions,None,page_corners,page_cornersActual)
                     if labelTime is not None:
                         labelTime += timeit.default_timer()-timeStart
                     gtF.close()
@@ -328,7 +342,7 @@ for groupName in sorted(groupNames):
                         continue
                     print 'g:'+groupName+', image: '+f+', from template'
                     timeStart = timeit.default_timer()
-                    texts,fields,pairs,samePairs,horzLinks,groups,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,cornersT,page_corners,page_cornersActual)
+                    texts,fields,pairs,samePairs,horzLinks,groups,transcriptions,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,transcriptionsT,cornersT,page_corners,page_cornersActual)
                     labelTime = timeit.default_timer()-timeStart
 
                 if len(texts)==0 and len(fields)==0:
@@ -338,7 +352,7 @@ for groupName in sorted(groupNames):
                 if not complete:
                     gtFileName+='.nf'
                 with open(gtFileName,'w') as out:
-                    out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime, "height":height, "width":width, "checkedBy":checkedBy}))
+                    out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "actualPage_corners":actualCorners, "imageFilename":f, "labelTime": labelTime, "height":height, "width":width, "checkedBy":checkedBy, "transcriptions":transcriptions}))
                     if complete and (startHere is None or startHere!=groupName):
                         if countInGroup==numImages:
                             groupsDone[groupIndex]=True
