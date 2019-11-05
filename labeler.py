@@ -20,7 +20,7 @@ MIN_MOVE_DIST=5
 colorMap = {'text':(0/255.0,0/255.0,255/255.0,0.51), 'textP':(0/255.0,150/255.0,255/255.0,0.51), 'textMinor':(80/255.0,170/255.0,190/255.0,0.65), 'textInst':(170/255.0,160/255.0,225/255.0,0.71), 'textNumber':(0/255.0,160/255.0,100/255.0,0.51), 'fieldCircle':(255/255.0,190/255.0,210/255.0,0.61), 'field':(255/255.0,0/255.0,0/255.0,0.51), 'fieldP':(255/255.0,120/255.0,0/255.0,0.51), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0,0.51), 'graphic':(255/255.0,105/255.0,250/255.0,0.51), 'comment':(165/255.0,10/255.0,15/255.0,0.51), 'pair':(15/255.0,150/255.0,15/255.0,0.51), 'col':(5/255.0,70/255.0,5/255.0,0.35), 'row':(25/255.0,5/255.0,75/255.0,0.35), 'fieldRegion':(15/255.0,15/255.0,75/255.0,0.51), 'fieldCol':(65/255.0,70/255.0,5/255.0,0.65), 'fieldRow':(65/255.0,5/255.0,75/255.0,0.65), 'move':(1,0,1,0.5), 'trans':(0.5,0.5,0.5)}
 DRAW_COLOR=(1,0.7,1)
 codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11, 'fieldCol':12, 'fieldRow':13, 'detectorPrediction':11}
-RcodeMap = {v: k for k, v in codeMap.iteritems()}
+RcodeMap = {v: k for k, v in codeMap.items()}
 keyMap = {'text':'1',
           'textP':'2',
           'textMinor':'3',
@@ -38,12 +38,12 @@ keyMap = {'text':'1',
           #'col':'6',
           #'row':'7',
           }
-RkeyMap = {v: k for k, v in keyMap.iteritems()}
+RkeyMap = {v: k for k, v in keyMap.items()}
 toolMap = {'text':'1:text/label', 'textP':'2:text para', 'textMinor':'3:minor label', 'textInst':'4:instructions', 'textNumber':'5:enumeration (#)', 'fieldCircle':'R:to be circled', 'field':'Q:field', 'fieldP':'W:field para', 'fieldCheckBox':'E:check-box', 'graphic':'T:graphic', 'comment':'Y:comment', 'fieldRegion':'~:Partitioned region', 'fieldCol':'U:col (cells)', 'fieldRow':'I:row (cells)','trans':'F1:transcribe'}
 toolYMap = {}
 modes = ['text', 'textP', 'textMinor', 'textInst', 'textNumber', 'field', 'fieldP', 'fieldCheckBox', 'fieldCircle', 'graphic', 'comment', 'fieldCol', 'fieldRow', 'fieldRegion', 'trans']
 ftypeMap = {'text':0, 'handwriting':1, 'print':2, 'blank':3, 'signature':4} #print:typewriter or stamp
-RftypeMap = {v: k for k, v in ftypeMap.iteritems()}
+RftypeMap = {v: k for k, v in ftypeMap.items()}
 
 def invalidPoly(points):
     def getQuad(a):
@@ -76,7 +76,7 @@ def invalidPoly(points):
         elif (q1==3 or q1==2) and (q2==1 or q2==0):
             diff = (a2+2*math.pi)-a1
         else:
-            print('error, unaccounted quads: q1={} q2={}'.format(q1,q2))
+            print(('error, unaccounted quads: q1={} q2={}'.format(q1,q2)))
             exit()
         if diff<=0 or diff>=math.pi:
             return True
@@ -105,7 +105,7 @@ def checkInsidePoly(x,y,vertices):
     point=(x,y)
     previous_side = None
     n_vertices = len(vertices)
-    for n in xrange(n_vertices):
+    for n in range(n_vertices):
         a, b = vertices[n], vertices[(n+1)%n_vertices]
         affine_segment = v_sub(b, a)
         affine_point = v_sub(point, a)
@@ -296,7 +296,7 @@ class Control:
 
     def init(self):
         self.corners_text.remove()
-        for key, dot in self.corners_draw.iteritems():
+        for key, dot in self.corners_draw.items():
             dot.remove()
         if self.preTexts is not None and self.preFields is not None:
             if self.preCorners is None:
@@ -332,12 +332,14 @@ class Control:
                 #endY = (new_points[1,2]+new_points[1,3])/2.0 #average y of new br and bl
                 #self.textBBs[self.bbCurId] = (int(round(startX)),int(round(startY)),int(round(endX)),int(round(endY)),para,0)
                 id = int(bb['id'][1:])
+                assert(bb['id'][0]=='t')
                 self.textBBs[id] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,0)
                 self.textBBCurId=max(self.textBBCurId,id+1)
             for bb in self.preFields:
                 if invalidPoly(bb['poly_points']):
                     continue
                 id = int(bb['id'][1:])
+                assert(bb['id'][0]=='f')
                 tlX,tlY = bb['poly_points'][0]
                 trX,trY = bb['poly_points'][1]
                 brX,brY = bb['poly_points'][2]
@@ -773,7 +775,7 @@ class Control:
                             return
                 elif self.secondaryMode=='row' or self.secondaryMode=='col':
                     #again, first check for linesitems
-                    for id, group in self.groups.iteritems():
+                    for id, group in self.groups.items():
                         if group.typeStr==self.secondaryMode:
                             x1,y1 = group.getCentroid(self)
                             if not group.holdsFields:
@@ -848,7 +850,7 @@ class Control:
                 indecies = list(range(len(self.textBBs)))
                 shuffle(indecies)
                 for index in indecies:
-                    id = self.textBBs.keys()[index]
+                    id = list(self.textBBs.keys())[index]
                     if self.checkInside(x,y,self.textBBs[id]):
                         #print 'click on text b'
                         if self.mode=='delete':
@@ -912,9 +914,9 @@ class Control:
 
                 indecies = list(range(len(self.fieldBBs)))
                 shuffle(indecies)
-                indecies.sort(key=lambda a: int(self.fieldBBs[self.fieldBBs.keys()[a]][8]==codeMap['fieldCol'] or self.fieldBBs[self.fieldBBs.keys()[a]][8]==codeMap['fieldRow'] or self.fieldBBs[self.fieldBBs.keys()[a]][8]==codeMap['fieldRegion']))
+                indecies.sort(key=lambda a: int(self.fieldBBs[list(self.fieldBBs.keys())[a]][8]==codeMap['fieldCol'] or self.fieldBBs[list(self.fieldBBs.keys())[a]][8]==codeMap['fieldRow'] or self.fieldBBs[list(self.fieldBBs.keys())[a]][8]==codeMap['fieldRegion']))
                 for index in indecies:
-                    id = self.fieldBBs.keys()[index]
+                    id = list(self.fieldBBs.keys())[index]
                     if self.checkInside(x,y,self.fieldBBs[id]):
                         #print 'click on field b'
                         if self.mode=='delete':
@@ -980,7 +982,7 @@ class Control:
                         if self.checkInside(x,y,self.textBBs[id]):
                             if self.selected=='none':
                                 skip=False
-                                for gId,group in self.groups.iteritems():
+                                for gId,group in self.groups.items():
                                     if not group.holdsFields and group.contains(id):
                                         skip=True
                                         break
@@ -1020,7 +1022,7 @@ class Control:
                         if self.checkInside(x,y,self.fieldBBs[id]):
                             if self.selected=='none':
                                 skip=False
-                                for gId,group in self.groups.iteritems():
+                                for gId,group in self.groups.items():
                                     if group.holdsFields and group.contains(id): # and group.typeStr==self.secondaryMode:
                                         skip=True
                                         break
@@ -1056,7 +1058,7 @@ class Control:
                                 self.setSelectedPoly(self.groups[self.selectedId].getPoly(self))
                                 self.draw()
                                 return
-                for id, group in self.groups.iteritems():
+                for id, group in self.groups.items():
                     if group.typeStr==self.secondaryMode and checkInsidePoly(x,y,group.getPoly(self)):
                         if self.mode=='delete':
                             self.didAction(('remove-group',id,group))
@@ -1425,7 +1427,7 @@ class Control:
                 self.draw()
             elif key=='f4' and self.mode=='move':
                 textBBs=[]
-                for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in self.textBBs.iteritems():
+                for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in self.textBBs.items():
                     if id in self.selectedTextIds:
                         textBBs.append({
                                         'id': 't'+str(id+1000),
@@ -1433,7 +1435,7 @@ class Control:
                                         'type':RcodeMap[para]
                                        })
                 fieldBBs=[]
-                for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in self.fieldBBs.iteritems():
+                for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in self.fieldBBs.items():
                     if id in self.selectedFieldIds:
                         fieldBBs.append({
                                         'id': 'f'+str(id+1000),
@@ -1639,8 +1641,8 @@ class Control:
         cv2.fillConvexPoly(draw2,np.array([[bb2[0]-minX,bb2[1]-minY],[bb2[2]-minX, bb2[3]-minY],[bb2[4]-minX,bb2[5]-minY],[bb2[6]-minX,bb2[7]-minY]],dtype=np.int),1)
         intersection = (draw1*draw2).sum()
         union = (draw1+draw2).sum()-intersection
-        print 'IOU:'+str(float(intersection)/union)
-        print 'sum dist:'+str(minV[0,0])
+        print('IOU:'+str(float(intersection)/union))
+        print('sum dist:'+str(minV[0,0]))
         return pairs
 
     def transformToRect(self,bb):
@@ -1759,7 +1761,7 @@ class Control:
         if oid is not None:
             id_hlid=None
             oid_hlid=None
-            for hlid, hl in self.horzLinks.iteritems():
+            for hlid, hl in self.horzLinks.items():
                 if id_hlid is None and id in hl:
                     id_hlid=hlid
                     if oid_hlid is not None:
@@ -2035,7 +2037,7 @@ class Control:
             toRet = ('merge-horzLink',hlid1,self.horzLinks[hlid1],hlid2,self.horzLinks[hlid2])
             self.horzLinks[hlid1]=merged
         else:
-            print 'Unimplemented action: '+str(action[0])
+            print('Unimplemented action: '+str(action[0]))
 
     def setMode(self,mode):
             self.tmpMode = self.mode
@@ -2121,7 +2123,7 @@ class Control:
 
     def checkInside(self,x,y,bb):
         if bb[0] is None or bb[1] is None or bb[2] is None or bb[3] is None or bb[4] is None or bb[5] is None or bb[6] is None or bb[7] is None:
-            print bb
+            print(bb)
         vertices = [(bb[0],bb[1]),(bb[2],bb[3]),(bb[4],bb[5]),(bb[6],bb[7])]
         return checkInsidePoly(x,y,vertices)
 
@@ -2159,16 +2161,16 @@ class Control:
         if self.mode != 'trans':
             
             #clear all
-            for id,rect in self.textRects.iteritems():
+            for id,rect in self.textRects.items():
                 rect.remove()
             self.textRects={}
-            for id,rect in self.fieldRects.iteritems():
+            for id,rect in self.fieldRects.items():
                 rect.remove()
             self.fieldRects={}
-            for id,line in self.pairLines.iteritems():
+            for id,line in self.pairLines.items():
                 line.remove()
             self.pairLines={}
-            for id,poly in self.groupPolys.iteritems():
+            for id,poly in self.groupPolys.items():
                 poly.remove()
             self.groupPolys={}
             for poly in self.arrowPolys:
@@ -2181,7 +2183,7 @@ class Control:
             if not clear:
 
                 lineId=0
-                for id, group in self.groups.iteritems():
+                for id, group in self.groups.items():
                     vertices = group.getPoly(self)
                     ar = []
                     for tup in vertices:
@@ -2215,7 +2217,7 @@ class Control:
                             lineId+=1
 
                 #self.displayImage[0:self.image.shape[0], 0:self.image.shape[1]] = self.image
-                for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,code,blank) in self.textBBs.iteritems():
+                for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,code,blank) in self.textBBs.items():
                     #cv2.rectangle(self.displayImage,(startX,startY),(endX,endY),colorMap[RcodeMap[code]],1)
                     color = colorMap[RcodeMap[code]]
                     if (self.selected=='row' or self.selected=='col') and not self.groups[self.selectedId].holdsFields and self.groups[self.selectedId].contains(id):
@@ -2229,7 +2231,7 @@ class Control:
                     self.arrowPolys.append(arrow)
                     self.ax_im.add_patch(arrow)
 
-                for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,code,ftype) in self.fieldBBs.iteritems():
+                for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,code,ftype) in self.fieldBBs.items():
                     #cv2.rectangle(self.displayImage,(startX,startY),(endX,endY),colorMap[RcodeMap[code]],1)
                     fill = 'none'
                     if ftype==ftypeMap['blank']:
@@ -2252,7 +2254,7 @@ class Control:
                         self.arrowPolys.append(arrow)
                         self.ax_im.add_patch(arrow)
 
-                for hlid, link in self.horzLinks.iteritems():
+                for hlid, link in self.horzLinks.items():
                     pointsTop=[]
                     pointsBot=[]
                     rot=None
@@ -2396,7 +2398,7 @@ class Control:
         vTop=vTop/np.linalg.norm(vTop)
         vmTop = np.array([mY-tlY,mX-tlX])
         dTop = vTop.dot(vmTop)
-        print('vTop:{}, vmTop:{}, dTop:{}'.format(vTop,vmTop,dTop))
+        print(('vTop:{}, vmTop:{}, dTop:{}'.format(vTop,vmTop,dTop)))
         pointTop = np.array([tlY,tlX]) + dTop*vTop
         print(pointTop)
         vBot = np.array([brY-blY,brX-blX])
@@ -2608,7 +2610,7 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,horzLinks,groups,transcrip
     allIds=set()
     #idToIdxText={}
     textBBs=[]
-    for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in control.textBBs.iteritems():
+    for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in control.textBBs.items():
         #idToIdxText[id]=len(textBBs)
         textBBs.append({
             #'id': 't'+str(idToIdxText[id]),
@@ -2619,7 +2621,7 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,horzLinks,groups,transcrip
         allIds.add(textBBs[-1]['id'])
     #idToIdxField={}
     fieldBBs=[]
-    for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in control.fieldBBs.iteritems():
+    for id, (tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank) in control.fieldBBs.items():
         pp=[[int(round(tlX)),int(round(tlY))],[int(round(trX)),int(round(trY))],[int(round(brX)),int(round(brY))],[int(round(blX)),int(round(blY))]]
         if invalidPoly(pp):
             continue
@@ -2648,7 +2650,7 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,horzLinks,groups,transcrip
         samePairing.append((typ+str(a),typ+str(b)))
     #horzLinks=[link for hid,link in control.horzLinks.iteritems()]
     horzLinks=[]
-    for hid,link in control.horzLinks.iteritems():
+    for hid,link in control.horzLinks.items():
         newLink = [id for id in link if id in allIds] #we don't ever remove deleted bb ids, do it here
         #newLink = []
         #for id in link:
@@ -2657,7 +2659,7 @@ def labelImage(imagePath,texts,fields,pairs,samePairs,horzLinks,groups,transcrip
         
 
     groups=[]
-    for id,group in control.groups.iteritems():
+    for id,group in control.groups.items():
         elements=[]
         if group.holdsFields:
             #idToIdx = idToIdxField

@@ -53,7 +53,7 @@ def checkProblem(path):
             height = abs(h)    #this is half height
             width = d/2.0 
 
-            print path+' :: '+str(height)
+            print((path+' :: '+str(height)))
 
             if height>width and width>26 and height>40:
                 #print('Tall box {}'.format(points))

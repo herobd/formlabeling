@@ -13,7 +13,7 @@ import grp
 NUM_PER_GROUP=2
 NUM_CHECKS=2
 USE_SIMPLE=True
-doTrans=True
+doTrans=False #True
 lock=None
 #groupId = grp.getgrnam("pairing").gr_gid
 
@@ -39,11 +39,11 @@ def combineFields(gtFields,tempFields):
     for bb in gtFields:
         bb['id']='f'+str(newId)
         newId+=1
-    print('combining {} and {}'.format(len(gtFields),len(tempFields)))
+    print(('combining {} and {}'.format(len(gtFields),len(tempFields))))
     return gtFields+tempFields
 
 if len(sys.argv)<2:
-    print 'usage: '+sys.argv[0]+' directory [startingGroup] [startingImage] [n(dont load horz links)]/[t (add template, skipping tables)] [C:checking]'
+    print('usage: '+sys.argv[0]+' directory [startingGroup] [startingImage] [n(dont load horz links)]/[t (add template, skipping tables)] [C:checking]')
     exit()
 
 directory = sys.argv[1]
@@ -57,8 +57,8 @@ if sys.argv[-1][0]=='C':
     checking=True
     myName=sys.argv[-1][1:]
     if len(myName)==0:
-        myName=raw_input("Enter name: ")
-    print 'CHECKING '+myName
+        myName=input("Enter name: ")
+    print('CHECKING '+myName)
     #USE_SIMPLE=False
 elif sys.argv[-1][0]=='A':
     USE_SIMPLE=False
@@ -68,7 +68,7 @@ elif sys.argv[-1][0]=='a':
     doTrans=False
     #USE_SIMPLE=False
     goingImage=True
-    print 'AUTO CHECKING'
+    print('AUTO CHECKING')
 elif sys.argv[-1][0]=='D':
     #USE_SIMPLE=False
     doubleCheck=True
@@ -92,6 +92,10 @@ else:
     going=True
 if len(sys.argv)>3:
     startHereImage = sys.argv[3]
+    if '.' in startHereImage:
+        startHereImage = startHereImage[:startHereImage.rfind('.')]+'.jpg'
+    else:
+        startHereImage +='.jpg'
     goingImage=False
 else:
     startHereImage=None
@@ -109,9 +113,9 @@ if USE_SIMPLE:
     with open(os.path.join(directory,'simple_train_valid_test_split.json')) as f:
         simpleSplit = json.load(f)
     if doTrans:
-        simpleFiles = dict(simpleSplit['test'].items()+ simpleSplit['valid'].items())
+        simpleFiles = dict(list(simpleSplit['test'].items())+ list(simpleSplit['valid'].items()))
     else:
-        simpleFiles = dict(simpleSplit['train'].items()+ simpleSplit['test'].items()+ simpleSplit['valid'].items())
+        simpleFiles = dict(list(simpleSplit['train'].items())+ list(simpleSplit['test'].items())+ list(simpleSplit['valid'].items()))
     #print(simpleFiles)
 
 if directory[-1]!='/':
@@ -131,13 +135,14 @@ for root, dirs, files in os.walk(directory):
         groupNames.append(groupName)
 
 if progressOnly or addOnly:
-    print 'removed, use scandata.py'
+    print('removed, use scandata.py')
 groupIndex=-1
 groupsDone=[False]*len(groupNames)
 for groupName in sorted(groupNames):
     groupIndex+=1
     files = imageGroups[groupName]
     if not going:
+        print('on group {}'.format(groupName))
         if startHere==groupName:
             going=True
         else:
@@ -208,7 +213,7 @@ for groupName in sorted(groupNames):
         else:
             if checking or autochecking:
                 continue
-            print '!!!!!!!!!!!!!!!!!!!!!!!!!'
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!')
             labelTime = None
             if templateNF is not None:
                 with open(templateNF) as f:
@@ -227,11 +232,11 @@ for groupName in sorted(groupNames):
                     imageTemplate=read['imageFilename']
                     if 'labelTime' in read:
                         labelTime = read['labelTime']
-                print "There is an incomplete template for group "+groupName+", editing it"
+                print("There is an incomplete template for group "+groupName+", editing it")
             else:
-                print "A template doesn't exist for group "+groupName+", creating one"
+                print("A template doesn't exist for group "+groupName+", creating one")
                 imageTemplate=files[0]
-            print '!!!!!!!!!!!!!!!!!!!!!!!!!'
+            print('!!!!!!!!!!!!!!!!!!!!!!!!!')
             template = os.path.join(directory,groupName,'template'+groupName+'.json')
             #tkMessageBox.showinfo("Template", "A template doesn't exist for group "+groupName+", creating one")
             timeStart = timeit.default_timer()
@@ -256,13 +261,14 @@ for groupName in sorted(groupNames):
         for f in unfinished+files:
             if autochecking:
                 f,reason = f
-                print reason
+                print(reason)
             ind = f.rfind('.')
             if f[ind:]=='.jpg' or f[ind:]=='.png' or f[ind:]=='.jpeg':
                 countInGroup+=1
                 if countInGroup>NUM_PER_GROUP and (startHereImage is None or goingImage) and not checking and not autochecking:
                     break
                 if not goingImage:
+                    print('{} == {}'.format(f,startHereImage))
                     if f==startHereImage:
                         goingImage=True
                     else:
@@ -311,9 +317,9 @@ for groupName in sorted(groupNames):
                     
                     if doubleCheck:
                         if len(checkedBy)>=NUM_CHECKS:
-                            print '{} checked by {}'.format(name,checkedBy)
+                            print('{} checked by {}'.format(name,checkedBy))
                         else:
-                            print '{} checked by {}'.format(name,checkedBy)
+                            print('{} checked by {}'.format(name,checkedBy))
                             continue
                     elif checking and (len(checkedBy)>=NUM_CHECKS or myName in checkedBy):
                         continue
@@ -321,7 +327,7 @@ for groupName in sorted(groupNames):
                         continue
                     if 'imageFilename' in read:
                         assert f==read['imageFilename']
-                    print 'g:'+groupName+', image: '+f+', gt found'
+                    print('g:'+groupName+', image: '+f+', gt found')
                     if applyTemplate:
                         texts+=textsT
                         fields = combineFields(fields,fieldsT)
@@ -340,7 +346,7 @@ for groupName in sorted(groupNames):
                 else:
                     if checking or autochecking:
                         continue
-                    print 'g:'+groupName+', image: '+f+', from template'
+                    print('g:'+groupName+', image: '+f+', from template')
                     timeStart = timeit.default_timer()
                     texts,fields,pairs,samePairs,horzLinks,groups,transcriptions,corners,actualCorners,complete,height,width = labelImage(os.path.join(directory,groupName,f),textsT,fieldsT,pairsT,samePairsT,horzLinksT,groupsT,transcriptionsT,cornersT,page_corners,page_cornersActual)
                     labelTime = timeit.default_timer()-timeStart
@@ -356,10 +362,10 @@ for groupName in sorted(groupNames):
                     if complete and (startHere is None or startHere!=groupName):
                         if countInGroup==numImages:
                             groupsDone[groupIndex]=True
-                            print groupName+' progress:['+('X'*numImages)+'] COMPLETE!'
-                            print 'Overall group progress:['+''.join(['X' if x else '.' for x in groupsDone])+']'
+                            print(groupName+' progress:['+('X'*numImages)+'] COMPLETE!')
+                            print('Overall group progress:['+''.join(['X' if x else '.' for x in groupsDone])+']')
                         else:
-                            print groupName+' progress:['+('X'*countInGroup)+('.'*(numImages-countInGroup))+']'
+                            print(groupName+' progress:['+('X'*countInGroup)+('.'*(numImages-countInGroup))+']')
                 skipHLinks=False
                 #os.chown(gtFileName,-1,groupId)
                 if not complete:
@@ -371,6 +377,6 @@ for groupName in sorted(groupNames):
         lock.release()
         lock=None
     except FileLockException as e:
-        print 'template locked for group '+groupName+', moving to next group'
+        print('template locked for group '+groupName+', moving to next group')
         lock=None
         continue

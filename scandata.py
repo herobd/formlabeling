@@ -9,12 +9,13 @@ import numpy as np
 import math
 from collections import defaultdict
 from forms_annotations import fixAnnotations
+from matchBoxes import matchBoxes
 NUM_PER_GROUP=2
 NUM_CHECKS=2
 USE_SIMPLE=True
 
 if len(sys.argv)<2:
-    print 'usage: '+sys.argv[0]+' directory [+:add] [-[-]:progress] [c:create split] [f:poputate info from template [group]] [s:stats]'
+    print('usage: '+sys.argv[0]+' directory [+:add] [-[-]:progress] [c:create split] [f:poputate info from template [group]] [s:stats]')
     exit()
 
 directory = sys.argv[1]
@@ -45,6 +46,8 @@ if len(sys.argv)>2:
         USE_SIMPLE=False
     elif sys.argv[2][0]=='s':
         getStats=True
+        showPlots=False
+        testMatch=True
         if len(sys.argv[2])>1 and sys.argv[2][1]=='m':
             mimic_dataset=True
             mimic_object=type('test', (object,), {})()
@@ -88,9 +91,9 @@ if getStats:
     if doSplit:
         simpleFiles = splitFile[doSplit]
     else:
-        simpleFiles = dict(splitFile['train'].items()+ splitFile['valid'].items())
+        simpleFiles = dict(list(splitFile['train'].items())+ list(splitFile['valid'].items()))
 else:
-    simpleFiles = dict(splitFile['train'].items()+ splitFile['test'].items()+ splitFile['valid'].items())
+    simpleFiles = dict(list(splitFile['train'].items())+ list(splitFile['test'].items())+ list(splitFile['valid'].items()))
 imageGroups={}
 groupNames=[]
 for root, dirs, files in os.walk(directory):
@@ -166,7 +169,7 @@ if progress:
                                 #print(read['checkedBy'])
                                 #numCheckedTotal+=len(read['checkedBy'])
                                 numCheckedTotal += len( [x for x in read['checkedBy'] if x!='doublecheck'])
-        for image,time in timesByImage.iteritems():
+        for image,time in timesByImage.items():
             if image!=templateImage:
                 timedAlign.append(time)
             else:
@@ -175,21 +178,21 @@ if progress:
         numTotal += min(imagesInGroup,NUM_PER_GROUP)
         realDoneTotal += max(numDoneG,NUM_PER_GROUP)
     checksNeeded = NUM_CHECKS*realDoneTotal
-    print('Templates: {}/{}  {}'.format(numTemplateDone,len(groupNames),float(numTemplateDone)/len(groupNames)))
-    print('Images:    {}/{}  {}'.format(numDoneTotal,numTotal,float(numDoneTotal)/numTotal))
-    print('Checking:    {}/{}  {}'.format(numCheckedTotal,checksNeeded,float(numCheckedTotal)/checksNeeded))
-    print('Num train:{}, valid:{}, test:{}'.format(numDoneTrain,numDoneValid,numDoneTest))
+    print(('Templates: {}/{}  {}'.format(numTemplateDone,len(groupNames),float(numTemplateDone)/len(groupNames))))
+    print(('Images:    {}/{}  {}'.format(numDoneTotal,numTotal,float(numDoneTotal)/numTotal)))
+    print(('Checking:    {}/{}  {}'.format(numCheckedTotal,checksNeeded,float(numCheckedTotal)/checksNeeded)))
+    print(('Num train:{}, valid:{}, test:{}'.format(numDoneTrain,numDoneValid,numDoneTest)))
     if doTime:
         timeTotal/=numTimed
         timeTemp/=numTempTimed
-        print (' Templates take {} secs, or {} minutes   ({} samples)'.format(timeTemp,timeTemp/60,numTempTimed))
+        print((' Templates take {} secs, or {} minutes   ({} samples)'.format(timeTemp,timeTemp/60,numTempTimed)))
         med = np.median(temped)
-        print (' Templates(Med) take {} secs, or {} minutes   ({} samples)'.format(med,med/60,numTempTimed))
-        print ('Alignment(Mean) takes {} secs, or {} minutes   ({} samples)'.format(timeTotal,timeTotal/60,numTimed))
+        print((' Templates(Med) take {} secs, or {} minutes   ({} samples)'.format(med,med/60,numTempTimed)))
+        print(('Alignment(Mean) takes {} secs, or {} minutes   ({} samples)'.format(timeTotal,timeTotal/60,numTimed)))
         stddev = np.std(timed)
-        print ('   std dev {} secs, or {} minutes'.format(stddev,stddev/60))
+        print(('   std dev {} secs, or {} minutes'.format(stddev,stddev/60)))
         med = np.median(timed)
-        print ('Alignment(Med) takes {} secs, or {} minutes   ({} samples)'.format(med,med/60,numTimed))
+        print(('Alignment(Med) takes {} secs, or {} minutes   ({} samples)'.format(med,med/60,numTimed)))
 
         print ('\nThresholding long times...')
         thresh = stddev*2 + timeTotal
@@ -199,25 +202,25 @@ if progress:
         new_timeT=[t for t in timedIsTemp if t<thresh and t>0]
 
         mean = np.mean(new_temped)
-        print ('Templating(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_temped)))
+        print(('Templating(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_temped))))
         stddev = np.std(new_temped)
-        print ('   std dev {} secs, or {} minutes'.format(stddev,stddev/60))
+        print(('   std dev {} secs, or {} minutes'.format(stddev,stddev/60)))
 
         mean = np.mean(new_time)
-        print ('Alignment(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_time)))
+        print(('Alignment(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_time))))
         stddev = np.std(new_time)
-        print ('   std dev {} secs, or {} minutes'.format(stddev,stddev/60))
+        print(('   std dev {} secs, or {} minutes'.format(stddev,stddev/60)))
 
         
         mean = np.mean(new_timeA)
-        print ('Alignment not temp(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_timeA)))
+        print(('Alignment not temp(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_timeA))))
         stddev = np.std(new_timeA)
-        print ('   std dev {} secs, or {} minutes'.format(stddev,stddev/60))
+        print(('   std dev {} secs, or {} minutes'.format(stddev,stddev/60)))
 
         mean = np.mean(new_timeT)
-        print ('Alignment is temp(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_timeT)))
+        print(('Alignment is temp(Mean) takes {} secs, or {} minutes   ({} samples)'.format(mean,mean/60,len(new_timeT))))
         stddev = np.std(new_timeT)
-        print ('   std dev {} secs, or {} minutes'.format(stddev,stddev/60))
+        print(('   std dev {} secs, or {} minutes'.format(stddev,stddev/60)))
 
     
 if add:
@@ -237,7 +240,7 @@ if add:
                     with open(os.path.join(directory,groupName,f),'w') as annFile:
                         annFile.write(json.dumps(read))
                         count+=1
-    print 'added to '+str(count)+' jsons'
+    print('added to '+str(count)+' jsons')
 
 if populate:
     count=0
@@ -268,7 +271,7 @@ if populate:
                         with open(os.path.join(directory,groupName,f),'w') as annFile:
                             annFile.write(json.dumps(read))
                             count+=1
-    print 'added to '+str(count)+' jsons'
+    print('added to '+str(count)+' jsons')
 
 
 if tableList:
@@ -358,9 +361,9 @@ if tableList:
             #groupTablePresence[groupName]=hasTable
         if tempFound and circleFound:
             circleGroups.append(groupName)
-    print('Tables: {}'.format(tableGroups))
-    print('Circles: {}'.format(circleGroups))
-    print('Upsidedown: {}'.format(upsidedown))
+    print(('Tables: {}'.format(tableGroups)))
+    print(('Circles: {}'.format(circleGroups)))
+    print(('Upsidedown: {}'.format(upsidedown)))
 if getStats:
     groupImages={}#defaultdict(list)
     sumCountTotal =0
@@ -394,12 +397,15 @@ if getStats:
     maxPairDist=0
     maxPairDistX=0
     maxPairDistY=0
+    portionMatcheds=[]
+    above90=above95=above100=0
     for groupName in sorted(groupNames):
         if groupName=='121':
             continue
         files = imageGroups[groupName]
         usedGroup=False
         imageFiles=[]
+        info=[]
         for f in files:
             if 'lock' not in f:
                 if 'template' not in f and f[-5:]=='.json':
@@ -412,12 +418,14 @@ if getStats:
                     if mimic_dataset:
                         fixAnnotations(mimic_object,read)
                         countTotal = len(read['byId'])
-                        bbs = read['byId'].values()
+                        bbs = list(read['byId'].values())
                     else:
                         sumCountField = len(read['fieldBBs'])
                         sumCountText = len(read['textBBs'])
                         countTotal = sumCountField + sumCountText
                         bbs = read['fieldBBs']+read['textBBs']
+                        if testMatch:
+                            info.append( (read['fieldBBs'], read['textBBs'], read['pairs']+read['samePairs']) )
                     sumCountTotal+=countTotal
                     count+=1
                     maxBoxes = max(maxBoxes,countTotal)
@@ -432,7 +440,7 @@ if getStats:
                         nn[bb['id']]=0
                         if bb['type']=='fieldRow' or bb['type']=='fieldCol' or bb['type']=='fieldRegion' or bb['type']=='textRegion' or bb['type']=='graphic':
                             if bb['type']=='graphic':
-                                print('has graphic: {}/{}'.format(groupName,f))
+                                print(('has graphic: {}/{}'.format(groupName,f)))
                             continue
                         if  bb['type'][:4]=='text':
                             totalText+=1
@@ -454,8 +462,8 @@ if getStats:
                         rY = (trY+brY)/2.0
                         height =  math.sqrt( ((blX+brX)/2.0 - (tlX+trX)/2.0)**2 + ((blY+brY)/2.0 - (tlY+trY)/2.0)**2 )
                         if height>300:
-                            print '{} {}'.format(groupName,f)
-                            print bb
+                            print('{} {}'.format(groupName,f))
+                            print(bb)
                             continue
                         widths.append( math.sqrt( (rX - lX)**2 + (rY - lY)**2 ) )
                         heights.append( height)
@@ -490,7 +498,7 @@ if getStats:
                         maxPairDist = max(maxPairDist,math.sqrt((bb1X-bb2X)**2 + (bb1Y-bb2Y)**2))
                         maxPairDistX = max(maxPairDistX,abs(bb1X-bb2X))
                         maxPairDistY = max(maxPairDistY,abs(bb1Y-bb2Y))
-                    for id,countNN in nn.items():
+                    for id,countNN in list(nn.items()):
                         isText=byId[id]['type'][0:4]=='text'
                         numNeighbors[isText].append(countNN)
                         countNN = min(countNN,9)
@@ -520,60 +528,80 @@ if getStats:
                             maxPairDist = max(maxPairDist,math.sqrt((bb1X-bb2X)**2 + (bb1Y-bb2Y)**2))
                             maxPairDistX = max(maxPairDistX,abs(bb1X-bb2X))
                             maxPairDistY = max(maxPairDistY,abs(bb1Y-bb2Y))
-                    for id,countNN in nn.items():
+                    for id,countNN in list(nn.items()):
                         isText=byId[id]['type'][0:4]=='text'
                         numNeighbors_same[isText].append(countNN)
                         countNN = min(countNN,9)
                         numNeighborsHist[countNN]+=1
+                elif 'template' in f and f[-5:]=='.json' and testMatch:
+                    with open(os.path.join(directory,groupName,f)) as annFile:
+                        read = json.loads(annFile.read())
+                    templateInfo = (read['fieldBBs'], read['textBBs'], read['pairs']+read['samePairs'])
+        if testMatch and len(info)>1:
+            for inst in info:
+                matchedPairs = matchBoxes(templateInfo,inst)
+                portionMatched = len(matchedPairs)/len(templateInfo[1])
+                portionMatcheds.append(portionMatched)
+                if portionMatched>0.95:
+                    above95+=1
+                else:
+                    print('matched amount {} {}: {}'.format(groupName,f,portionMatched))
+                if portionMatched>0.90:
+                    above90+=1
+                if portionMatched>0.99999:
+                    above100+=1
 
-    print('Number of images: {}'.format(numImagesUsed))
-    print('Number of groups: {}'.format(numGroupsUsed))
-    print('Number of text lines: {}'.format(totalText))
-    print('Number of field lines: {}'.format(totalField))
-    print('Number of relationships diff: {}'.format(totalRelationships))
-    print('Number of relationships same: {}'.format(totalRelationshipsSame))
+    print(('Number of images: {}'.format(numImagesUsed)))
+    print(('Number of groups: {}'.format(numGroupsUsed)))
+    print(('Number of text lines: {}'.format(totalText)))
+    print(('Number of field lines: {}'.format(totalField)))
+    print(('Number of relationships diff: {}'.format(totalRelationships)))
+    print(('Number of relationships same: {}'.format(totalRelationshipsSame)))
+    if testMatch:
+        print(('\nPortion of text matched from template. Mean:{}, StD:{}'.format(np.mean(portionMatcheds),np.std(portionMatcheds))))
+        print('\n     Above 90%: {:0.3}, above 95%: {:0.3}, perfect: {:0.3}'.format(above90/len(portionMatcheds),above95/len(portionMatcheds),above100/len(portionMatcheds)))
 
-    print('\nMax pair dist: {}'.format(maxPairDist))
-    print('\nMax pair distX: {}'.format(maxPairDistX))
-    print('\nMax pair distY: {}'.format(maxPairDistY))
+    print(('\nMax pair dist: {}'.format(maxPairDist)))
+    print(('\nMax pair distX: {}'.format(maxPairDistX)))
+    print(('\nMax pair distY: {}'.format(maxPairDistY)))
 
     print('\nNum Neighbor stuff:')
-    print('NN hist {}'.format(numNeighborsHist))
-    print('text num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[1]),np.std(numNeighbors[1])))
-    print('text neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff[1]),np.std(neighborXDiff[1])))
-    print('text neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff[1]),np.std(neighborYDiff[1])))
-    print('field num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[0]),np.std(numNeighbors[0])))
-    print('field neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff[0]),np.std(neighborXDiff[0])))
-    print('field neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff[0]),np.std(neighborYDiff[0])))
-    print('SAME text num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[1]),np.std(numNeighbors[1])))
-    print('SAME text neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff_same[1]),np.std(neighborXDiff_same[1])))
-    print('SAME text neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff_same[1]),np.std(neighborYDiff_same[1])))
-    print('SAME field num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[0]),np.std(numNeighbors[0])))
-    print('SAME field neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff_same[0]),np.std(neighborXDiff_same[0])))
-    print('SAME field neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff_same[0]),np.std(neighborYDiff_same[0])))
+    print(('NN hist {}'.format(numNeighborsHist)))
+    print(('text num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[1]),np.std(numNeighbors[1]))))
+    print(('text neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff[1]),np.std(neighborXDiff[1]))))
+    print(('text neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff[1]),np.std(neighborYDiff[1]))))
+    print(('field num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[0]),np.std(numNeighbors[0]))))
+    print(('field neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff[0]),np.std(neighborXDiff[0]))))
+    print(('field neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff[0]),np.std(neighborYDiff[0]))))
+    print(('SAME text num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[1]),np.std(numNeighbors[1]))))
+    print(('SAME text neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff_same[1]),np.std(neighborXDiff_same[1]))))
+    print(('SAME text neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff_same[1]),np.std(neighborYDiff_same[1]))))
+    print(('SAME field num neighbors mean: {}, std: {}'.format(np.mean(numNeighbors[0]),np.std(numNeighbors[0]))))
+    print(('SAME field neighbor X diff mean: {}, std: {}'.format(np.mean(neighborXDiff_same[0]),np.std(neighborXDiff_same[0]))))
+    print(('SAME field neighbor Y diff mean: {}, std: {}'.format(np.mean(neighborYDiff_same[0]),np.std(neighborYDiff_same[0]))))
 
 
     print('\nOld Stats:')
-    print('BB count mean:{}, max: {}'.format(np.mean(numBBs),np.max(numBBs)))
-    print('image mean height: {}, width: {}, area: {}'.format(np.mean(page_heights),np.mean(page_widths),np.mean(page_areas)))
-    print('image std height: {}, width: {}, area: {}'.format(np.std(page_heights),np.std(page_widths),np.std(page_areas)))
-    print('image max height: {}, width: {}, area: {}'.format(max(page_heights),max(page_widths),max(page_areas)))
-    print('image min height: {}, width: {}, area: {}'.format(min(page_heights),min(page_widths),min(page_areas)))
-    print 'avg boxes: {}'.format((sumCountTotal)/float(count))
-    print 'max boxes: {}'.format(maxBoxes)
-    print 'With rotation'
-    print 'width mean: {}, std: {}'.format(np.mean(widths),np.std(widths))
-    print 'width min: {}, max: {}'.format(min(widths),max(widths))
-    print 'height mean: {}, std: {}'.format(np.mean(heights),np.std(heights))
-    print 'height min: {}, max: {}'.format(min(heights),max(heights))
-    print 'ratio mean: {}, std: {}'.format(np.mean(ratios),np.std(ratios))
-    print 'rot mean: {}, std: {}'.format(np.mean(rots),np.std(rots))
-    print 'No rotation'
-    print 'width mean: {}, std: {}'.format(np.mean(widths_norot),np.std(widths_norot))
-    print 'width min: {}, max: {}'.format(min(widths_norot),max(widths_norot))
-    print 'height mean: {}, std: {}'.format(np.mean(heights_norot),np.std(heights_norot))
-    print 'height min: {}, max: {}'.format(min(heights_norot),max(heights_norot))
-    print 'ratio mean: {}, std: {}'.format(np.mean(ratios_norot),np.std(ratios_norot))
+    print(('BB count mean:{}, max: {}'.format(np.mean(numBBs),np.max(numBBs))))
+    print(('image mean height: {}, width: {}, area: {}'.format(np.mean(page_heights),np.mean(page_widths),np.mean(page_areas))))
+    print(('image std height: {}, width: {}, area: {}'.format(np.std(page_heights),np.std(page_widths),np.std(page_areas))))
+    print(('image max height: {}, width: {}, area: {}'.format(max(page_heights),max(page_widths),max(page_areas))))
+    print(('image min height: {}, width: {}, area: {}'.format(min(page_heights),min(page_widths),min(page_areas))))
+    print('avg boxes: {}'.format((sumCountTotal)/float(count)))
+    print('max boxes: {}'.format(maxBoxes))
+    print('With rotation')
+    print('width mean: {}, std: {}'.format(np.mean(widths),np.std(widths)))
+    print('width min: {}, max: {}'.format(min(widths),max(widths)))
+    print('height mean: {}, std: {}'.format(np.mean(heights),np.std(heights)))
+    print('height min: {}, max: {}'.format(min(heights),max(heights)))
+    print('ratio mean: {}, std: {}'.format(np.mean(ratios),np.std(ratios)))
+    print('rot mean: {}, std: {}'.format(np.mean(rots),np.std(rots)))
+    print('No rotation')
+    print('width mean: {}, std: {}'.format(np.mean(widths_norot),np.std(widths_norot)))
+    print('width min: {}, max: {}'.format(min(widths_norot),max(widths_norot)))
+    print('height mean: {}, std: {}'.format(np.mean(heights_norot),np.std(heights_norot)))
+    print('height min: {}, max: {}'.format(min(heights_norot),max(heights_norot)))
+    print('ratio mean: {}, std: {}'.format(np.mean(ratios_norot),np.std(ratios_norot)))
 
     import matplotlib.pyplot as plt
     from matplotlib.ticker import NullFormatter
@@ -675,8 +703,10 @@ if getStats:
         axHistx.set_xlim(axScatter.get_xlim())
         axHisty.set_ylim(axScatter.get_ylim())
         plt.show()
-    showScatter(neighborXDiff[1],neighborYDiff[1],30,15)
-    showScatter(numNeighbors[1],len(numNeighbors[1])*[0],0.5,1)
+
+    if showPlots:
+        showScatter(neighborXDiff[1],neighborYDiff[1],30,15)
+        showScatter(numNeighbors[1],len(numNeighbors[1])*[0],0.5,1)
 
 
 if makesplit:
@@ -766,7 +796,7 @@ if makesplit:
             #print groupName
             #print '  {}'.format(len(groupImages[groupName]))
             #print '  {}'.format(groupTablePresence[groupName])
-    print('Without: {}, table: {}, para: {}, (both:{})'.format(len(groupsWithout),len(groupsWithTable),len(groupsWithPara),both))
+    print(('Without: {}, table: {}, para: {}, (both:{})'.format(len(groupsWithout),len(groupsWithTable),len(groupsWithPara),both)))
 
     if mixsplit:
         imagesGT=[]
@@ -796,8 +826,8 @@ if makesplit:
         for groupName,f in trainImages:
             ret['train'][groupName].append(f)
         fileName='mix_train_valid_test_split.json'
-        print('mix train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
-        print('mix train: {}, valid: {}, test: {}'.format(len(trainImages), len(validImages), len(testImages)))
+        print(('mix train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test']))))
+        print(('mix train: {}, valid: {}, test: {}'.format(len(trainImages), len(validImages), len(testImages))))
         with open(fileName, 'w') as out:
             out.write(json.dumps(ret,indent=4, sort_keys=True))
     else:
@@ -854,13 +884,13 @@ if makesplit:
         trainPara, trainCountPara, validPara, validCountPara, testPara, testCountPara = split(groupsWithPara,groupCount)
         trainWithout, trainCountWithout, validWithout, validCountWithout, testWithout, testCountWithout = split(groupsWithout,groupCount)
 
-        print('trainCountTable:{},\tvalidCountTable:{}\ttestCountTable:{}'.format(trainCountTable,validCountTable,testCountTable))
-        print('trainCountPara:{},\tvalidCountPara:{}\ttestCountPara:{}'.format(trainCountPara,validCountPara,testCountPara))
-        print('trainCountWithout:{},\tvalidCountWithout:{}\ttestCountWithout:{}'.format(trainCountWithout,validCountWithout,testCountWithout))
+        print(('trainCountTable:{},\tvalidCountTable:{}\ttestCountTable:{}'.format(trainCountTable,validCountTable,testCountTable)))
+        print(('trainCountPara:{},\tvalidCountPara:{}\ttestCountPara:{}'.format(trainCountPara,validCountPara,testCountPara)))
+        print(('trainCountWithout:{},\tvalidCountWithout:{}\ttestCountWithout:{}'.format(trainCountWithout,validCountWithout,testCountWithout)))
         trainCountTotal = trainCountTable+trainCountPara+trainCountWithout
         validCountTotal = validCountTable+validCountPara+validCountWithout
         testCountTotal = testCountTable+testCountPara+testCountWithout
-        print('trainCountTotal:{},\tvalidCountTotal:{}\ttestCountTotal:{}'.format(trainCountTotal,validCountTotal,testCountTotal))
+        print(('trainCountTotal:{},\tvalidCountTotal:{}\ttestCountTotal:{}'.format(trainCountTotal,validCountTotal,testCountTotal)))
 
 
         ret={'train':{}, 'valid':{}, 'test':{}}
@@ -872,7 +902,7 @@ if makesplit:
         for groupName in trainWithout:
             ret['train'][groupName]=groupImages[groupName]
         fileName='simple_train_valid_test_split.json'
-        print('simple train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
+        print(('simple train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test']))))
         with open(fileName, 'w') as out:
             out.write(json.dumps(ret,indent=4, sort_keys=True))
         #else:
@@ -887,7 +917,7 @@ if makesplit:
         for groupName in trainWithout+trainTable+trainPara:
             ret['train'][groupName]=groupImages[groupName]
         fileName='train_valid_test_split.json'
-        print('train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test'])))
+        print(('train: {}, valid: {}, test: {}'.format(len(ret['train']), len(ret['valid']), len(ret['test']))))
         with open(fileName, 'w') as out:
             out.write(json.dumps(ret,indent=4, sort_keys=True))
 
