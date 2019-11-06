@@ -55,10 +55,25 @@ with PyTessBaseAPI(psm=PSM.PSM_SINGLE_LINE) as api:
                         read = json.loads(annFile.read())
 
                     imagePath = ?
-                    image = Image.open(imagePath)
-                    api.SetImage(image)
-                    api.Recognize()
-                    text = api.GetUTF8Text()
-                    #?tesserocr.image_to_text(image)
-                    #api.AllWordConfidences()
+                    #image = Image.open(imagePath)
+                    for textBB in read['textBBs']:
+                        id = textBB['id']
+                        cords = textBB['poly_points']
+                        #transform to rectangle, and rotation
+                        #crop
+                        #rotate crop
+                        #final crop
+                        #convert to PIL
+                        api.SetImage(image)
+                        api.Recognize()
+                        text = api.GetUTF8Text()
+                        #?tesserocr.image_to_text(image)
+                        #api.AllWordConfidences()
+
+                        globalId = '{}-{}-{}'.format(groupName,fileName,id)
+                        cropImagePath = os.path.join(cropDir,globalId+'.png')
+                        out[globalId]={
+                                'pred': text,
+                                'image': cropImagePath
+                                }
                     
