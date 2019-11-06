@@ -425,7 +425,7 @@ if getStats:
                         countTotal = sumCountField + sumCountText
                         bbs = read['fieldBBs']+read['textBBs']
                         if testMatch:
-                            info.append( (read['fieldBBs'], read['textBBs'], read['pairs']+read['samePairs']) )
+                            info.append( read )
                     sumCountTotal+=countTotal
                     count+=1
                     maxBoxes = max(maxBoxes,countTotal)
@@ -536,20 +536,21 @@ if getStats:
                 elif 'template' in f and f[-5:]=='.json' and testMatch:
                     with open(os.path.join(directory,groupName,f)) as annFile:
                         read = json.loads(annFile.read())
-                    templateInfo = (read['fieldBBs'], read['textBBs'], read['pairs']+read['samePairs'])
+                    templateInfo = read
         if testMatch and len(info)>1:
             for inst in info:
-                matchedPairs = matchBoxes(templateInfo,inst)
-                portionMatched = len(matchedPairs)/len(templateInfo[1])
-                portionMatcheds.append(portionMatched)
-                if portionMatched>0.95:
-                    above95+=1
-                else:
-                    print('matched amount {} {}: {}'.format(groupName,f,portionMatched))
-                if portionMatched>0.90:
-                    above90+=1
-                if portionMatched>0.99999:
-                    above100+=1
+                if templateInfo['imageFile'] != inst['imageFile']:
+                    matchedPairs = matchBoxes(templateInfo,inst)
+                    portionMatched = len(matchedPairs)/len(templateInfo[1])
+                    portionMatcheds.append(portionMatched)
+                    if portionMatched>0.95:
+                        above95+=1
+                    else:
+                        print('matched amount {} {}: {}'.format(groupName,f,portionMatched))
+                    if portionMatched>0.90:
+                        above90+=1
+                    if portionMatched>0.99999:
+                        above100+=1
 
     print(('Number of images: {}'.format(numImagesUsed)))
     print(('Number of groups: {}'.format(numGroupsUsed)))

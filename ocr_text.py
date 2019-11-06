@@ -41,39 +41,41 @@ with PyTessBaseAPI(psm=PSM.PSM_SINGLE_LINE) as api:
         if groupName=='121':
             continue
         files = imageGroups[groupName]
-        usedGroup=False
-        imageFiles=[]
-        info=[]
+        inGroup={}
         for f in files:
             if 'lock' not in f:
                 if 'template' not in f and f[-5:]=='.json':
-                    if not usedGroup:
-                        numGroupsUsed+=1
-                        usedGroup=True
-                    numImagesUsed+=1
                     with open(os.path.join(directory,groupName,f)) as annFile:
                         read = json.loads(annFile.read())
+                    inGroup[f]=read
+                else:
+                    with open(os.path.join(directory,groupName,f)) as annFile:
+                        read = json.loads(annFile.read())
+                    template=read
+        for f,read in inGroup.items():
+            matchPairs = matchBoxes(template,read)
+            imagePath = ?
+            #image = Image.open(imagePath)
+            for textBB in read['textBBs']:
+                id = textBB['id']
+                cords = textBB['poly_points']
+                #transform to rectangle, and rotation
+                #crop
+                #rotate crop
+                #final crop
+                #convert to PIL
+                api.SetImage(image)
+                api.Recognize()
+                text = api.GetUTF8Text()
+                #?tesserocr.image_to_text(image)
+                #api.AllWordConfidences()
 
-                    imagePath = ?
-                    #image = Image.open(imagePath)
-                    for textBB in read['textBBs']:
-                        id = textBB['id']
-                        cords = textBB['poly_points']
-                        #transform to rectangle, and rotation
-                        #crop
-                        #rotate crop
-                        #final crop
-                        #convert to PIL
-                        api.SetImage(image)
-                        api.Recognize()
-                        text = api.GetUTF8Text()
-                        #?tesserocr.image_to_text(image)
-                        #api.AllWordConfidences()
+                #compare match?
 
-                        globalId = '{}-{}-{}'.format(groupName,fileName,id)
-                        cropImagePath = os.path.join(cropDir,globalId+'.png')
-                        out[globalId]={
-                                'pred': text,
-                                'image': cropImagePath
-                                }
+                globalId = '{}-{}-{}'.format(groupName,fileName,id)
+                cropImagePath = os.path.join(cropDir,globalId+'.png')
+                ocr_res[globalId]={
+                        'pred': text,
+                        'image': cropImagePath
+                        }
                     

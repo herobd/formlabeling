@@ -3,8 +3,12 @@ from collections import defaultdict
 def matchBoxes(template,target):
     #match id and most neighbors
     matches=[]
-    templateFields, templateTexts, templatePairs = template
-    targetFields, targetTexts, targetPairs = target
+    templateFields = template['fieldBBs']
+    templateTexts = template['textBBs']
+    templatePairs = template['pairs']+template['samePairs']
+    targetFields = target['fieldBBs']
+    targetTexts = target['textBBs']
+    targetPairs = target['pairs']+target['samePairs']
 
     templateNeighbors=defaultdict(set)
     templateNeighborsF=defaultdict(set)
