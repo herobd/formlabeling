@@ -539,9 +539,9 @@ if getStats:
                     templateInfo = read
         if testMatch and len(info)>1:
             for inst in info:
-                if templateInfo['imageFile'] != inst['imageFile']:
+                if templateInfo['imageFilename'] != inst['imageFilename']:
                     matchedPairs = matchBoxes(templateInfo,inst)
-                    portionMatched = len(matchedPairs)/len(templateInfo[1])
+                    portionMatched = len(matchedPairs)/len(templateInfo['textBBs'])
                     portionMatcheds.append(portionMatched)
                     if portionMatched>0.95:
                         above95+=1
