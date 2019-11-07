@@ -54,7 +54,9 @@ with PyTessBaseAPI(psm=PSM.PSM_SINGLE_LINE) as api:
                     template=read
         for f,read in inGroup.items():
             matchPairs = matchBoxes(template,read)
-            imagePath = ?
+            for tId, id in matchPairs:
+                groupMatches[tId].append( (fileName,id) )
+            imagePath = read['imageFile']
             #image = Image.open(imagePath)
             for textBB in read['textBBs']:
                 id = textBB['id']
@@ -78,4 +80,7 @@ with PyTessBaseAPI(psm=PSM.PSM_SINGLE_LINE) as api:
                         'pred': text,
                         'image': cropImagePath
                         }
+
+      for tId, matches in groupMatches:
+          for fileName,id in matches:
                     
