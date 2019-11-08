@@ -54,7 +54,7 @@ with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api:
     all_ocr_to_ret={}
     for groupName in sorted(groupNames):
         print('group {}'.format(groupName))
-        #if groupName=='121':
+        #if groupName!='125_2':
         #    continue
         files = imageGroups[groupName]
         inGroup={}
@@ -101,10 +101,10 @@ with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api:
                 #colorIm[yc-3:yc+3,xc-3:xc+3,0:2]=255
                 #print('bb: {}  {}  {}  {}'.format(tr,tl,br,bl))
                 #crop
-                maxX = max(tr[0],tl[0],br[0],bl[0])
-                minX = min(tr[0],tl[0],br[0],bl[0])
-                maxY = max(tr[1],tl[1],br[1],bl[1])
-                minY = min(tr[1],tl[1],br[1],bl[1])
+                maxX = min(max(tr[0],tl[0],br[0],bl[0]),cvImage.shape[1]-1)
+                minX = max(min(tr[0],tl[0],br[0],bl[0]),0)
+                maxY = min(max(tr[1],tl[1],br[1],bl[1]),cvImage.shape[0]-1)
+                minY = max(min(tr[1],tl[1],br[1],bl[1]),0)
                 uH = maxY-minY +1
                 uW = maxX-minX +1
                 crop = cvImage[minY:maxY+1,minX:maxX+1]
@@ -150,19 +150,28 @@ with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api:
                 globalId = '{}-{}-{}'.format(groupName,fileName,id)
                 pred = ocr_res[globalId]['pred']
                 addedToMatchings=False
-                for matchings in theseMatch:
+                toAdd=[]
+                for i,matchings in enumerate(theseMatch):
                     worstMatch=0
                     for otherId,otherPred in matchings:
                         if min(len(pred),len(otherPred))>0:
                             ed = editdistance.eval(pred, otherPred)/min(len(pred),len(otherPred))
                             worstMatch = max(ed,worstMatch)
                     if worstMatch < threshold:
-                        matchings.append((globalId,pred))
-                        if addedToMatchings:
-                            print('id {} added to multiple matchings'.format(globalId))
+                        #matchings.append((globalId,pred))
+                        toAdd.append(i)
+                        #if addedToMatchings:
+                        #    print('id {} added to multiple matchings'.format(globalId))
                         addedToMatchings=True
                 if not addedToMatchings:
                     theseMatch.append([(globalId,pred)])
+                else:
+                    theseMatch[toAdd[0]].append((globalId,pred))
+                    if len(toAdd)>1:
+                        for i in toAdd[1:]:
+                            theseMatch[toAdd[0]] += theseMatch[i]
+                        for i in toAdd[:0:-1]:
+                            del theseMatch[i]
             for matchings in theseMatch:
                 matchedInstances.append( [ i[0] for i in matchings ] )
 
@@ -177,7 +186,10 @@ with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api:
                 for id2 in matchingIds:
                     if id!=id2:
                         otherPred = ocr_res[id2]['pred']
-                        cum += editdistance.eval(pred, otherPred)/min(len(pred),len(otherPred))
+                        if min(len(pred),len(otherPred))>0:
+                            cum += editdistance.eval(pred, otherPred)/min(len(pred),len(otherPred))
+                        else:
+                            cum+=1
                 scored.append((cum,id))
             scored.sort(key = lambda a:a[0])
             id = scored[0][1]
@@ -227,7 +239,10 @@ with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api:
                     for mid2 in res['matches']:
                         if mid1!=mid2:
                             otherPred = ocr_res[mid2]['pred']
-                            cum += editdistance.eval(pred, otherPred)/min(len(pred),len(otherPred))
+                            if min(len(pred),len(otherPred))>0:
+                                cum += editdistance.eval(pred, otherPred)/min(len(pred),len(otherPred))
+                            else:
+                                cum += 1
                     scored.append((cum,mid1))
                 scored.sort(key = lambda a:a[0])
                 best_pred = ocr_res[scored[0][1]]['pred']
