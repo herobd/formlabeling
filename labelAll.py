@@ -12,7 +12,7 @@ import grp
 
 NUM_PER_GROUP=2
 NUM_CHECKS=2
-USE_SIMPLE=True
+USE_SIMPLE=False#True
 doTrans=False #True
 lock=None
 #groupId = grp.getgrnam("pairing").gr_gid

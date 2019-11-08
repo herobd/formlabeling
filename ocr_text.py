@@ -15,7 +15,7 @@ cropDir = sys.argv[3]
 if not os.path.exists(cropDir):
     os.makedirs(cropDir)
 
-threshold = 0.3
+threshold = 0.6
 threshold_notMatched = 0.05
 USE_SIMPLE=False
 
@@ -46,16 +46,16 @@ for root, dirs, files in os.walk(directory):
     #if (not USE_SIMPLE and not getStats) or groupName in simpleFiles:
     imageGroups[groupName]=sorted(files)
     groupNames.append(groupName)
-
+print(groupNames)
 
 
 with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api:
     ocr_res={}
     all_ocr_to_ret={}
     for groupName in sorted(groupNames):
+        if groupName!='99':
+            continue
         print('group {}'.format(groupName))
-        #if groupName!='125_2':
-        #    continue
         files = imageGroups[groupName]
         inGroup={}
         for f in files:
@@ -108,6 +108,12 @@ with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api:
                 uH = maxY-minY +1
                 uW = maxX-minX +1
                 crop = cvImage[minY:maxY+1,minX:maxX+1]
+                if crop.shape[0]==0 or crop.shape[1]==0:
+                    matchedIds.remove(id)
+                    for tId, matches in groupMatches.items():
+                        if (fileName,id) in matches:
+                            matches.remove( (fileName,id) )
+                    continue
                 #cv2.imwrite(os.path.join(cropDir,'beforecrop.png'),colorIm)
                 #rotate crop
                 #final crop
@@ -141,8 +147,9 @@ with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api:
                 #save crop image
                 cv2.imwrite(cropImagePath,crop)
 
-                #print('{}: {}'.format(cropImagePath,text))
-                #exit(1)
+
+        #ensure matches are good; they at least sort of match OCR text
+        #if they don't split into different matching groups
         matchedInstances=[]
         for tId, matches in groupMatches.items():
             theseMatch=[]
@@ -177,6 +184,7 @@ with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api:
 
 
 
+        #select the best (most consistent in matching group) OCR text
         ocr_to_ret = {}
         for matchingIds in matchedInstances:
             scored=[]
@@ -199,6 +207,8 @@ with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api:
             #    print(scored)
             ocr_to_ret[id]['matches'] = matchingIds
 
+
+        #merge unmatched instances in based on the similarity of OCR text
         for id in notMatched:
             pred = ocr_res[id]['pred']
             image = ocr_res[id]['root image']
@@ -254,5 +264,6 @@ with PyTessBaseAPI(psm=PSM.SINGLE_LINE) as api:
 
     with open(outfile,'w') as f:
         json.dump(all_ocr_to_ret,f,indent=4)
+    print('There are {} results needing checked/corrected/'.format(len(all_ocr_to_ret)))
     with open('./all_ocr.json','w') as f:
         json.dump(ocr_res,f,indent=4)
