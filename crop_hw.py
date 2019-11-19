@@ -12,6 +12,7 @@ def _removeNonAscii(s): return "".join(i for i in s if ord(i)<128)
 
 if len(sys.argv)<12:
     print('usage: python {} directory splitFile ocrFile cropDir contextDir train_hw_out train_circle_out train_check_out testvalid_hw_out testvalid_circle_out testvalid_check_out'.format(sys.argv[0]))
+    print('This script saves the cropped images of the fields that need transcribed, spliting them into hw/text, circle, checkbox categies.')
     exit()
 
 directory = sys.argv[1]
