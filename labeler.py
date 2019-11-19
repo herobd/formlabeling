@@ -382,7 +382,7 @@ class Control:
             tlX,tlY,trX,trY,brX,brY,blX,blY,para,blank = self.textBBs[id]
             old_corners = np.array([[tlX,trX,brX,blX],
                                     [tlY,trY,brY,blY],
-                                    [1,1,1,1]])
+                                    [1.0,1.0,1.0,1.0]], dtype='float')
             new_points = np.matmul(trans,old_corners)
             new_points/=new_points[2,:] #bring back to standard homogeneous form
             self.textBBs[id] = (int(round(new_points[0,0])),int(round(new_points[1,0])),int(round(new_points[0,1])),int(round(new_points[1,1])),int(round(new_points[0,2])),int(round(new_points[1,2])),int(round(new_points[0,3])),int(round(new_points[1,3])),para,0)
@@ -1372,24 +1372,24 @@ class Control:
             elif key==';': #col
                 self.setSecondaryMode('col')
             elif key=='up' or key=='shift+up':
-                trans = np.array([[1,0,0],
+                trans = np.array([[1.0,0,0],
                                   [0,1,-self.shiftAmount],
                                   [0,0,1]])
                 self.transAll(trans)
             elif key=='down' or key=='shift+down':
                 trans = np.array([[1,0,0],
                                   [0,1,self.shiftAmount],
-                                  [0,0,1]])
+                                  [0,0,1.0]])
                 self.transAll(trans)
             elif key=='left' or key=='shift+left':
                 trans = np.array([[1,0,-self.shiftAmount],
                                   [0,1,0],
-                                  [0,0,1]])
+                                  [0,0,1.0]])
                 self.transAll(trans)
             elif key=='right' or key=='shift+right':
                 trans = np.array([[1,0,self.shiftAmount],
                                   [0,1,0],
-                                  [0,0,1]])
+                                  [0,0,1.0]])
                 self.transAll(trans)
             elif key==',':#rotate
                 t=-0.01

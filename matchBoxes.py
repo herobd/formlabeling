@@ -70,5 +70,29 @@ def matchBoxes(template,target):
 
             if iou>=0.80 and iouFields>0.1:
                 matches.append((tempId,tempId))
+    targetByIdF = {}
+    for fieldBB in targetFields:
+        targetByIdF[fieldBB['id']] = fieldBB
+
+    for fieldBB in templateFields:
+        tempId = fieldBB['id']
+
+        if tempId in targetById:
+            a = templateNeighborsF[tempId]
+            b = targetNeighborsF[tempId]
+            if len(a)>0 or len(b)>0:
+                iou = len(a.intersection(b))/len(b.union(a))
+            else:
+                iou = 1
+
+            a = templateNeighbors[tempId]
+            b = targetNeighbors[tempId]
+            if len(a)>0 or len(b)>0:
+                iouFields = len(a.intersection(b))/len(b.union(a))
+            else:
+                iouFields = 1
+
+            if iou>=0.80 and iouFields>0.1:
+                matches.append((tempId,tempId))
     return matches
 
