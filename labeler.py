@@ -19,7 +19,7 @@ BOX_MIN_AREA=200
 MIN_MOVE_DIST=5
 colorMap = {'text':(0/255.0,0/255.0,255/255.0,0.51), 'textP':(0/255.0,150/255.0,255/255.0,0.51), 'textMinor':(80/255.0,170/255.0,190/255.0,0.65), 'textInst':(170/255.0,160/255.0,225/255.0,0.71), 'textNumber':(0/255.0,160/255.0,100/255.0,0.51), 'fieldCircle':(255/255.0,190/255.0,210/255.0,0.61), 'field':(255/255.0,0/255.0,0/255.0,0.51), 'fieldP':(255/255.0,120/255.0,0/255.0,0.51), 'fieldCheckBox':(255/255.0,220/255.0,0/255.0,0.51), 'graphic':(255/255.0,105/255.0,250/255.0,0.51), 'comment':(165/255.0,10/255.0,15/255.0,0.51), 'pair':(15/255.0,150/255.0,15/255.0,0.51), 'col':(5/255.0,70/255.0,5/255.0,0.35), 'row':(25/255.0,5/255.0,75/255.0,0.35), 'fieldRegion':(15/255.0,15/255.0,75/255.0,0.51), 'fieldCol':(65/255.0,70/255.0,5/255.0,0.65), 'fieldRow':(65/255.0,5/255.0,75/255.0,0.65), 'move':(1,0,1,0.5), 'trans':(0.5,0.5,0.5)}
 DRAW_COLOR=(1,0.7,1)
-codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11, 'fieldCol':12, 'fieldRow':13, 'detectorPrediction':11}
+codeMap = {'text':0, 'textP':1, 'textMinor':2, 'textInst':3, 'textNumber':4, 'fieldCircle':5, 'field':6, 'fieldP':7, 'fieldCheckBox':8, 'graphic':9, 'comment':10, 'fieldRegion':11, 'fieldCol':12, 'fieldRow':13, 'detectorPrediction':14}
 RcodeMap = {v: k for k, v in codeMap.items()}
 keyMap = {'text':'1',
           'textP':'2',

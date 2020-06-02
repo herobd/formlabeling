@@ -1,46 +1,84 @@
 import cv2
 import json
-import sys, random
+import sys, random, os
 import numpy as np
 import readline
-
-def printInst():
-    print('1: good')
-    print('2: slight error')
-    print('3: major error')
-    print('4: blank')
-    print('5: bad image')
+import pyperclip
+#import gtk
+import timeit
 
 resultFile = sys.argv[1]
 outFile = sys.argv[2]
+if len(sys.argv)>3:
+    remove = abs(int(sys.argv[3]))
+else:
+    remove = None
 
 save_every=20
 
 with open(resultFile) as f:
     results = json.load(f)
-with open(outFile) as f:
-    out = json.load(f)
 
-undone=[]
-for r in results:
-    done=False
-    for o in out:
-        if r['image']==o['image']:
-            done=True
-            break
-    if not done:
-        undone.append(r)
+if os.path.exists(outFile):
+    with open(outFile) as f:
+        out = json.load(f)
+    if remove is not None:
+        out = out[:-remove]
+        print(' removed last {}'.format(remove))
+    undone=[]
+    for r in results:
+        done=False
+        for o in out:
+            if r['image']==o['image']:
+                done=True
+                break
+        if not done:
+            undone.append(r)
+else:
+    out = []
+    undone = results
 
+first=True
+times=[]
+#clipboard = gtk.clipboard_get()
 for i,r in enumerate(undone):
-    print('{}  {}/{}'.format(r['image'],i+len(out),len(undon)+len(out)))
+    print('{}  {}/{} \t\t[qqq: quit, UNDO:redo last]'.format(r['image'],i+len(out),len(undone)+len(out)))
     print(': {}'.format(r['pred']))
     im = cv2.imread(r['image'])
     cv2.imshow('im',im)
 
-    readline.insert_text(r['pred'])
+    if first:
+        print('press key...')
+        key = cv2.waitKey()
+        first=False
+    else:
+        key = cv2.waitKey(1)
+    #readline.insert_text(r['pred'])
+    #readline.redisplay()
+    pyperclip.copy(r['pred'])
+    #clipboard.set_text(r['pred'])
+    #clipboard.store()
+    tic=timeit.default_timer()
     trans = input('> ')
-    key = cv2.waitKey()
-    print(key)
+    toc=timeit.default_timer()
+    #print(key)
+    if key==27 or trans=='qqq':
+        break
+    times.append(toc-tic)
+    if trans=='UNDO':
+        last = out[-1]
+        im2 = cv2.imread(last['image'])
+        cv2.imshow('im2',im2)
+        trans2 = input('2> ')
+        last['gt'] = trans2
+
+        trans = input('> ')
+    elif trans=='FULL':
+        iii = r['matches'][0]
+        group,image,line = iii.split('-')
+        im2 = cv2.imread(os.path.join('../data/forms/groups',group,'{}.jpg'.format(image)))
+        cv2.imshow('im2',im2)
+        trans = input('> ')
 
     r['gt'] = trans
 
@@ -49,5 +87,14 @@ for i,r in enumerate(undone):
     if (i-1)%save_every==0:
         with open(outFile,'w') as f:
             json.dump(out,f)
+        print('saved!')
+    
+with open(outFile,'w') as f:
+    json.dump(out,f,indent=4)
+print('saved!')
+if key!=27 and trans!='qqq':
+    print('done!')
+else:
+    print('closed')
 
-
+print('mean time: {}'.format(np.mean(times)))
