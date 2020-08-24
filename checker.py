@@ -9,10 +9,12 @@ def checkProblem(path):
     pairs=read['pairs']
     samePairs=read['samePairs']
     groups=read['groups']
+    reasons=[]
     if 'horzLinks' in read:
         horzLinks=read['horzLinks']
     else:
-        return True, 'no horz links'
+        #return True, 'no horz links'
+        reasons.append('no horz links')
     if 'page_corners' in read and 'actualPage_corners' in read:
         page_corners=read['page_corners']
         page_cornersActual=read['actualPage_corners']
@@ -53,18 +55,28 @@ def checkProblem(path):
             height = abs(h)    #this is half height
             width = d/2.0 
 
-            print((path+' :: '+str(height)))
+            #print((path+' :: '+str(height)))
+            #if read['imageFilename']=='004191670_00347.jpg':
+            #    print(bb)
+            #    print('rot: {}, w: {}, h: {}, h/w: {}'.format(rot,width,height,height/width))
 
-            if height>width and width>26 and height>40:
-                #print('Tall box {}'.format(points))
-                return True, 'Tall box {}'.format(points)
-            if height>150:
-                return True, 'Very tall box {}'.format(points)
+            if height/width>3 and width>26 and height>40:
+                #print('inline Tall box1 {}'.format(points))
+                #return True, 'Tall box {}'.format(points)
+                reasons.append('Tall box {}'.format(points))
+            elif height/width>5 and width>1 and height>1:
+                #print('inline Tall box2 {}'.format(points))
+                #return True, 'Tall box {}'.format(points)
+                reasons.append('Tall box {}'.format(points))
+            elif height>150 and height/width>0.9:
+                #return True, 'Very tall box {}'.format(points)
+                reasons.append('Very tall box {}'.format(points))
 
-            if height*width<50:
+            elif height*width<50:
                 #print('Small box {}'.format(points))
 
-                return True, 'Small box {}'.format(points)
+                #return True, 'Small box {}'.format(points)
+                reasons.append('Small box {}'.format(points))
             
             if rot<math.pi/4 and rot>-math.pi/4:
                 sumUpright+=1
@@ -72,23 +84,26 @@ def checkProblem(path):
 
     if sumUpright/float(countRot)<0.45:
         #print('Rotation')
-        return True, 'Rotation'
+        #return True, 'Rotation'
+        reasons.append('Rotation')
 
-    for link in horzLinks:
-        existsPair=False
-        for id1 in link:
-            for id2 in link:
-                #if (id1,id2) in pairs or (id2,id1) in pairs or (id1,id2) in samePairs or (id2,id1) in samePairs:
-                for p in pairs+samePairs:
-                    if p[0]==id1 and p[1]==id2 or p[0]==id2 and p[1]==id1:
-                        existsPair=True
-                        break
-                if existsPair:
-                    break
-            if existsPair:
-                break
-        if not existsPair:
-            #print('horz link without a pair')
-            return True, 'horz link without a pair: {} :: {} ::s {}'.format(link,pairs,samePairs)
+    #for link in horzLinks:
+    #    existsPair=False
+    #    for id1 in link:
+    #        for id2 in link:
+    #            #if (id1,id2) in pairs or (id2,id1) in pairs or (id1,id2) in samePairs or (id2,id1) in samePairs:
+    #            for p in pairs+samePairs:
+    #                if p[0]==id1 and p[1]==id2 or p[0]==id2 and p[1]==id1:
+    #                    existsPair=True
+    #                    break
+    #            if existsPair:
+    #                break
+    #        if existsPair:
+    #            break
+    #    if not existsPair:
+    #        #print('horz link without a pair')
+    #        #return True, 'horz link without a pair: {} :: {} ::s {}'.format(link,pairs,samePairs)
+    #        reasons.append('horz link without a pair: {} :: {} ::s {}'.format(link,pairs,samePairs))
 
-    return False, 'none'
+    #print(len(reasons))
+    return len(reasons)>0, reasons

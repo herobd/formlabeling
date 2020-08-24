@@ -138,6 +138,8 @@ if progressOnly or addOnly:
     print('removed, use scandata.py')
 groupIndex=-1
 groupsDone=[False]*len(groupNames)
+if autochecking:
+    problems=[]
 for groupName in sorted(groupNames):
     groupIndex+=1
     files = imageGroups[groupName]
@@ -152,8 +154,6 @@ for groupName in sorted(groupNames):
     numImages=0
     numDone=0
     unfinished=[]
-    if autochecking:
-        problems=[]
     for f in files:
         if 'template' in f and f[-5:]=='.json':
             template = os.path.join(directory,groupName,f)
@@ -168,22 +168,26 @@ for groupName in sorted(groupNames):
                 numImages+=1
             if autochecking:
                 prob,reason = checkProblem(os.path.join(directory,groupName,f))
+                #print(len(reason))
                 if prob:
                     ind = f.find('.')
-                    f = f[:ind]+'.jpg'
-                    problems.append((f,reason))
+                    f = groupName+' '+f[:ind]+'.jpg'
+                    for r in reason:
+                        problems.append((f,r))
         elif f[-8:]=='.json.nf':
             if not autochecking:
                 unfinished.append(f[0:-8]+'.jpg')
             else:
                 prob, reason = checkProblem(os.path.join(directory,groupName,f))
+                #print(len(reason))
                 ind = f.find('.')
-                f = f[:ind]+'.jpg'
-                problems.append((f,reason))
+                f = groupName+' '+f[:ind]+'.jpg'
+                for r in reason:
+                    problems.append((f,r))
     if not checking:
         numImages = min(numImages,NUM_PER_GROUP)
-    if autochecking:
-        files=problems
+    #f autochecking:
+    #    files=problems
     if numDone>=numImages:
         groupsDone[groupIndex]=True
         if startHere is None and not checking and not doTrans:
@@ -380,3 +384,7 @@ for groupName in sorted(groupNames):
         print('template locked for group '+groupName+', moving to next group')
         lock=None
         continue
+
+if autochecking:
+    for p in problems:
+        print(p)
