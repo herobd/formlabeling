@@ -13787,5 +13787,131 @@
             "195-007486024_00025-t45"
         ],
         "gt": "United States for more than five years last past: and for more than one year in"
+    },
+    {
+        "pred": "tr. % 2h",
+        "image": "ocr_crops_new/37-100101969_00101-t0.png",
+        "root image": "100101969_00101",
+        "text": true,
+        "matches": [
+            "37-100101969_00101-t0"
+        ],
+        "gt": "\\illegible"
+    },
+    {
+        "pred": "How many Grades ?",
+        "image": "ocr_crops_new/186-007675712_00119-t53.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t53"
+        ],
+        "gt": "How many Grades ?"
+    },
+    {
+        "pred": "Citizen of the United States of Age",
+        "image": "ocr_crops_new/113-100802226_00003-t71.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t71"
+        ],
+        "gt": "Citizen of the United States of A"
+    },
+    {
+        "pred": "at ports in the United States, and is not intended to be used for any",
+        "image": "ocr_crops_new/207-100176364_x-t5.png",
+        "root image": "100176364_x",
+        "text": true,
+        "matches": [
+            "207-100176364_x-t5"
+        ],
+        "gt": "at ports in the United States, and is not intended to be used for any"
+    },
+    {
+        "pred": "day of",
+        "image": "ocr_crops_new/180-100760033_00005-t29.png",
+        "root image": "100760033_00005",
+        "text": true,
+        "matches": [
+            "180-100760033_00005-t29",
+            "180-100760033_00011-t29",
+            "180-100760033_00015-t29"
+        ],
+        "gt": "day of"
+    },
+    {
+        "pred": "28",
+        "image": "ocr_crops_new/62-004191670_00065-t77.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t77",
+            "62-004191670_00079-t77"
+        ],
+        "gt": "28"
+    },
+    {
+        "pred": "10",
+        "image": "ocr_crops_new/91-100423934_00003-t64.png",
+        "root image": "100423934_00003",
+        "text": true,
+        "matches": [
+            "91-100423934_00003-t64",
+            "91-100423934_00005-t64"
+        ],
+        "gt": "10"
+    },
+    {
+        "pred": "See Record No.",
+        "image": "ocr_crops_new/210-004098525_00025-t108.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t108"
+        ],
+        "gt": "See Record No."
+    },
+    {
+        "pred": "Amount paid to you this month, S$",
+        "image": "ocr_crops_new/186-007675712_00119-t41.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t41"
+        ],
+        "gt": "Amount paid to you this month, $"
+    },
+    {
+        "pred": "G33.",
+        "image": "ocr_crops_new/165-100572410_00279-t15.png",
+        "root image": "100572410_00279",
+        "text": true,
+        "matches": [
+            "165-100572410_00279-t15"
+        ],
+        "gt": "638"
+    },
+    {
+        "pred": "5",
+        "image": "ocr_crops_new/91-100423934_00003-t42.png",
+        "root image": "100423934_00003",
+        "text": true,
+        "matches": [
+            "91-100423934_00003-t42",
+            "91-100423934_00005-t42"
+        ],
+        "gt": "5"
+    },
+    {
+        "pred": ", vorn",
+        "image": "ocr_crops_new/181-100587124_00040-t116.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t116",
+            "181-100587124_00118-t116"
+        ],
+        "gt": ", born"
     }
 ]
