@@ -98,7 +98,7 @@ for groupName in sorted(groupNames):
         else:
             labelTime=0
             startTime = timeit.default_timer()
-        texts,fields,pairs,samePairs,horzLinks,groups,corners,actualCorners,complete,r,c = labelImage(os.path.join(directory,groupName,imageTemplate),texts,fields,pairs,samePairs,horzLinks,groups,None,page_corners,page_cornersActual)
+        texts,fields,pairs,samePairs,horzLinks,groups,transcriptions,corners,actualCorners,complete,r,c = labelImage(os.path.join(directory,groupName,imageTemplate),texts,fields,pairs,samePairs,horzLinks,groups,None,page_corners,page_cornersActual)
         if labelTime is not None:
             labelTime+=timeit.default_timer()-startTime
         if len(texts)==0 and len(fields)==0:
@@ -108,7 +108,7 @@ for groupName in sorted(groupNames):
         elif len(horzLinks)==0:
             print('Did you forget horz links?')
         with open(outFile,'w') as out:
-            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "imageFilename":imageTemplate, "labelTime": labelTime}))
+            out.write(json.dumps({"textBBs":texts, "fieldBBs":fields, "pairs":pairs, "samePairs":samePairs, "horzLinks":horzLinks, "groups":groups, "page_corners":corners, "imageFilename":imageTemplate, "labelTime": labelTime,"transcriptions":transcriptions}))
         #os.chown(outFile,-1,groupId)
         ###lock.release()
         lock=None
