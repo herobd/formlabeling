@@ -7,8 +7,12 @@ import pyperclip
 #import gtk
 import timeit
 
-resultFile = sys.argv[1]
-outFile = sys.argv[2]
+if len(sys.argv)>2:
+    resultFile = sys.argv[1]
+    outFile = sys.argv[2]
+else:
+    resultFile = 'ocr_test_valid.json'
+    outFile = 'corrected_test_valid.json'
 if len(sys.argv)>3:
     remove = abs(int(sys.argv[3]))
 else:
