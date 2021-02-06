@@ -18589,5 +18589,6054 @@
             "91-100423934_00005-t26"
         ],
         "gt": "IT IS FURTHER ORDERED that prayers for change of name on said List be and hereby are granted, except"
+    },
+    {
+        "pred": "VESSEL BOARDED BY PI AND DEPARTURE WERIFIED SNELL LOCK 1415 11/15/59.",
+        "image": "ocr_crops_new/187-101044939_00018-t67.png",
+        "root image": "101044939_00018",
+        "text": true,
+        "matches": [
+            "187-101044939_00018-t67"
+        ],
+        "gt": "VESSEL BOARDED BY PI AND DEPARTURE VERIFIED SNELL LOCK 1415 11/15/59."
+    },
+    {
+        "pred": "day of -.",
+        "image": "ocr_crops_new/38-100283147_00023-t29.png",
+        "root image": "100283147_00023",
+        "text": true,
+        "matches": [
+            "38-100283147_00023-t29",
+            "38-100283147_00038-t29"
+        ],
+        "gt": "day of"
+    },
+    {
+        "pred": "notes or other similar acknowledgments of ascertained liability.",
+        "image": "ocr_crops_new/2-004713434_00276-t10.png",
+        "root image": "004713434_00276",
+        "text": true,
+        "matches": [
+            "2-004713434_00276-t10",
+            "2-004713434_00277-t10"
+        ],
+        "gt": "notes or other similar acknowledgments of ascertained liability."
+    },
+    {
+        "pred": "CLASS.",
+        "image": "ocr_crops_new/6-007641608_00126-t71.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t71",
+            "6-007641608_00138-t71"
+        ],
+        "gt": "CLASS."
+    },
+    {
+        "pred": "Complexion,",
+        "image": "ocr_crops_new/210-004098525_00025-t6.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t6"
+        ],
+        "gt": "Complexion,"
+    },
+    {
+        "pred": "United States; that I reside at",
+        "image": "ocr_crops_new/38-100283147_00023-t3.png",
+        "root image": "100283147_00023",
+        "text": true,
+        "matches": [
+            "38-100283147_00023-t3",
+            "38-100283147_00038-t3"
+        ],
+        "gt": "United States; that I reside at"
+    },
+    {
+        "pred": "Shows",
+        "image": "ocr_crops_new/204-005150587_00024-t88.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t88"
+        ],
+        "gt": "Short"
+    },
+    {
+        "pred": "Eyes",
+        "image": "ocr_crops_new/213-100682131_00025-t38.png",
+        "root image": "100682131_00025",
+        "text": true,
+        "matches": [
+            "213-100682131_00025-t38"
+        ],
+        "gt": "Eyes"
+    },
+    {
+        "pred": "(Include names of American citizen seamen as well as aliens in order to facilitate inspection of aliens)",
+        "image": "ocr_crops_new/193-100901188_00075-t6.png",
+        "root image": "100901188_00075",
+        "text": true,
+        "matches": [
+            "193-100901188_00075-t6",
+            "193-100101969_00259-t8"
+        ],
+        "gt": "(Include names of American citizen seamen as well as aliens in order to facilitate inspection of aliens)"
+    },
+    {
+        "pred": "19",
+        "image": "ocr_crops_new/62-004191670_00065-t242.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t242"
+        ],
+        "gt": "19"
+    },
+    {
+        "pred": "; resides at",
+        "image": "ocr_crops_new/181-100587124_00040-t96.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t96",
+            "181-100587124_00118-t96"
+        ],
+        "gt": "; resides at"
+    },
+    {
+        "pred": "; that concerning each the information recorded is correct, full, And complete in every respect; and",
+        "image": "ocr_crops_new/187-101044939_00020-t37.png",
+        "root image": "101044939_00020",
+        "text": true,
+        "matches": [
+            "187-101044939_00013-t37",
+            "187-101044939_00018-t37",
+            "187-101044939_00020-t37"
+        ],
+        "gt": "; that concerning each the information recorded is correct, full, and complete in every respect; and"
+    },
+    {
+        "pred": "Deio: med",
+        "image": "ocr_crops_new/47-004857625_00042-t124.png",
+        "root image": "004857625_00042",
+        "text": true,
+        "matches": [
+            "47-004857625_00042-t124",
+            "47-004857625_00045-t124"
+        ],
+        "gt": "Deformed"
+    },
+    {
+        "pred": "",
+        "image": "ocr_crops_new/47-004857625_00045-t141.png",
+        "root image": "004857625_00045",
+        "text": true,
+        "matches": [
+            "47-004857625_00045-t141",
+            "47-004857625_00042-t71"
+        ],
+        "gt": "citizen before becoming"
+    },
+    {
+        "pred": "SERVICE:",
+        "image": "ocr_crops_new/56-005240858_00010-t91.png",
+        "root image": "005240858_00010",
+        "text": true,
+        "matches": [
+            "56-005240858_00010-t91",
+            "56-005240858_00011-t91"
+        ],
+        "gt": "SERVICE:"
+    },
+    {
+        "pred": "DATE FILMED",
+        "image": "ocr_crops_new/184-007499090_00008-t4.png",
+        "root image": "007499090_00008",
+        "text": true,
+        "matches": [
+            "184-007499090_00008-t4"
+        ],
+        "gt": "DATE FILMED"
+    },
+    {
+        "pred": "and states that on the",
+        "image": "ocr_crops_new/185-100283146_00004-t3.png",
+        "root image": "100283146_00004",
+        "text": true,
+        "matches": [
+            "185-100283146_00004-t3",
+            "185-100283146_00008-t37",
+            "185-100283146_00011-t37"
+        ],
+        "gt": "and states that on the"
+    },
+    {
+        "pred": "2",
+        "image": "ocr_crops_new/174-007641608_00208-t42.png",
+        "root image": "007641608_00208",
+        "text": true,
+        "matches": [
+            "174-007641608_00208-t42",
+            "174-007641608_00212-t42"
+        ],
+        "gt": "2"
+    },
+    {
+        "pred": "Has or Have",
+        "image": "ocr_crops_new/20-007270209_00002-t99.png",
+        "root image": "007270209_00002",
+        "text": true,
+        "matches": [
+            "20-007270209_00002-t99",
+            "20-007270209_00006-t99"
+        ],
+        "gt": "Has or Have"
+    },
+    {
+        "pred": "AGE.",
+        "image": "ocr_crops_new/6-007641608_00126-t69.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t69",
+            "6-007641608_00138-t69"
+        ],
+        "gt": "AGE."
+    },
+    {
+        "pred": "SERIAL",
+        "image": "ocr_crops_new/204-005150587_00024-t1.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t1"
+        ],
+        "gt": "SERIAL"
+    },
+    {
+        "pred": "Form approved.",
+        "image": "ocr_crops_new/193-100101969_00221-t4.png",
+        "root image": "100101969_00221",
+        "text": true,
+        "matches": [
+            "193-100101969_00067-t4",
+            "193-100101969_00093-t4",
+            "193-100101969_00221-t4",
+            "193-100101969_00259-t4"
+        ],
+        "gt": "Form approved."
+    },
+    {
+        "pred": "Day",
+        "image": "ocr_crops_new/113-100802226_00003-t211.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t211"
+        ],
+        "gt": "Day"
+    },
+    {
+        "pred": "_at",
+        "image": "ocr_crops_new/9-100194510_00001-t16.png",
+        "root image": "100194510_00001",
+        "text": true,
+        "matches": [
+            "9-100194510_00001-t16",
+            "9-100194510_00003-t16"
+        ],
+        "gt": "at"
+    },
+    {
+        "pred": "Remarks:",
+        "image": "ocr_crops_new/62-004191670_00065-t129.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t129",
+            "62-004191670_00079-t129"
+        ],
+        "gt": "Remarks:"
+    },
+    {
+        "pred": "CTF.",
+        "image": "ocr_crops_new/56-005240858_00010-t79.png",
+        "root image": "005240858_00010",
+        "text": true,
+        "matches": [
+            "56-005240858_00010-t79",
+            "56-005240858_00011-t79"
+        ],
+        "gt": "CTF."
+    },
+    {
+        "pred": "Have you an Industrial School?.",
+        "image": "ocr_crops_new/160-007675712_00033-t59.png",
+        "root image": "007675712_00033",
+        "text": true,
+        "matches": [
+            "160-007675712_00021-t59",
+            "160-007675712_00033-t59",
+            "160-007675712_00027-t54"
+        ],
+        "gt": "Have you an Industrial School?."
+    },
+    {
+        "pred": "DO NOT WRITE HERE",
+        "image": "ocr_crops_new/154-007182398_00071-t80.png",
+        "root image": "007182398_00071",
+        "text": true,
+        "matches": [
+            "154-007182398_00039-t92",
+            "154-007182398_00071-t80",
+            "154-007182398_00028-t36"
+        ],
+        "gt": "DO NOT WRITE HERE"
+    },
+    {
+        "pred": "SEAMANS INDENTIFICATION. CARD",
+        "image": "ocr_crops_new/207-100176364_x-t2.png",
+        "root image": "100176364_x",
+        "text": true,
+        "matches": [
+            "207-100176364_x-t2"
+        ],
+        "gt": "SEAMAN'S INDENTIFICATION CARD"
+    },
+    {
+        "pred": "19.",
+        "image": "ocr_crops_new/83-100660792_00291-t18.png",
+        "root image": "100660792_00291",
+        "text": true,
+        "matches": [
+            "83-100660792_00291-t18"
+        ],
+        "gt": "19"
+    },
+    {
+        "pred": "Number of Pupils enrolled,.",
+        "image": "ocr_crops_new/186-007675712_00119-t18.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t18"
+        ],
+        "gt": "Number of Pupils enrolled,"
+    },
+    {
+        "pred": "a",
+        "image": "ocr_crops_new/62-004191670_00065-t56.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t56"
+        ],
+        "gt": "5"
+    },
+    {
+        "pred": "Vessel",
+        "image": "ocr_crops_new/60-100660788_00064-t74.png",
+        "root image": "100660788_00064",
+        "text": true,
+        "matches": [
+            "60-100660788_00064-t74"
+        ],
+        "gt": "Vessel"
+    },
+    {
+        "pred": "it shall be the duty of such owner. arent. consienee. or master to",
+        "image": "ocr_crops_new/78-007540939_00028-t16.png",
+        "root image": "007540939_00028",
+        "text": true,
+        "matches": [
+            "78-007540939_00028-t16",
+            "78-007540939_00032-t16"
+        ],
+        "gt": "it shall be the duty of such owner, agent, consignee, or master to"
+    },
+    {
+        "pred": "this.",
+        "image": "ocr_crops_new/199-007270209_00003-t43.png",
+        "root image": "007270209_00003",
+        "text": true,
+        "matches": [
+            "199-007270209_00003-t43",
+            "199-007270209_00007-t43"
+        ],
+        "gt": "this"
+    },
+    {
+        "pred": "in said County, who",
+        "image": "ocr_crops_new/195-007486024_00025-t37.png",
+        "root image": "007486024_00025",
+        "text": true,
+        "matches": [
+            "195-007486024_00025-t37",
+            "195-007486024_00022-t10",
+            "195-007486024_00020-t37"
+        ],
+        "gt": "in said County, who"
+    },
+    {
+        "pred": "@ibken under mn Hand and Deal of Office, this",
+        "image": "ocr_crops_new/180-100760033_00015-t28.png",
+        "root image": "100760033_00015",
+        "text": true,
+        "matches": [
+            "180-100760033_00005-t28",
+            "180-100760033_00015-t28",
+            "180-100760033_00011-t28"
+        ],
+        "gt": "Given under my hand and Seal of Office , this"
+    },
+    {
+        "pred": "Qn this.",
+        "image": "ocr_crops_new/164-007372211_00002-t9.png",
+        "root image": "007372211_00002",
+        "text": true,
+        "matches": [
+            "164-007372211_00002-t9"
+        ],
+        "gt": "On this"
+    },
+    {
+        "pred": "3.",
+        "image": "ocr_crops_new/9-100194510_00001-t19.png",
+        "root image": "100194510_00001",
+        "text": true,
+        "matches": [
+            "9-100194510_00001-t19"
+        ],
+        "gt": "$"
+    },
+    {
+        "pred": "A",
+        "image": "ocr_crops_new/96-004955493_00029-t17.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t17"
+        ],
+        "gt": "A"
+    },
+    {
+        "pred": "When to close?",
+        "image": "ocr_crops_new/160-007675712_00021-t12.png",
+        "root image": "007675712_00021",
+        "text": true,
+        "matches": [
+            "160-007675712_00021-t12",
+            "160-007675712_00027-t12",
+            "160-007675712_00033-t12"
+        ],
+        "gt": "When to close?"
+    },
+    {
+        "pred": "On.",
+        "image": "ocr_crops_new/187-101044939_00013-t54.png",
+        "root image": "101044939_00013",
+        "text": true,
+        "matches": [
+            "187-101044939_00013-t54",
+            "187-101044939_00020-t54"
+        ],
+        "gt": "on"
+    },
+    {
+        "pred": "(Signature of holder.)",
+        "image": "ocr_crops_new/208-100214276_x-t22.png",
+        "root image": "100214276_x",
+        "text": true,
+        "matches": [
+            "208-100214276_x-t22"
+        ],
+        "gt": "(Signature of holder.)"
+    },
+    {
+        "pred": "1s",
+        "image": "ocr_crops_new/86-004191670_00007-t61.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t61",
+            "86-004191670_00010-t61"
+        ],
+        "gt": "18"
+    },
+    {
+        "pred": "of",
+        "image": "ocr_crops_new/211-007191975_00024-t21.png",
+        "root image": "007191975_00024",
+        "text": true,
+        "matches": [
+            "211-007191975_00024-t21"
+        ],
+        "gt": "(639)"
+    },
+    {
+        "pred": "in this",
+        "image": "ocr_crops_new/96-004955493_00029-t138.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t138",
+            "96-004955493_00030-t138"
+        ],
+        "gt": "in this"
+    },
+    {
+        "pred": "Judge.",
+        "image": "ocr_crops_new/91-100423934_00003-t69.png",
+        "root image": "100423934_00003",
+        "text": true,
+        "matches": [
+            "91-100423934_00003-t69"
+        ],
+        "gt": "Judge."
+    },
+    {
+        "pred": "of",
+        "image": "ocr_crops_new/113-100802226_00003-t192.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t192"
+        ],
+        "gt": "of"
+    },
+    {
+        "pred": "CLAIMANT:",
+        "image": "ocr_crops_new/56-005240858_00010-t101.png",
+        "root image": "005240858_00010",
+        "text": true,
+        "matches": [
+            "56-005240858_00010-t101",
+            "56-005240858_00011-t101"
+        ],
+        "gt": "CLAIMANT:"
+    },
+    {
+        "pred": "Age.",
+        "image": "ocr_crops_new/62-004191670_00065-t13.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t13",
+            "62-004191670_00079-t13"
+        ],
+        "gt": "Age."
+    },
+    {
+        "pred": "Wherefore he prays that he may be admitted by this Honorable Coart, to become a citizen of the United States of",
+        "image": "ocr_crops_new/195-007486024_00022-t31.png",
+        "root image": "007486024_00022",
+        "text": true,
+        "matches": [
+            "195-007486024_00020-t31",
+            "195-007486024_00022-t31",
+            "195-007486024_00025-t31"
+        ],
+        "gt": "Wherefore he prays that he may be admitted by this Honorable Coart, to become a citizen of the United States of"
+    },
+    {
+        "pred": "hie Mite",
+        "image": "ocr_crops_new/189-100760033_00004-t4.png",
+        "root image": "100760033_00004",
+        "text": true,
+        "matches": [
+            "189-100760033_00004-t4",
+            "189-100760033_00014-t4"
+        ],
+        "gt": "whereof is Master"
+    },
+    {
+        "pred": "S. 8S.",
+        "image": "ocr_crops_new/90-007540939_00160-t12.png",
+        "root image": "007540939_00160",
+        "text": true,
+        "matches": [
+            "90-007540939_00160-t12"
+        ],
+        "gt": "S. S."
+    },
+    {
+        "pred": "Discharge.",
+        "image": "ocr_crops_new/65-004832573_00044-t70.png",
+        "root image": "004832573_00044",
+        "text": true,
+        "matches": [
+            "65-004832573_00044-t70",
+            "65-004832573_00050-t70"
+        ],
+        "gt": "Discharge."
+    },
+    {
+        "pred": "and of the punctual payment by",
+        "image": "ocr_crops_new/6-007641608_00126-t32.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t32",
+            "6-007641608_00138-t32"
+        ],
+        "gt": "and of the punctual payment by"
+    },
+    {
+        "pred": "Height ..",
+        "image": "ocr_crops_new/2-004713434_00276-t22.png",
+        "root image": "004713434_00276",
+        "text": true,
+        "matches": [
+            "2-004713434_00276-t22",
+            "2-004713434_00277-t22"
+        ],
+        "gt": "Height"
+    },
+    {
+        "pred": "the said parties do hereby mutually agree that Circular No. 29 Headquarters Bureau",
+        "image": "ocr_crops_new/6-007641608_00126-t14.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t14",
+            "6-007641608_00138-t14"
+        ],
+        "gt": "the said parties do hereby mutually agree that Circular No. 29 Headquarters Bureau"
+    },
+    {
+        "pred": "REMARKS:",
+        "image": "ocr_crops_new/56-005240858_00010-t42.png",
+        "root image": "005240858_00010",
+        "text": true,
+        "matches": [
+            "56-005240858_00010-t42",
+            "56-005240858_00011-t42"
+        ],
+        "gt": "REMARKS:"
+    },
+    {
+        "pred": "2",
+        "image": "ocr_crops_new/86-004191670_00007-t52.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t52",
+            "86-004191670_00010-t52"
+        ],
+        "gt": "2"
+    },
+    {
+        "pred": "Citizen of the United states of America.",
+        "image": "ocr_crops_new/113-100802226_00003-t209.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t209"
+        ],
+        "gt": "Citizen of the United States of America."
+    },
+    {
+        "pred": "I",
+        "image": "ocr_crops_new/35-100788105_00006-t3.png",
+        "root image": "100788105_00006",
+        "text": true,
+        "matches": [
+            "35-100788105_00006-t3"
+        ],
+        "gt": "I,"
+    },
+    {
+        "pred": "NAMES.",
+        "image": "ocr_crops_new/6-007641608_00126-t68.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t68",
+            "6-007641608_00138-t68"
+        ],
+        "gt": "NAMES."
+    },
+    {
+        "pred": "_ home port",
+        "image": "ocr_crops_new/208-100214276_x-t20.png",
+        "root image": "100214276_x",
+        "text": true,
+        "matches": [
+            "208-100214276_x-t20"
+        ],
+        "gt": ", home port"
+    },
+    {
+        "pred": "The cause of such denial has since been cured or removed.",
+        "image": "ocr_crops_new/181-100587124_00040-t145.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t145",
+            "181-100587124_00118-t145"
+        ],
+        "gt": "The cause of such denial has since been cured or removed."
+    },
+    {
+        "pred": "Paaaae cald Gs",
+        "image": "ocr_crops_new/47-004857625_00045-t74.png",
+        "root image": "004857625_00045",
+        "text": true,
+        "matches": [
+            "47-004857625_00045-t74"
+        ],
+        "gt": "Passage paid by"
+    },
+    {
+        "pred": "(15)",
+        "image": "ocr_crops_new/60-100660788_00064-t94.png",
+        "root image": "100660788_00064",
+        "text": true,
+        "matches": [
+            "60-100660788_00064-t94"
+        ],
+        "gt": "(15)"
+    },
+    {
+        "pred": "Nationality",
+        "image": "ocr_crops_new/60-100660788_00064-t101.png",
+        "root image": "100660788_00064",
+        "text": true,
+        "matches": [
+            "60-100660788_00064-t101"
+        ],
+        "gt": "Nationality"
+    },
+    {
+        "pred": "In the",
+        "image": "ocr_crops_new/91-100423934_00003-t7.png",
+        "root image": "100423934_00003",
+        "text": true,
+        "matches": [
+            "91-100423934_00003-t7",
+            "91-100423934_00005-t7"
+        ],
+        "gt": "In the"
+    },
+    {
+        "pred": "Sd,",
+        "image": "ocr_crops_new/186-007675712_00119-t38.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t38"
+        ],
+        "gt": "3d,"
+    },
+    {
+        "pred": "CLAIMANT:",
+        "image": "ocr_crops_new/56-005240858_00010-t34.png",
+        "root image": "005240858_00010",
+        "text": true,
+        "matches": [
+            "56-005240858_00010-t34",
+            "56-005240858_00011-t34"
+        ],
+        "gt": "CLAIMANT:"
+    },
+    {
+        "pred": "180",
+        "image": "ocr_crops_new/113-100802226_00003-t31.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t31"
+        ],
+        "gt": "180"
+    },
+    {
+        "pred": "Q. Whboisthe owner of these improvements? <A.",
+        "image": "ocr_crops_new/20-007270209_00006-t134.png",
+        "root image": "007270209_00006",
+        "text": true,
+        "matches": [
+            "20-007270209_00006-t134",
+            "20-007270209_00002-t151"
+        ],
+        "gt": "Q. Who is the owner of these improvements? A."
+    },
+    {
+        "pred": "Application is made",
+        "image": "ocr_crops_new/72-004284105_00007-t42.png",
+        "root image": "004284105_00007",
+        "text": true,
+        "matches": [
+            "72-004284105_00007-t42",
+            "72-004284105_00009-t42"
+        ],
+        "gt": "Application is made"
+    },
+    {
+        "pred": "28",
+        "image": "ocr_crops_new/60-100660788_00018-t21.png",
+        "root image": "100660788_00018",
+        "text": true,
+        "matches": [
+            "60-100660788_00018-t21",
+            "60-100660788_00064-t21"
+        ],
+        "gt": "28"
+    },
+    {
+        "pred": "Port of -",
+        "image": "ocr_crops_new/203-007540939_00106-t23.png",
+        "root image": "007540939_00106",
+        "text": true,
+        "matches": [
+            "203-007540939_00106-t23",
+            "203-007540939_00287-t23"
+        ],
+        "gt": "Port of"
+    },
+    {
+        "pred": "IN CREW",
+        "image": "ocr_crops_new/193-100101969_00067-t23.png",
+        "root image": "100101969_00067",
+        "text": true,
+        "matches": [
+            "193-100101969_00067-t23",
+            "193-100101969_00093-t24",
+            "193-100101969_00221-t23",
+            "193-100101969_00259-t22",
+            "193-100901188_00075-t20"
+        ],
+        "gt": "IN CREW"
+    },
+    {
+        "pred": "by the",
+        "image": "ocr_crops_new/205-007319607_00044-t7.png",
+        "root image": "007319607_00044",
+        "text": true,
+        "matches": [
+            "205-007319607_00044-t7"
+        ],
+        "gt": "by the"
+    },
+    {
+        "pred": "| Stent",
+        "image": "ocr_crops_new/47-004857625_00042-t29.png",
+        "root image": "004857625_00042",
+        "text": true,
+        "matches": [
+            "47-004857625_00042-t29"
+        ],
+        "gt": "Sheet"
+    },
+    {
+        "pred": "Separate summary should be prepared for each class when manifested",
+        "image": "ocr_crops_new/187-101044939_00013-t47.png",
+        "root image": "101044939_00013",
+        "text": true,
+        "matches": [
+            "187-101044939_00013-t47"
+        ],
+        "gt": "Separate summary should be prepared for each class when manifested"
+    },
+    {
+        "pred": "fcribed, have been landed imthis",
+        "image": "ocr_crops_new/201-100802224_00019-t5.png",
+        "root image": "100802224_00019",
+        "text": true,
+        "matches": [
+            "201-100802224_00019-t5"
+        ],
+        "gt": "scribed, have been landed in this"
+    },
+    {
+        "pred": "10",
+        "image": "ocr_crops_new/62-004191670_00065-t198.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t198",
+            "62-004191670_00079-t198"
+        ],
+        "gt": "10"
+    },
+    {
+        "pred": "of arrival in U.S.",
+        "image": "ocr_crops_new/24-007486024_00010-t7.png",
+        "root image": "007486024_00010",
+        "text": true,
+        "matches": [
+            "24-007486024_00010-t7",
+            "24-007486024_00014-t7"
+        ],
+        "gt": "of arrival in U.S."
+    },
+    {
+        "pred": "Pn Set elt allt \\alee So Tae ee LORE Peta",
+        "image": "ocr_crops_new/99-100802224_00008-t63.png",
+        "root image": "100802224_00008",
+        "text": true,
+        "matches": [
+            "99-100802224_00008-t63"
+        ],
+        "gt": "these by two respectable Merchanges of the place."
+    },
+    {
+        "pred": "Division",
+        "image": "ocr_crops_new/46-100251356_00001-t9.png",
+        "root image": "100251356_00001",
+        "text": true,
+        "matches": [
+            "46-100251356_00001-t9",
+            "46-100251356_00025-t9"
+        ],
+        "gt": "Division"
+    },
+    {
+        "pred": "Where",
+        "image": "ocr_crops_new/60-100660788_00018-t57.png",
+        "root image": "100660788_00018",
+        "text": true,
+        "matches": [
+            "60-100660788_00018-t57",
+            "60-100660788_00064-t116"
+        ],
+        "gt": "Where"
+    },
+    {
+        "pred": "Subscfibed and sworn go before me, this",
+        "image": "ocr_crops_new/150-100572410_00028-t11.png",
+        "root image": "100572410_00028",
+        "text": true,
+        "matches": [
+            "150-100572410_00028-t11"
+        ],
+        "gt": "Subscribed and sworn to before me, this"
+    },
+    {
+        "pred": "means, whether cutting of throat, hanging, drowning, shooting, poisoning by opium,",
+        "image": "ocr_crops_new/17-007579716_00226-t31.png",
+        "root image": "007579716_00226",
+        "text": true,
+        "matches": [
+            "17-007579716_00226-t31",
+            "17-007579716_00230-t31",
+            "17-007579716_00232-t31"
+        ],
+        "gt": "means, whether cutting of throat, hanging, drowning, shooting, poisoning by opium,"
+    },
+    {
+        "pred": "Sex",
+        "image": "ocr_crops_new/96-004955493_00029-t62.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t62",
+            "96-004955493_00030-t62"
+        ],
+        "gt": "Sex"
+    },
+    {
+        "pred": "iv",
+        "image": "ocr_crops_new/62-004191670_00079-t205.png",
+        "root image": "004191670_00079",
+        "text": true,
+        "matches": [
+            "62-004191670_00079-t205"
+        ],
+        "gt": "17"
+    },
+    {
+        "pred": "@)",
+        "image": "ocr_crops_new/193-100101969_00259-t51.png",
+        "root image": "100101969_00259",
+        "text": true,
+        "matches": [
+            "193-100101969_00259-t51",
+            "193-100901188_00075-t52"
+        ],
+        "gt": "(9)"
+    },
+    {
+        "pred": "20",
+        "image": "ocr_crops_new/62-004191670_00065-t101.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t101",
+            "62-004191670_00079-t101"
+        ],
+        "gt": "29"
+    },
+    {
+        "pred": "Noafary-Public.",
+        "image": "ocr_crops_new/113-100802226_00003-t98.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t98"
+        ],
+        "gt": "Notary-Public."
+    },
+    {
+        "pred": "Name of Sender",
+        "image": "ocr_crops_new/27-004173988_00047-t11.png",
+        "root image": "004173988_00047",
+        "text": true,
+        "matches": [
+            "27-004173988_00047-t11",
+            "27-004173988_00061-t11"
+        ],
+        "gt": "Name of Sender"
+    },
+    {
+        "pred": "bets",
+        "image": "ocr_crops_new/203-007540939_00106-t69.png",
+        "root image": "007540939_00106",
+        "text": true,
+        "matches": [
+            "203-007540939_00106-t69"
+        ],
+        "gt": "1-805"
+    },
+    {
+        "pred": "Naturalization",
+        "image": "ocr_crops_new/96-004955493_00029-t116.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t116",
+            "96-004955493_00030-t116"
+        ],
+        "gt": "Naturalization"
+    },
+    {
+        "pred": "further shows to this Honorable Court",
+        "image": "ocr_crops_new/195-007486024_00020-t24.png",
+        "root image": "007486024_00020",
+        "text": true,
+        "matches": [
+            "195-007486024_00020-t24",
+            "195-007486024_00022-t24",
+            "195-007486024_00025-t24"
+        ],
+        "gt": "further shows to this Honorable Court"
+    },
+    {
+        "pred": "| Remarks",
+        "image": "ocr_crops_new/47-004857625_00042-t18.png",
+        "root image": "004857625_00042",
+        "text": true,
+        "matches": [
+            "47-004857625_00042-t18"
+        ],
+        "gt": "Remarks"
+    },
+    {
+        "pred": "Number enrolled last report ?",
+        "image": "ocr_crops_new/160-007675712_00021-t36.png",
+        "root image": "007675712_00021",
+        "text": true,
+        "matches": [
+            "160-007675712_00021-t36",
+            "160-007675712_00033-t36",
+            "160-007675712_00027-t33"
+        ],
+        "gt": "Number enrolled last report?"
+    },
+    {
+        "pred": "day of",
+        "image": "ocr_crops_new/91-100423934_00003-t20.png",
+        "root image": "100423934_00003",
+        "text": true,
+        "matches": [
+            "91-100423934_00003-t20",
+            "91-100423934_00005-t20"
+        ],
+        "gt": "day of"
+    },
+    {
+        "pred": "and is now about",
+        "image": "ocr_crops_new/85-007372211_00001-t19.png",
+        "root image": "007372211_00001",
+        "text": true,
+        "matches": [
+            "85-007372211_00001-t19"
+        ],
+        "gt": "and is now about"
+    },
+    {
+        "pred": "Colored,",
+        "image": "ocr_crops_new/186-007675712_00119-t15.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t15"
+        ],
+        "gt": "Colored,"
+    },
+    {
+        "pred": "Acres",
+        "image": "ocr_crops_new/199-007270209_00003-t28.png",
+        "root image": "007270209_00003",
+        "text": true,
+        "matches": [
+            "199-007270209_00003-t28"
+        ],
+        "gt": "Acres"
+    },
+    {
+        "pred": "VEssEeL",
+        "image": "ocr_crops_new/4-100283146_00038-t3.png",
+        "root image": "100283146_00038",
+        "text": true,
+        "matches": [
+            "4-100283146_00038-t3",
+            "4-100283146_00048-t3"
+        ],
+        "gt": "Vessel"
+    },
+    {
+        "pred": "PHYJTOGRAPH",
+        "image": "ocr_crops_new/23-100283146_00001-t33.png",
+        "root image": "100283146_00001",
+        "text": true,
+        "matches": [
+            "23-100283146_00001-t33"
+        ],
+        "gt": "PHOTOGRAPH"
+    },
+    {
+        "pred": "| Purpose in coming and time remainiag",
+        "image": "ocr_crops_new/213-100682131_00025-t36.png",
+        "root image": "100682131_00025",
+        "text": true,
+        "matches": [
+            "213-100682131_00025-t36"
+        ],
+        "gt": "Purpose in coming and time remaining"
+    },
+    {
+        "pred": "Re-admission.",
+        "image": "ocr_crops_new/65-004832573_00044-t38.png",
+        "root image": "004832573_00044",
+        "text": true,
+        "matches": [
+            "65-004832573_00044-t38",
+            "65-004832573_00050-t38"
+        ],
+        "gt": "Re-admission."
+    },
+    {
+        "pred": "Quarantine Officer |",
+        "image": "ocr_crops_new/198-101044939_00042-t12.png",
+        "root image": "101044939_00042",
+        "text": true,
+        "matches": [
+            "198-101044939_00042-t12"
+        ],
+        "gt": "Quarantine Officer"
+    },
+    {
+        "pred": "Crier.",
+        "image": "ocr_crops_new/31-007372163_00003-t33.png",
+        "root image": "007372163_00003",
+        "text": true,
+        "matches": [
+            "31-007372163_00003-t33",
+            "31-007372163_00004-t33"
+        ],
+        "gt": "Clerk."
+    },
+    {
+        "pred": "",
+        "image": "ocr_crops_new/204-005150587_00024-t9.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t9"
+        ],
+        "gt": "6"
+    },
+    {
+        "pred": "_, and that the recommendation of the desionated examiner is",
+        "image": "ocr_crops_new/91-100423934_00003-t28.png",
+        "root image": "100423934_00003",
+        "text": true,
+        "matches": [
+            "91-100423934_00003-t28",
+            "91-100423934_00005-t28"
+        ],
+        "gt": ", and that the recommendation of the desionated examiner is"
+    },
+    {
+        "pred": "of.",
+        "image": "ocr_crops_new/113-100802226_00003-t151.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t151"
+        ],
+        "gt": "of"
+    },
+    {
+        "pred": "ales intends te",
+        "image": "ocr_crops_new/47-004857625_00042-t95.png",
+        "root image": "004857625_00042",
+        "text": true,
+        "matches": [
+            "47-004857625_00042-t95",
+            "47-004857625_00045-t95"
+        ],
+        "gt": "alien intends to"
+    },
+    {
+        "pred": "Shipped",
+        "image": "ocr_crops_new/154-007182398_00039-t96.png",
+        "root image": "007182398_00039",
+        "text": true,
+        "matches": [
+            "154-007182398_00039-t96",
+            "154-007182398_00071-t83",
+            "154-007182398_00028-t40"
+        ],
+        "gt": "Shipped"
+    },
+    {
+        "pred": "BT.",
+        "image": "ocr_crops_new/62-004191670_00079-t103.png",
+        "root image": "004191670_00079",
+        "text": true,
+        "matches": [
+            "62-004191670_00079-t103"
+        ],
+        "gt": "27"
+    },
+    {
+        "pred": "CLASS.",
+        "image": "ocr_crops_new/174-007641608_00208-t21.png",
+        "root image": "007641608_00208",
+        "text": true,
+        "matches": [
+            "174-007641608_00208-t21",
+            "174-007641608_00212-t21",
+            "174-007641608_00216-t74"
+        ],
+        "gt": "CLASS."
+    },
+    {
+        "pred": "(STAMP OF LOCAL BOARD",
+        "image": "ocr_crops_new/204-005150587_00024-t108.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t108"
+        ],
+        "gt": "(STAMP OF LOCAL BOARD)"
+    },
+    {
+        "pred": "oan",
+        "image": "ocr_crops_new/47-004857625_00045-t30.png",
+        "root image": "004857625_00045",
+        "text": true,
+        "matches": [
+            "47-004857625_00045-t30"
+        ],
+        "gt": "Class"
+    },
+    {
+        "pred": "that I will and do absolutely and entirely renounce and adjure all allegiance and fidelity",
+        "image": "ocr_crops_new/164-007372211_00002-t15.png",
+        "root image": "007372211_00002",
+        "text": true,
+        "matches": [
+            "164-007372211_00002-t15"
+        ],
+        "gt": "that I will and do absolutely and entirely renounce and adjure all allegiance and fidelity"
+    },
+    {
+        "pred": "SE A",
+        "image": "ocr_crops_new/199-007270209_00003-t46.png",
+        "root image": "007270209_00003",
+        "text": true,
+        "matches": [
+            "199-007270209_00003-t46"
+        ],
+        "gt": "SEAL"
+    },
+    {
+        "pred": "in.",
+        "image": "ocr_crops_new/47-004857625_00045-t136.png",
+        "root image": "004857625_00045",
+        "text": true,
+        "matches": [
+            "47-004857625_00045-t136",
+            "47-004857625_00042-t107"
+        ],
+        "gt": "in."
+    },
+    {
+        "pred": "Age,",
+        "image": "ocr_crops_new/210-004098525_00025-t66.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t66"
+        ],
+        "gt": "Age,"
+    },
+    {
+        "pred": "7. I now owe allegiance to",
+        "image": "ocr_crops_new/181-100587124_00040-t117.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t117",
+            "181-100587124_00118-t117"
+        ],
+        "gt": "7. I now owe allegiance to"
+    },
+    {
+        "pred": "ON",
+        "image": "ocr_crops_new/193-100101969_00067-t74.png",
+        "root image": "100101969_00067",
+        "text": true,
+        "matches": [
+            "193-100101969_00067-t74",
+            "193-100101969_00093-t17",
+            "193-100101969_00221-t17",
+            "193-100101969_00259-t16",
+            "193-100901188_00075-t14"
+        ],
+        "gt": "ON"
+    },
+    {
+        "pred": "PLACE OF BIRTH,",
+        "image": "ocr_crops_new/86-004191670_00007-t13.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t13",
+            "86-004191670_00010-t13"
+        ],
+        "gt": "PLACE OF BIRTH,"
+    },
+    {
+        "pred": "Ag",
+        "image": "ocr_crops_new/20-007270209_00002-t169.png",
+        "root image": "007270209_00002",
+        "text": true,
+        "matches": [
+            "20-007270209_00002-t169",
+            "20-007270209_00006-t169"
+        ],
+        "gt": "A."
+    },
+    {
+        "pred": "Certified copies can be had upon application to the",
+        "image": "ocr_crops_new/165-100572410_00026-t11.png",
+        "root image": "100572410_00026",
+        "text": true,
+        "matches": [
+            "165-100572410_00026-t11",
+            "165-100572410_00279-t11"
+        ],
+        "gt": "Certified copies can be had upon application to the"
+    },
+    {
+        "pred": "having found the same duly authenticated and sufficient, That the said petition be recited at fall length in the",
+        "image": "ocr_crops_new/31-007372163_00003-t26.png",
+        "root image": "007372163_00003",
+        "text": true,
+        "matches": [
+            "31-007372163_00003-t26",
+            "31-007372163_00004-t26"
+        ],
+        "gt": "having found the same duly authenticated and sufficient, That the said petition be recited at full length in the"
+    },
+    {
+        "pred": "above-named",
+        "image": "ocr_crops_new/38-100283147_00023-t23.png",
+        "root image": "100283147_00023",
+        "text": true,
+        "matches": [
+            "38-100283147_00023-t23",
+            "38-100283147_00038-t23"
+        ],
+        "gt": "above-named"
+    },
+    {
+        "pred": "(Street or BLP. DD. Now",
+        "image": "ocr_crops_new/204-005150587_00024-t66.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t66"
+        ],
+        "gt": "(Street or R. F. D. No.)"
+    },
+    {
+        "pred": "ing",
+        "image": "ocr_crops_new/96-004955493_00029-t28.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t28",
+            "96-004955493_00030-t28"
+        ],
+        "gt": "ing"
+    },
+    {
+        "pred": "Check No.",
+        "image": "ocr_crops_new/9-100194510_00001-t8.png",
+        "root image": "100194510_00001",
+        "text": true,
+        "matches": [
+            "9-100194510_00001-t8",
+            "9-100194510_00003-t8"
+        ],
+        "gt": "Check No."
+    },
+    {
+        "pred": "REMARKS:",
+        "image": "ocr_crops_new/210-004098525_00025-t127.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t127"
+        ],
+        "gt": "REMARKS:"
+    },
+    {
+        "pred": "shen sulGequnt @eparture of the halder/befprehe",
+        "image": "ocr_crops_new/203-007540939_00106-t56.png",
+        "root image": "007540939_00106",
+        "text": true,
+        "matches": [
+            "203-007540939_00106-t56",
+            "203-007540939_00287-t56"
+        ],
+        "gt": "each subsequent departure of the holder before he"
+    },
+    {
+        "pred": "7",
+        "image": "ocr_crops_new/91-100423934_00005-t44.png",
+        "root image": "100423934_00005",
+        "text": true,
+        "matches": [
+            "91-100423934_00005-t44"
+        ],
+        "gt": "7"
+    },
+    {
+        "pred": "for the following de-",
+        "image": "ocr_crops_new/72-004284105_00007-t43.png",
+        "root image": "004284105_00007",
+        "text": true,
+        "matches": [
+            "72-004284105_00007-t43",
+            "72-004284105_00009-t43"
+        ],
+        "gt": "for the following de-"
+    },
+    {
+        "pred": "for support",
+        "image": "ocr_crops_new/174-007641608_00208-t22.png",
+        "root image": "007641608_00208",
+        "text": true,
+        "matches": [
+            "174-007641608_00208-t22",
+            "174-007641608_00212-t22",
+            "174-007641608_00216-t79"
+        ],
+        "gt": "for support"
+    },
+    {
+        "pred": "WASHINGTON. DC",
+        "image": "ocr_crops_new/184-007499090_00008-t2.png",
+        "root image": "007499090_00008",
+        "text": true,
+        "matches": [
+            "184-007499090_00008-t2"
+        ],
+        "gt": "WASHINGTON. DC"
+    },
+    {
+        "pred": "Cts.",
+        "image": "ocr_crops_new/72-004284105_00007-t37.png",
+        "root image": "004284105_00007",
+        "text": true,
+        "matches": [
+            "72-004284105_00007-t37",
+            "72-004284105_00009-t37"
+        ],
+        "gt": "Cts."
+    },
+    {
+        "pred": "5 ee",
+        "image": "ocr_crops_new/96-004955493_00030-t97.png",
+        "root image": "004955493_00030",
+        "text": true,
+        "matches": [
+            "96-004955493_00030-t97"
+        ],
+        "gt": "\\bad"
+    },
+    {
+        "pred": "MICROFILMED BY THE NATIONAL ARCHIVES",
+        "image": "ocr_crops_new/184-007499090_00008-t0.png",
+        "root image": "007499090_00008",
+        "text": true,
+        "matches": [
+            "184-007499090_00008-t0"
+        ],
+        "gt": "MICROFILMED BY THE NATIONAL ARCHIVES"
+    },
+    {
+        "pred": "Register.)",
+        "image": "ocr_crops_new/39-007641649_00123-t6.png",
+        "root image": "007641649_00123",
+        "text": true,
+        "matches": [
+            "39-007641649_00123-t6",
+            "39-007641649_00124-t6"
+        ],
+        "gt": "Register."
+    },
+    {
+        "pred": "Court of",
+        "image": "ocr_crops_new/181-100587124_00040-t57.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t57",
+            "181-100587124_00118-t57"
+        ],
+        "gt": "Court of"
+    },
+    {
+        "pred": "einlees",
+        "image": "ocr_crops_new/2-004713434_00277-t24.png",
+        "root image": "004713434_00277",
+        "text": true,
+        "matches": [
+            "2-004713434_00277-t24"
+        ],
+        "gt": "in."
+    },
+    {
+        "pred": "rented",
+        "image": "ocr_crops_new/96-004955493_00029-t59.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t59",
+            "96-004955493_00030-t59"
+        ],
+        "gt": "rented"
+    },
+    {
+        "pred": "Q. Who is the owner of these improvemerts? eet",
+        "image": "ocr_crops_new/20-007270209_00006-t151.png",
+        "root image": "007270209_00006",
+        "text": true,
+        "matches": [
+            "20-007270209_00006-t151"
+        ],
+        "gt": "Q. Who is the owner of these improvements? A."
+    },
+    {
+        "pred": "REMARKS",
+        "image": "ocr_crops_new/60-100660788_00018-t66.png",
+        "root image": "100660788_00018",
+        "text": true,
+        "matches": [
+            "60-100660788_00018-t66",
+            "60-100660788_00064-t95"
+        ],
+        "gt": "REMARKS"
+    },
+    {
+        "pred": "SIGNATURE OF EMPLOYEE",
+        "image": "ocr_crops_new/45-100175952_00004-t19.png",
+        "root image": "100175952_00004",
+        "text": true,
+        "matches": [
+            "45-100175952_00004-t19",
+            "45-100175952_00006-t19"
+        ],
+        "gt": "SIGNATURE OF EMPLOYEE"
+    },
+    {
+        "pred": "(Name of port(s) of embarkation)",
+        "image": "ocr_crops_new/187-101044939_00013-t33.png",
+        "root image": "101044939_00013",
+        "text": true,
+        "matches": [
+            "187-101044939_00013-t33",
+            "187-101044939_00020-t33",
+            "187-101044939_00018-t33"
+        ],
+        "gt": "(Name of port(s) of embarkation)"
+    },
+    {
+        "pred": "Declaration of Intention with this",
+        "image": "ocr_crops_new/48-100587124_00356-t16.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t16",
+            "48-100613486_00026-t16"
+        ],
+        "gt": "Declaration of Intention with this"
+    },
+    {
+        "pred": "Te whem getew",
+        "image": "ocr_crops_new/47-004857625_00045-t82.png",
+        "root image": "004857625_00045",
+        "text": true,
+        "matches": [
+            "47-004857625_00045-t82",
+            "47-004857625_00042-t82"
+        ],
+        "gt": "To whom going"
+    },
+    {
+        "pred": "His service is required",
+        "image": "ocr_crops_new/206-100194565_x-t24.png",
+        "root image": "100194565_x",
+        "text": true,
+        "matches": [
+            "206-100194565_x-t24"
+        ],
+        "gt": "His service is required"
+    },
+    {
+        "pred": "FILING MEMORANDUM",
+        "image": "ocr_crops_new/155-004173988_00022-t0.png",
+        "root image": "004173988_00022",
+        "text": true,
+        "matches": [
+            "155-004173988_00022-t0"
+        ],
+        "gt": "FILING MEMORANDUM"
+    },
+    {
+        "pred": "of",
+        "image": "ocr_crops_new/195-007486024_00022-t36.png",
+        "root image": "007486024_00022",
+        "text": true,
+        "matches": [
+            "195-007486024_00022-t36"
+        ],
+        "gt": "of"
+    },
+    {
+        "pred": "shipment of products shall be made until the duly authorized Agent shall certify that all dues to laborers are paid or satisfactorily arranged.",
+        "image": "ocr_crops_new/174-007641608_00216-t49.png",
+        "root image": "007641608_00216",
+        "text": true,
+        "matches": [
+            "174-007641608_00208-t35",
+            "174-007641608_00212-t35",
+            "174-007641608_00216-t49"
+        ],
+        "gt": "shipment of products shall be made until the duly authorized Agent shall certify that all dues to laborers are paid or satisfactorily arranged."
+    },
+    {
+        "pred": "Post Office Building,",
+        "image": "ocr_crops_new/48-100587124_00356-t33.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t33",
+            "48-100613486_00026-t33"
+        ],
+        "gt": "Post Office Building,"
+    },
+    {
+        "pred": "By whom the Teachers are employed,",
+        "image": "ocr_crops_new/186-007675712_00119-t13.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t13"
+        ],
+        "gt": "By whom the Teachers are employed,"
+    },
+    {
+        "pred": "(FOR GOLD EMPLOYEES ONLY)",
+        "image": "ocr_crops_new/9-100194510_00001-t49.png",
+        "root image": "100194510_00001",
+        "text": true,
+        "matches": [
+            "9-100194510_00001-t49",
+            "9-100194510_00003-t49"
+        ],
+        "gt": "(FOR GOLD EMPLOYEES ONLY)"
+    },
+    {
+        "pred": "Bacgeen",
+        "image": "ocr_crops_new/47-004857625_00042-t38.png",
+        "root image": "004857625_00042",
+        "text": true,
+        "matches": [
+            "47-004857625_00042-t38",
+            "47-004857625_00045-t38"
+        ],
+        "gt": "Surgeon"
+    },
+    {
+        "pred": "Name and complete address of nearest relative or",
+        "image": "ocr_crops_new/166-101023522_00018-t15.png",
+        "root image": "101023522_00018",
+        "text": true,
+        "matches": [
+            "166-101023522_00024-t15",
+            "166-101023522_00026-t15",
+            "166-101023522_00018-t15"
+        ],
+        "gt": "Name and complete address of nearest relative or"
+    },
+    {
+        "pred": "person died, |",
+        "image": "ocr_crops_new/86-004191670_00007-t18.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t18",
+            "86-004191670_00010-t18"
+        ],
+        "gt": "person died."
+    },
+    {
+        "pred": "1804",
+        "image": "ocr_crops_new/178-100283146_00037-t62.png",
+        "root image": "100283146_00037",
+        "text": true,
+        "matches": [
+            "178-100283146_00037-t62",
+            "178-100283146_00047-t62",
+            "178-100283146_00065-t62"
+        ],
+        "gt": "1-804"
+    },
+    {
+        "pred": "within the time fpecified in the faid certificate,",
+        "image": "ocr_crops_new/99-100802224_00006-t16.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t16",
+            "99-100802224_00008-t16"
+        ],
+        "gt": "within the time specified in the said certificate."
+    },
+    {
+        "pred": "Treland on oath before",
+        "image": "ocr_crops_new/195-007486024_00022-t19.png",
+        "root image": "007486024_00022",
+        "text": true,
+        "matches": [
+            "195-007486024_00022-t19",
+            "195-007486024_00025-t19",
+            "195-007486024_00020-t19"
+        ],
+        "gt": "Ireland on oath before"
+    },
+    {
+        "pred": "Given. Name",
+        "image": "ocr_crops_new/32-004786715_00019-t3.png",
+        "root image": "004786715_00019",
+        "text": true,
+        "matches": [
+            "32-004786715_00019-t3"
+        ],
+        "gt": "Given Name"
+    },
+    {
+        "pred": "NAME OF",
+        "image": "ocr_crops_new/56-005240858_00010-t19.png",
+        "root image": "005240858_00010",
+        "text": true,
+        "matches": [
+            "56-005240858_00010-t19",
+            "56-005240858_00011-t19"
+        ],
+        "gt": "NAME OF"
+    },
+    {
+        "pred": "Sworn hefone me, this",
+        "image": "ocr_crops_new/113-100802226_00003-t94.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t94"
+        ],
+        "gt": "Sworn before me, this"
+    },
+    {
+        "pred": "informed, and verly believe, to the United States, on or about the",
+        "image": "ocr_crops_new/195-007486024_00025-t40.png",
+        "root image": "007486024_00025",
+        "text": true,
+        "matches": [
+            "195-007486024_00020-t40",
+            "195-007486024_00022-t40",
+            "195-007486024_00025-t40"
+        ],
+        "gt": "informed, and verily believe, to the United States, on or about the"
+    },
+    {
+        "pred": "Name of the Society ?_",
+        "image": "ocr_crops_new/160-007675712_00021-t78.png",
+        "root image": "007675712_00021",
+        "text": true,
+        "matches": [
+            "160-007675712_00021-t78",
+            "160-007675712_00027-t78",
+            "160-007675712_00033-t78"
+        ],
+        "gt": "Name of the Society?"
+    },
+    {
+        "pred": "7",
+        "image": "ocr_crops_new/86-004191670_00007-t46.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t46",
+            "86-004191670_00010-t46"
+        ],
+        "gt": "7"
+    },
+    {
+        "pred": "30",
+        "image": "ocr_crops_new/86-004191670_00007-t145.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t145",
+            "86-004191670_00010-t145"
+        ],
+        "gt": "30"
+    },
+    {
+        "pred": "ot_",
+        "image": "ocr_crops_new/171-100423934_00135-t10.png",
+        "root image": "100423934_00135",
+        "text": true,
+        "matches": [
+            "171-100423934_00135-t10"
+        ],
+        "gt": "of"
+    },
+    {
+        "pred": "Places of their Birth and Residence, as far as Lean ascertain the same.",
+        "image": "ocr_crops_new/180-100760033_00005-t5.png",
+        "root image": "100760033_00005",
+        "text": true,
+        "matches": [
+            "180-100760033_00005-t5",
+            "180-100760033_00015-t5",
+            "180-100760033_00011-t5"
+        ],
+        "gt": "Places of their Birth and Residence, as far as I can ascertain the same."
+    },
+    {
+        "pred": "aforesaid during the year commencing on the.",
+        "image": "ocr_crops_new/6-007641608_00126-t8.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t8",
+            "6-007641608_00138-t8"
+        ],
+        "gt": "aforesaid during the year commencing on the"
+    },
+    {
+        "pred": "(8)",
+        "image": "ocr_crops_new/193-100101969_00067-t51.png",
+        "root image": "100101969_00067",
+        "text": true,
+        "matches": [
+            "193-100101969_00067-t51"
+        ],
+        "gt": "(8)"
+    },
+    {
+        "pred": "Sworn to before me this",
+        "image": "ocr_crops_new/38-100283147_00023-t28.png",
+        "root image": "100283147_00023",
+        "text": true,
+        "matches": [
+            "38-100283147_00023-t28",
+            "38-100283147_00038-t28"
+        ],
+        "gt": "Sworn to before me this"
+    },
+    {
+        "pred": "NAME OF",
+        "image": "ocr_crops_new/56-005240858_00010-t47.png",
+        "root image": "005240858_00010",
+        "text": true,
+        "matches": [
+            "56-005240858_00010-t47",
+            "56-005240858_00011-t47"
+        ],
+        "gt": "NAME OF"
+    },
+    {
+        "pred": "33",
+        "image": "ocr_crops_new/86-004191670_00010-t157.png",
+        "root image": "004191670_00010",
+        "text": true,
+        "matches": [
+            "86-004191670_00010-t157"
+        ],
+        "gt": "23"
+    },
+    {
+        "pred": "Deputy Collector of Customs.",
+        "image": "ocr_crops_new/38-100283147_00038-t34.png",
+        "root image": "100283147_00038",
+        "text": true,
+        "matches": [
+            "38-100283147_00038-t34"
+        ],
+        "gt": "Deputy Collector of Customs."
+    },
+    {
+        "pred": "| VESSEL",
+        "image": "ocr_crops_new/203-007540939_00106-t66.png",
+        "root image": "007540939_00106",
+        "text": true,
+        "matches": [
+            "203-007540939_00106-t66",
+            "203-007540939_00287-t66"
+        ],
+        "gt": "Vessel"
+    },
+    {
+        "pred": "that there is no Conful, or other: Public Agent: of the dtnited",
+        "image": "ocr_crops_new/99-100802224_00006-t54.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t54",
+            "99-100802224_00008-t54"
+        ],
+        "gt": "that there is no Consul, or other Public Agent of the United"
+    },
+    {
+        "pred": "(Act of Congress, approved March 3, 1905).",
+        "image": "ocr_crops_new/72-004284105_00007-t6.png",
+        "root image": "004284105_00007",
+        "text": true,
+        "matches": [
+            "72-004284105_00007-t6",
+            "72-004284105_00009-t6"
+        ],
+        "gt": "(Act of Congress, approved March 3, 1905)."
+    },
+    {
+        "pred": "card muSt~bemvisaed by :",
+        "image": "ocr_crops_new/178-100283146_00047-t40.png",
+        "root image": "100283146_00047",
+        "text": true,
+        "matches": [
+            "178-100283146_00047-t40"
+        ],
+        "gt": "card must be visaed by a"
+    },
+    {
+        "pred": "Vessel,",
+        "image": "ocr_crops_new/203-007540939_00106-t11.png",
+        "root image": "007540939_00106",
+        "text": true,
+        "matches": [
+            "203-007540939_00106-t11",
+            "203-007540939_00287-t11"
+        ],
+        "gt": "Vessel"
+    },
+    {
+        "pred": "Nuom-",
+        "image": "ocr_crops_new/96-004955493_00029-t169.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t169",
+            "96-004955493_00030-t169"
+        ],
+        "gt": "Num-"
+    },
+    {
+        "pred": "20",
+        "image": "ocr_crops_new/204-005150587_00024-t22.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t22"
+        ],
+        "gt": "20"
+    },
+    {
+        "pred": "Place and date of issue",
+        "image": "ocr_crops_new/213-100682131_00025-t9.png",
+        "root image": "100682131_00025",
+        "text": true,
+        "matches": [
+            "213-100682131_00025-t9"
+        ],
+        "gt": "Place and date of issue"
+    },
+    {
+        "pred": "",
+        "image": "ocr_crops_new/174-007641608_00216-t86.png",
+        "root image": "007641608_00216",
+        "text": true,
+        "matches": [
+            "174-007641608_00216-t86"
+        ],
+        "gt": "REMARKS."
+    },
+    {
+        "pred": "_, 191",
+        "image": "ocr_crops_new/38-100283147_00023-t30.png",
+        "root image": "100283147_00023",
+        "text": true,
+        "matches": [
+            "38-100283147_00023-t30",
+            "38-100283147_00038-t30"
+        ],
+        "gt": ", 191"
+    },
+    {
+        "pred": "Language or exemption",
+        "image": "ocr_crops_new/213-100682131_00025-t23.png",
+        "root image": "100682131_00025",
+        "text": true,
+        "matches": [
+            "213-100682131_00025-t23"
+        ],
+        "gt": "Language or exemption"
+    },
+    {
+        "pred": "Number in higher branches?",
+        "image": "ocr_crops_new/160-007675712_00021-t52.png",
+        "root image": "007675712_00021",
+        "text": true,
+        "matches": [
+            "160-007675712_00021-t52",
+            "160-007675712_00033-t52",
+            "160-007675712_00027-t46"
+        ],
+        "gt": "Number in higher branches?"
+    },
+    {
+        "pred": "day of",
+        "image": "ocr_crops_new/185-100283146_00004-t4.png",
+        "root image": "100283146_00004",
+        "text": true,
+        "matches": [
+            "185-100283146_00004-t4",
+            "185-100283146_00011-t38"
+        ],
+        "gt": "day of"
+    },
+    {
+        "pred": "Filed",
+        "image": "ocr_crops_new/123-100572410_00029-t6.png",
+        "root image": "100572410_00029",
+        "text": true,
+        "matches": [
+            "123-100572410_00029-t6"
+        ],
+        "gt": "Filed"
+    },
+    {
+        "pred": "[SEAL.]",
+        "image": "ocr_crops_new/203-007540939_00287-t48.png",
+        "root image": "007540939_00287",
+        "text": true,
+        "matches": [
+            "203-007540939_00287-t48"
+        ],
+        "gt": "[SEAL.]"
+    },
+    {
+        "pred": "ARRIVAL",
+        "image": "ocr_crops_new/193-100101969_00067-t28.png",
+        "root image": "100101969_00067",
+        "text": true,
+        "matches": [
+            "193-100101969_00067-t28",
+            "193-100101969_00093-t29",
+            "193-100101969_00221-t28",
+            "193-100101969_00259-t27",
+            "193-100901188_00075-t25"
+        ],
+        "gt": "ARRIVAL"
+    },
+    {
+        "pred": "Nationality",
+        "image": "ocr_crops_new/208-100214276_x-t11.png",
+        "root image": "100214276_x",
+        "text": true,
+        "matches": [
+            "208-100214276_x-t11"
+        ],
+        "gt": "Nationality"
+    },
+    {
+        "pred": "Res ante da oo Are",
+        "image": "ocr_crops_new/99-100802224_00008-t46.png",
+        "root image": "100802224_00008",
+        "text": true,
+        "matches": [
+            "99-100802224_00008-t46"
+        ],
+        "gt": "merchants do declare"
+    },
+    {
+        "pred": "U.@. Rwifient.",
+        "image": "ocr_crops_new/154-007182398_00028-t12.png",
+        "root image": "007182398_00028",
+        "text": true,
+        "matches": [
+            "154-007182398_00028-t12"
+        ],
+        "gt": "U.S. Regiment,"
+    },
+    {
+        "pred": "Mariner nn hoard the American.",
+        "image": "ocr_crops_new/113-100802226_00003-t89.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t89"
+        ],
+        "gt": "Mariner on board the American"
+    },
+    {
+        "pred": "DATE OF BIRTH OR AGE",
+        "image": "ocr_crops_new/45-100175952_00004-t13.png",
+        "root image": "100175952_00004",
+        "text": true,
+        "matches": [
+            "45-100175952_00004-t13",
+            "45-100175952_00006-t13"
+        ],
+        "gt": "DATE OF BIRTH OR AGE"
+    },
+    {
+        "pred": "to be paid at the rate of onyfays labor, and to reecive (4) one-half ration extra for every six hours work. Said parties of the second part do further agree to do such extraordinary work as may be necessary on Sundays or night, for the security of Plantations",
+        "image": "ocr_crops_new/6-007641608_00126-t37.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t37",
+            "6-007641608_00138-t37"
+        ],
+        "gt": "to be paid at the rate of one days labor, and to receive (1/2) one-half ration extra for every six hours' work. Said parties of the second part do further agree to do such extraordinary work as may be necessary on Sundays or night, for the security of Plantations"
+    },
+    {
+        "pred": "In 3d,",
+        "image": "ocr_crops_new/186-007675712_00119-t35.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t35"
+        ],
+        "gt": "In 3d,"
+    },
+    {
+        "pred": "(Occupation),",
+        "image": "ocr_crops_new/9-100194510_00001-t17.png",
+        "root image": "100194510_00001",
+        "text": true,
+        "matches": [
+            "9-100194510_00001-t17",
+            "9-100194510_00003-t17"
+        ],
+        "gt": "(Occupation)"
+    },
+    {
+        "pred": "REMARKS.",
+        "image": "ocr_crops_new/39-007641649_00123-t22.png",
+        "root image": "007641649_00123",
+        "text": true,
+        "matches": [
+            "39-007641649_00123-t22"
+        ],
+        "gt": "REMARKS."
+    },
+    {
+        "pred": "Cet. No; 1436",
+        "image": "ocr_crops_new/23-100283146_00001-t0.png",
+        "root image": "100283146_00001",
+        "text": true,
+        "matches": [
+            "23-100283146_00001-t0",
+            "23-100283146_00041-t0"
+        ],
+        "gt": "Cat. No. 1436"
+    },
+    {
+        "pred": "SESE of Sees) Corplauny MeO te",
+        "image": "ocr_crops_new/189-100760033_00014-t2.png",
+        "root image": "100760033_00014",
+        "text": true,
+        "matches": [
+            "189-100760033_00014-t2"
+        ],
+        "gt": "List of Persons Composing the Crew of the"
+    },
+    {
+        "pred": "yea",
+        "image": "ocr_crops_new/181-100587124_00040-t53.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t53"
+        ],
+        "gt": ", 1"
+    },
+    {
+        "pred": "Asst Marshal.",
+        "image": "ocr_crops_new/62-004191670_00065-t5.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t5",
+            "62-004191670_00079-t5"
+        ],
+        "gt": "Ass't Marshal."
+    },
+    {
+        "pred": "COMPLEXION.",
+        "image": "ocr_crops_new/35-100788105_00006-t27.png",
+        "root image": "100788105_00006",
+        "text": true,
+        "matches": [
+            "35-100788105_00006-t27",
+            "35-100788105_00008-t27"
+        ],
+        "gt": "COMPLEXION."
+    },
+    {
+        "pred": "de",
+        "image": "ocr_crops_new/181-100587124_00040-t99.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t99"
+        ],
+        "gt": ", 1"
+    },
+    {
+        "pred": "1. PORT OF",
+        "image": "ocr_crops_new/37-100093596_00222-t3.png",
+        "root image": "100093596_00222",
+        "text": true,
+        "matches": [
+            "37-100093596_00222-t3",
+            "37-100101969_00101-t3"
+        ],
+        "gt": "1. PORT OF"
+    },
+    {
+        "pred": "31",
+        "image": "ocr_crops_new/62-004191670_00065-t247.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t247",
+            "62-004191670_00079-t247"
+        ],
+        "gt": "31"
+    },
+    {
+        "pred": "NO.",
+        "image": "ocr_crops_new/6-007641608_00126-t67.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t67",
+            "6-007641608_00138-t67"
+        ],
+        "gt": "NO."
+    },
+    {
+        "pred": "separately.",
+        "image": "ocr_crops_new/187-101044939_00013-t48.png",
+        "root image": "101044939_00013",
+        "text": true,
+        "matches": [
+            "187-101044939_00013-t48"
+        ],
+        "gt": "separately,"
+    },
+    {
+        "pred": "_ personally for .",
+        "image": "ocr_crops_new/38-100283147_00023-t6.png",
+        "root image": "100283147_00023",
+        "text": true,
+        "matches": [
+            "38-100283147_00023-t6",
+            "38-100283147_00038-t6"
+        ],
+        "gt": "personally for"
+    },
+    {
+        "pred": "Citizen of-",
+        "image": "ocr_crops_new/9-100194510_00001-t29.png",
+        "root image": "100194510_00001",
+        "text": true,
+        "matches": [
+            "9-100194510_00001-t29",
+            "9-100194510_00003-t29"
+        ],
+        "gt": "Citizen of"
+    },
+    {
+        "pred": "meningitis as cerebro-spinal fever. Do not report as the cause of death old age,",
+        "image": "ocr_crops_new/17-007579716_00226-t28.png",
+        "root image": "007579716_00226",
+        "text": true,
+        "matches": [
+            "17-007579716_00226-t28",
+            "17-007579716_00230-t28",
+            "17-007579716_00232-t28"
+        ],
+        "gt": "meningitis as cerebro-spinal fever. Do not report as the cause of death old age,"
+    },
+    {
+        "pred": "or near his enumeration district, who is named in this Schedule as the physician",
+        "image": "ocr_crops_new/17-007579716_00226-t40.png",
+        "root image": "007579716_00226",
+        "text": true,
+        "matches": [
+            "17-007579716_00226-t40",
+            "17-007579716_00230-t40",
+            "17-007579716_00232-t40"
+        ],
+        "gt": "or near his enumeration district, who is named in this Schedule as the physician"
+    },
+    {
+        "pred": "Family Name",
+        "image": "ocr_crops_new/60-100660788_00018-t52.png",
+        "root image": "100660788_00018",
+        "text": true,
+        "matches": [
+            "60-100660788_00018-t52",
+            "60-100660788_00064-t124"
+        ],
+        "gt": "Family Name"
+    },
+    {
+        "pred": "% qa2ece",
+        "image": "ocr_crops_new/37-100101969_00101-t7.png",
+        "root image": "100101969_00101",
+        "text": true,
+        "matches": [
+            "37-100101969_00101-t7"
+        ],
+        "gt": "5. CARRIER"
+    },
+    {
+        "pred": "U, S, GOVERNMENT PRINTING OFFICE 1667664-1",
+        "image": "ocr_crops_new/64-100423934_00038-t62.png",
+        "root image": "100423934_00038",
+        "text": true,
+        "matches": [
+            "64-100423934_00038-t62",
+            "64-100423934_00056-t62"
+        ],
+        "gt": "U. S. GOVERNMENT PRINTING OFFICE 16-67664-1"
+    },
+    {
+        "pred": "whereof",
+        "image": "ocr_crops_new/180-100760033_00005-t22.png",
+        "root image": "100760033_00005",
+        "text": true,
+        "matches": [
+            "180-100760033_00005-t22",
+            "180-100760033_00011-t22",
+            "180-100760033_00015-t22"
+        ],
+        "gt": "whereof"
+    },
+    {
+        "pred": "Mother,",
+        "image": "ocr_crops_new/210-004098525_00025-t60.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t60"
+        ],
+        "gt": "Mother,"
+    },
+    {
+        "pred": "Is your School supported wholly by local School Board ?*.",
+        "image": "ocr_crops_new/160-007675712_00021-t15.png",
+        "root image": "007675712_00021",
+        "text": true,
+        "matches": [
+            "160-007675712_00021-t15",
+            "160-007675712_00027-t15",
+            "160-007675712_00033-t15"
+        ],
+        "gt": "Is your School supported wholly by local School Board ?*"
+    },
+    {
+        "pred": "DAYS ILL. |",
+        "image": "ocr_crops_new/62-004191670_00065-t36.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t36",
+            "62-004191670_00079-t36"
+        ],
+        "gt": "DAYS ILL."
+    },
+    {
+        "pred": "(The stamp of the Local Board having jurisdiction of the area in which",
+        "image": "ocr_crops_new/204-005150587_00024-t109.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t109"
+        ],
+        "gt": "(The stamp of the Local Board having jurisdiction of the area in which"
+    },
+    {
+        "pred": "Age",
+        "image": "ocr_crops_new/60-100660788_00018-t58.png",
+        "root image": "100660788_00018",
+        "text": true,
+        "matches": [
+            "60-100660788_00018-t58",
+            "60-100660788_00064-t104"
+        ],
+        "gt": "Age"
+    },
+    {
+        "pred": "Number",
+        "image": "ocr_crops_new/199-007270209_00003-t23.png",
+        "root image": "007270209_00003",
+        "text": true,
+        "matches": [
+            "199-007270209_00003-t23",
+            "199-007270209_00007-t23"
+        ],
+        "gt": "Number"
+    },
+    {
+        "pred": "principal Ofiticers, in cate of accident.",
+        "image": "ocr_crops_new/99-100802224_00006-t23.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t23",
+            "99-100802224_00008-t23"
+        ],
+        "gt": "principal Officers, in case of accident."
+    },
+    {
+        "pred": "IMMIGRATION AND NATURALIZATIONSME LCE",
+        "image": "ocr_crops_new/91-100423934_00003-t2.png",
+        "root image": "100423934_00003",
+        "text": true,
+        "matches": [
+            "91-100423934_00003-t2",
+            "91-100423934_00005-t2"
+        ],
+        "gt": "IMMIGRATION AND NATURALIZATION SERVICE"
+    },
+    {
+        "pred": "CHARGE,",
+        "image": "ocr_crops_new/61-007641596_00274-t4.png",
+        "root image": "007641596_00274",
+        "text": true,
+        "matches": [
+            "61-007641596_00274-t4",
+            "61-007641596_00275-t4"
+        ],
+        "gt": "CHARGE."
+    },
+    {
+        "pred": "ber of",
+        "image": "ocr_crops_new/96-004955493_00029-t26.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t26",
+            "96-004955493_00030-t26"
+        ],
+        "gt": "ber of"
+    },
+    {
+        "pred": "to me proof, in the shine gixected by law, and I do hereby certify that",
+        "image": "ocr_crops_new/23-100283146_00001-t21.png",
+        "root image": "100283146_00001",
+        "text": true,
+        "matches": [
+            "23-100283146_00001-t21",
+            "23-100283146_00041-t21"
+        ],
+        "gt": "to me proof, in the manner directed by law, and I do hereby certify that"
+    },
+    {
+        "pred": "lf puildings, state whether house, barn, shed, etc.",
+        "image": "ocr_crops_new/20-007270209_00002-t118.png",
+        "root image": "007270209_00002",
+        "text": true,
+        "matches": [
+            "20-007270209_00002-t118",
+            "20-007270209_00006-t118"
+        ],
+        "gt": "If buildings, state whether house, barn, shed, etc."
+    },
+    {
+        "pred": "Date",
+        "image": "ocr_crops_new/32-004786715_00019-t21.png",
+        "root image": "004786715_00019",
+        "text": true,
+        "matches": [
+            "32-004786715_00019-t21",
+            "32-004786715_00068-t21"
+        ],
+        "gt": "Date"
+    },
+    {
+        "pred": "Seaman's Protection Certificate No.",
+        "image": "ocr_crops_new/185-100283146_00004-t8.png",
+        "root image": "100283146_00004",
+        "text": true,
+        "matches": [
+            "185-100283146_00004-t8",
+            "185-100283146_00011-t44",
+            "185-100283146_00008-t44"
+        ],
+        "gt": "Seaman's Protection Certificate No."
+    },
+    {
+        "pred": "2 Has person lost wens lee, and: eye, or is he abvtowaly phviteatty disqualified?",
+        "image": "ocr_crops_new/204-005150587_00024-t101.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t101"
+        ],
+        "gt": "29 Has person lost arm leg, hand, eye, or is he obviously physically disqualified?"
+    },
+    {
+        "pred": "FILM EMULSION NUMBER",
+        "image": "ocr_crops_new/184-007499090_00008-t6.png",
+        "root image": "007499090_00008",
+        "text": true,
+        "matches": [
+            "184-007499090_00008-t6"
+        ],
+        "gt": "FILM EMULSION NUMBER"
+    },
+    {
+        "pred": "My name is",
+        "image": "ocr_crops_new/181-100587124_00040-t16.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t16",
+            "181-100587124_00118-t16"
+        ],
+        "gt": "My name is"
+    },
+    {
+        "pred": "Free or slave.",
+        "image": "ocr_crops_new/62-004191670_00065-t20.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t20",
+            "62-004191670_00079-t20"
+        ],
+        "gt": "Free or slave."
+    },
+    {
+        "pred": "Date,",
+        "image": "ocr_crops_new/210-004098525_00025-t21.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t21"
+        ],
+        "gt": "Date,"
+    },
+    {
+        "pred": "23",
+        "image": "ocr_crops_new/62-004191670_00065-t86.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t86",
+            "62-004191670_00079-t86"
+        ],
+        "gt": "23"
+    },
+    {
+        "pred": "I",
+        "image": "ocr_crops_new/113-100802226_00003-t195.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t195"
+        ],
+        "gt": "I"
+    },
+    {
+        "pred": "SCHEDULE 3.Persons who Died during the Year ending ist June, 1860, in",
+        "image": "ocr_crops_new/62-004191670_00065-t130.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t130",
+            "62-004191670_00079-t130"
+        ],
+        "gt": "SCHEDULE 3.-Persons who Died during the Year ending 1st June, 1860, in"
+    },
+    {
+        "pred": "9",
+        "image": "ocr_crops_new/62-004191670_00065-t228.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t228"
+        ],
+        "gt": "5"
+    },
+    {
+        "pred": "4",
+        "image": "ocr_crops_new/96-004955493_00029-t44.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t44",
+            "96-004955493_00030-t44"
+        ],
+        "gt": "4"
+    },
+    {
+        "pred": "SS.",
+        "image": "ocr_crops_new/150-100572410_00028-t3.png",
+        "root image": "100572410_00028",
+        "text": true,
+        "matches": [
+            "150-100572410_00028-t3"
+        ],
+        "gt": "SS."
+    },
+    {
+        "pred": "Date of Death",
+        "image": "ocr_crops_new/154-007182398_00039-t65.png",
+        "root image": "007182398_00039",
+        "text": true,
+        "matches": [
+            "154-007182398_00039-t65",
+            "154-007182398_00071-t64",
+            "154-007182398_00028-t15"
+        ],
+        "gt": "Date of Death"
+    },
+    {
+        "pred": "JMPORTANT NOTICE TO APPLICANT.It is VERY IMPORTANT that this Form be CAREFULLY AND COMPLETE-",
+        "image": "ocr_crops_new/48-100587124_00356-t1.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t1",
+            "48-100613486_00026-t1"
+        ],
+        "gt": "IMPORTANT NOTICE TO APPLICANT.-It is VERY IMPORTANT that this Form be CAREFULLY AND COMPLETE-"
+    },
+    {
+        "pred": "(Name.)",
+        "image": "ocr_crops_new/181-100587124_00040-t161.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t161",
+            "181-100587124_00118-t161"
+        ],
+        "gt": "(Name.)"
+    },
+    {
+        "pred": "Initials",
+        "image": "ocr_crops_new/9-100194510_00001-t70.png",
+        "root image": "100194510_00001",
+        "text": true,
+        "matches": [
+            "9-100194510_00001-t70",
+            "9-100194510_00003-t70"
+        ],
+        "gt": "Initials"
+    },
+    {
+        "pred": "10 PERSON",
+        "image": "ocr_crops_new/199-007270209_00007-t11.png",
+        "root image": "007270209_00007",
+        "text": true,
+        "matches": [
+            "199-007270209_00007-t11"
+        ],
+        "gt": "TO PERSON"
+    },
+    {
+        "pred": "(State.)",
+        "image": "ocr_crops_new/48-100587124_00356-t39.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t39",
+            "48-100613486_00026-t39"
+        ],
+        "gt": "(State.)"
+    },
+    {
+        "pred": "Occupation,",
+        "image": "ocr_crops_new/210-004098525_00025-t28.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t28"
+        ],
+        "gt": "Occupation,"
+    },
+    {
+        "pred": "Asst. Insp. Fyveedmen.",
+        "image": "ocr_crops_new/25-007641636_00290-t2.png",
+        "root image": "007641636_00290",
+        "text": true,
+        "matches": [
+            "25-007641636_00290-t2",
+            "25-007641636_00292-t2"
+        ],
+        "gt": "Asst. Insp. Freedmen."
+    },
+    {
+        "pred": "(City or town!",
+        "image": "ocr_crops_new/204-005150587_00024-t58.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t58"
+        ],
+        "gt": "(City or town)"
+    },
+    {
+        "pred": "FLAT MARBLE MARKER",
+        "image": "ocr_crops_new/154-007182398_00039-t49.png",
+        "root image": "007182398_00039",
+        "text": true,
+        "matches": [
+            "154-007182398_00039-t49",
+            "154-007182398_00071-t52"
+        ],
+        "gt": "FLAT MARBLE MARKER"
+    },
+    {
+        "pred": "6 ENDING DATE",
+        "image": "ocr_crops_new/37-100093596_00222-t11.png",
+        "root image": "100093596_00222",
+        "text": true,
+        "matches": [
+            "37-100093596_00222-t11"
+        ],
+        "gt": "6 ENDING DATE"
+    },
+    {
+        "pred": "a Certificate of which",
+        "image": "ocr_crops_new/195-007486024_00020-t21.png",
+        "root image": "007486024_00020",
+        "text": true,
+        "matches": [
+            "195-007486024_00020-t21",
+            "195-007486024_00022-t21",
+            "195-007486024_00025-t21"
+        ],
+        "gt": "a Certificate of which"
+    },
+    {
+        "pred": "NAME IN FULL",
+        "image": "ocr_crops_new/60-100660788_00018-t50.png",
+        "root image": "100660788_00018",
+        "text": true,
+        "matches": [
+            "60-100660788_00018-t50",
+            "60-100660788_00064-t122"
+        ],
+        "gt": "NAME IN FULL"
+    },
+    {
+        "pred": "with his own views, signing each entry.",
+        "image": "ocr_crops_new/17-007579716_00226-t52.png",
+        "root image": "007579716_00226",
+        "text": true,
+        "matches": [
+            "17-007579716_00226-t52",
+            "17-007579716_00230-t52",
+            "17-007579716_00232-t52"
+        ],
+        "gt": "with his own views, signing each entry."
+    },
+    {
+        "pred": "Master.",
+        "image": "ocr_crops_new/52-007540939_00029-t35.png",
+        "root image": "007540939_00029",
+        "text": true,
+        "matches": [
+            "52-007540939_00029-t35",
+            "52-007540939_00042-t35"
+        ],
+        "gt": "Master."
+    },
+    {
+        "pred": "Physical marks,",
+        "image": "ocr_crops_new/60-100660788_00064-t96.png",
+        "root image": "100660788_00064",
+        "text": true,
+        "matches": [
+            "60-100660788_00064-t96"
+        ],
+        "gt": "Physical marks,"
+    },
+    {
+        "pred": "day of",
+        "image": "ocr_crops_new/180-100760033_00005-t18.png",
+        "root image": "100760033_00005",
+        "text": true,
+        "matches": [
+            "180-100760033_00005-t18",
+            "180-100760033_00011-t18",
+            "180-100760033_00015-t18"
+        ],
+        "gt": "day of"
+    },
+    {
+        "pred": "Hu Testimony HWhevent, the said parties have affixed their names to this Agreement at",
+        "image": "ocr_crops_new/6-007641608_00126-t47.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t47",
+            "6-007641608_00138-t47"
+        ],
+        "gt": "In Testimony Whereof, the said parties have affixed their names to this Agreement at"
+    },
+    {
+        "pred": "Port of",
+        "image": "ocr_crops_new/90-007540939_00160-t4.png",
+        "root image": "007540939_00160",
+        "text": true,
+        "matches": [
+            "90-007540939_00160-t4"
+        ],
+        "gt": "Port of"
+    },
+    {
+        "pred": "Witnesses to mark:",
+        "image": "ocr_crops_new/20-007270209_00002-t170.png",
+        "root image": "007270209_00002",
+        "text": true,
+        "matches": [
+            "20-007270209_00002-t170",
+            "20-007270209_00006-t170"
+        ],
+        "gt": "Witnesses to mark:"
+    },
+    {
+        "pred": "mys per week and six",
+        "image": "ocr_crops_new/160-007675712_00033-t86.png",
+        "root image": "007675712_00033",
+        "text": true,
+        "matches": [
+            "160-007675712_00033-t86"
+        ],
+        "gt": "days per week and six"
+    },
+    {
+        "pred": "ear.)",
+        "image": "ocr_crops_new/48-100587124_00356-t85.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t85",
+            "48-100613486_00026-t85"
+        ],
+        "gt": "(Year.)"
+    },
+    {
+        "pred": "Time and Place of Each",
+        "image": "ocr_crops_new/65-004832573_00044-t53.png",
+        "root image": "004832573_00044",
+        "text": true,
+        "matches": [
+            "65-004832573_00044-t53",
+            "65-004832573_00050-t53"
+        ],
+        "gt": "Time and Place of Each"
+    },
+    {
+        "pred": "he been",
+        "image": "ocr_crops_new/96-004955493_00029-t166.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t166",
+            "96-004955493_00030-t166"
+        ],
+        "gt": "he been"
+    },
+    {
+        "pred": "AFFIDAVIT OF LOSS OF SEAMAN'S PROTECTIVE CERTIFICATE",
+        "image": "ocr_crops_new/185-100283146_00004-t1.png",
+        "root image": "100283146_00004",
+        "text": true,
+        "matches": [
+            "185-100283146_00004-t1",
+            "185-100283146_00011-t1"
+        ],
+        "gt": "AFFIDAVIT OF LOSS OF SEAMAN'S PROTECTIVE CERTIFICATE"
+    },
+    {
+        "pred": "Maul a",
+        "image": "ocr_crops_new/113-100802226_00003-t219.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t219"
+        ],
+        "gt": "Mates and"
+    },
+    {
+        "pred": "are listed in the foregoing sheets Nos.",
+        "image": "ocr_crops_new/187-101044939_00013-t35.png",
+        "root image": "101044939_00013",
+        "text": true,
+        "matches": [
+            "187-101044939_00013-t35",
+            "187-101044939_00018-t35",
+            "187-101044939_00020-t35"
+        ],
+        "gt": "are listed in the foregoing sheets Nos."
+    },
+    {
+        "pred": "NAME OF EVERY PERSON WHO DIED",
+        "image": "ocr_crops_new/62-004191670_00065-t8.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t8",
+            "62-004191670_00079-t8"
+        ],
+        "gt": "NAME OF EVERY PERSON WHO DIED"
+    },
+    {
+        "pred": "Te",
+        "image": "ocr_crops_new/38-100283147_00023-t1.png",
+        "root image": "100283147_00023",
+        "text": true,
+        "matches": [
+            "38-100283147_00023-t1"
+        ],
+        "gt": "I,"
+    },
+    {
+        "pred": "pow a resident in",
+        "image": "ocr_crops_new/36-007486024_00002-t5.png",
+        "root image": "007486024_00002",
+        "text": true,
+        "matches": [
+            "36-007486024_00002-t5"
+        ],
+        "gt": "now a resident in"
+    },
+    {
+        "pred": ", 191",
+        "image": "ocr_crops_new/206-100194565_x-t6.png",
+        "root image": "100194565_x",
+        "text": true,
+        "matches": [
+            "206-100194565_x-t6"
+        ],
+        "gt": ", 191"
+    },
+    {
+        "pred": "SI",
+        "image": "ocr_crops_new/62-004191670_00065-t113.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t113"
+        ],
+        "gt": "31"
+    },
+    {
+        "pred": "Index books",
+        "image": "ocr_crops_new/48-100587124_00356-t23.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t23",
+            "48-100613486_00026-t23"
+        ],
+        "gt": "Index books"
+    },
+    {
+        "pred": "stgar-cane Plantation, ere.",
+        "image": "ocr_crops_new/96-004955493_00029-t143.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t143",
+            "96-004955493_00030-t143"
+        ],
+        "gt": "sugar-cane plantation, etc."
+    },
+    {
+        "pred": "Death.",
+        "image": "ocr_crops_new/65-004832573_00044-t49.png",
+        "root image": "004832573_00044",
+        "text": true,
+        "matches": [
+            "65-004832573_00044-t49",
+            "65-004832573_00050-t49"
+        ],
+        "gt": "Death."
+    },
+    {
+        "pred": "of",
+        "image": "ocr_crops_new/64-100423934_00038-t50.png",
+        "root image": "100423934_00038",
+        "text": true,
+        "matches": [
+            "64-100423934_00038-t50",
+            "64-100423934_00056-t50"
+        ],
+        "gt": "of"
+    },
+    {
+        "pred": "DISCHARGED SEAMEN.",
+        "image": "ocr_crops_new/52-007540939_00029-t7.png",
+        "root image": "007540939_00029",
+        "text": true,
+        "matches": [
+            "52-007540939_00029-t7",
+            "52-007540939_00042-t7"
+        ],
+        "gt": "DISCHARGED SEAMEN."
+    },
+    {
+        "pred": "Enumerator.",
+        "image": "ocr_crops_new/96-004955493_00029-t12.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t12"
+        ],
+        "gt": "Enumerator."
+    },
+    {
+        "pred": "Mariner ot board the American",
+        "image": "ocr_crops_new/113-100802226_00003-t133.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t133"
+        ],
+        "gt": "Mariner on board the American"
+    },
+    {
+        "pred": "See a IN STATUS",
+        "image": "ocr_crops_new/46-100251356_00001-t26.png",
+        "root image": "100251356_00001",
+        "text": true,
+        "matches": [
+            "46-100251356_00001-t26",
+            "46-100251356_00025-t26"
+        ],
+        "gt": "CHANGES IN STATUS"
+    },
+    {
+        "pred": "Parishes of St. Helena, St. Tammany and Washiegton. Stateos Lewsianm",
+        "image": "ocr_crops_new/50-007641631_00133-t31.png",
+        "root image": "007641631_00133",
+        "text": true,
+        "matches": [
+            "50-007641631_00133-t31",
+            "50-007641631_00137-t31"
+        ],
+        "gt": "Parishes of St. Helena, St. Tammany and Washington. State of Louisiana,"
+    },
+    {
+        "pred": "he",
+        "image": "ocr_crops_new/185-100283146_00008-t41.png",
+        "root image": "100283146_00008",
+        "text": true,
+        "matches": [
+            "185-100283146_00008-t41",
+            "185-100283146_00011-t41"
+        ],
+        "gt": "he"
+    },
+    {
+        "pred": "job?",
+        "image": "ocr_crops_new/96-004955493_00029-t168.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t168",
+            "96-004955493_00030-t168"
+        ],
+        "gt": "job?"
+    },
+    {
+        "pred": "residence in some other State must be established at the hearing by the testimony of the same or other witnesses appearing in person, or by depositions taken under section 10 of the naturalization act of June 29, 1906. The required form for",
+        "image": "ocr_crops_new/181-100587124_00040-t176.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t176",
+            "181-100587124_00118-t176"
+        ],
+        "gt": "residence in some other State must be established at the hearing by the testimony of the same or other witnesses appearing in person, or by depositions taken under section 10 of the naturalization act of June 29, 1906. The required form for"
+    },
+    {
+        "pred": "now fying at Charleiton, dao",
+        "image": "ocr_crops_new/113-100802226_00003-t197.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t197"
+        ],
+        "gt": "now lying at Charleston, do"
+    },
+    {
+        "pred": "Last permanent residence (town, country, ote.)",
+        "image": "ocr_crops_new/213-100682131_00025-t26.png",
+        "root image": "100682131_00025",
+        "text": true,
+        "matches": [
+            "213-100682131_00025-t26"
+        ],
+        "gt": "Last permanent residence (town, country, etc.)"
+    },
+    {
+        "pred": "Discharge dates",
+        "image": "ocr_crops_new/154-007182398_00039-t55.png",
+        "root image": "007182398_00039",
+        "text": true,
+        "matches": [
+            "154-007182398_00039-t55",
+            "154-007182398_00071-t56",
+            "154-007182398_00028-t7"
+        ],
+        "gt": "Discharge dates"
+    },
+    {
+        "pred": "In the -",
+        "image": "ocr_crops_new/64-100423934_00038-t48.png",
+        "root image": "100423934_00038",
+        "text": true,
+        "matches": [
+            "64-100423934_00038-t48",
+            "64-100423934_00056-t48"
+        ],
+        "gt": "In the"
+    },
+    {
+        "pred": "(Give name in full,)",
+        "image": "ocr_crops_new/48-100587124_00356-t86.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t86",
+            "48-100613486_00026-t86"
+        ],
+        "gt": "(Give name in full.)"
+    },
+    {
+        "pred": "of",
+        "image": "ocr_crops_new/113-100802226_00003-t162.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t162"
+        ],
+        "gt": "of"
+    },
+    {
+        "pred": "Paae No.",
+        "image": "ocr_crops_new/62-004191670_00065-t132.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t132",
+            "62-004191670_00079-t132"
+        ],
+        "gt": "Page No."
+    },
+    {
+        "pred": "whose subject I have heretofore been,so help me God.",
+        "image": "ocr_crops_new/164-007372211_00002-t18.png",
+        "root image": "007372211_00002",
+        "text": true,
+        "matches": [
+            "164-007372211_00002-t18"
+        ],
+        "gt": "whose subject I have heretofore been,-so help me God."
+    },
+    {
+        "pred": "U. S. DEPARTMENT OF LABOR",
+        "image": "ocr_crops_new/60-100660788_00064-t68.png",
+        "root image": "100660788_00064",
+        "text": true,
+        "matches": [
+            "60-100660788_00064-t68"
+        ],
+        "gt": "U. S. DEPARTMENT OF LABOR"
+    },
+    {
+        "pred": "20",
+        "image": "ocr_crops_new/62-004191670_00065-t76.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t76",
+            "62-004191670_00079-t76"
+        ],
+        "gt": "29"
+    },
+    {
+        "pred": "No.",
+        "image": "ocr_crops_new/208-100214276_x-t2.png",
+        "root image": "100214276_x",
+        "text": true,
+        "matches": [
+            "208-100214276_x-t2"
+        ],
+        "gt": "No."
+    },
+    {
+        "pred": "Ji. ( ha .",
+        "image": "ocr_crops_new/65-004832573_00044-t13.png",
+        "root image": "004832573_00044",
+        "text": true,
+        "matches": [
+            "65-004832573_00044-t13"
+        ],
+        "gt": "Michael Berry"
+    },
+    {
+        "pred": "IN THE",
+        "image": "ocr_crops_new/165-100572410_00026-t2.png",
+        "root image": "100572410_00026",
+        "text": true,
+        "matches": [
+            "165-100572410_00026-t2",
+            "165-100572410_00279-t2"
+        ],
+        "gt": "IN THE"
+    },
+    {
+        "pred": "| ae es",
+        "image": "ocr_crops_new/96-004955493_00030-t16.png",
+        "root image": "004955493_00030",
+        "text": true,
+        "matches": [
+            "96-004955493_00030-t16"
+        ],
+        "gt": "\\bad"
+    },
+    {
+        "pred": "State of .",
+        "image": "ocr_crops_new/6-007641608_00126-t48.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t48",
+            "6-007641608_00138-t48"
+        ],
+        "gt": "State of"
+    },
+    {
+        "pred": "7",
+        "image": "ocr_crops_new/62-004191670_00065-t230.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t230"
+        ],
+        "gt": "7"
+    },
+    {
+        "pred": "Given under my had, ang the seal of said fCourt, at Denver, in",
+        "image": "ocr_crops_new/150-100572410_00028-t26.png",
+        "root image": "100572410_00028",
+        "text": true,
+        "matches": [
+            "150-100572410_00028-t26"
+        ],
+        "gt": "Given under my hand, and the seal of said Court, at Denver, in"
+    },
+    {
+        "pred": "Tntst",
+        "image": "ocr_crops_new/174-007641608_00208-t31.png",
+        "root image": "007641608_00208",
+        "text": true,
+        "matches": [
+            "174-007641608_00208-t31",
+            "174-007641608_00212-t31",
+            "174-007641608_00216-t83"
+        ],
+        "gt": "Int'st"
+    },
+    {
+        "pred": "(No)",
+        "image": "ocr_crops_new/204-005150587_00024-t56.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t56"
+        ],
+        "gt": "(No)"
+    },
+    {
+        "pred": "immigration officer, in writing, as soon as discovered, all cases in",
+        "image": "ocr_crops_new/78-007540939_00028-t12.png",
+        "root image": "007540939_00028",
+        "text": true,
+        "matches": [
+            "78-007540939_00028-t12",
+            "78-007540939_00032-t12"
+        ],
+        "gt": "immigration officer, in writing, as soon as discovered, all cases in"
+    },
+    {
+        "pred": "And as in duty bound will ever pray.",
+        "image": "ocr_crops_new/195-007486024_00020-t33.png",
+        "root image": "007486024_00020",
+        "text": true,
+        "matches": [
+            "195-007486024_00020-t33",
+            "195-007486024_00022-t33",
+            "195-007486024_00025-t33"
+        ],
+        "gt": "And as in duty bound will ever pray."
+    },
+    {
+        "pred": "EXAMINERS DOCKET LIST",
+        "image": "ocr_crops_new/171-100423934_00135-t12.png",
+        "root image": "100423934_00135",
+        "text": true,
+        "matches": [
+            "171-100423934_00135-t12",
+            "171-100423934_00137-t12",
+            "171-100423934_00156-t12"
+        ],
+        "gt": "EXAMINER'S DOCKET LIST"
+    },
+    {
+        "pred": "S",
+        "image": "ocr_crops_new/86-004191670_00007-t116.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t116"
+        ],
+        "gt": "5"
+    },
+    {
+        "pred": "RIASK",
+        "image": "ocr_crops_new/56-005240858_00011-t58.png",
+        "root image": "005240858_00011",
+        "text": true,
+        "matches": [
+            "56-005240858_00011-t58"
+        ],
+        "gt": "6-1585"
+    },
+    {
+        "pred": "Children,",
+        "image": "ocr_crops_new/210-004098525_00025-t122.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t122"
+        ],
+        "gt": "Children,"
+    },
+    {
+        "pred": "18",
+        "image": "ocr_crops_new/195-007486024_00022-t65.png",
+        "root image": "007486024_00022",
+        "text": true,
+        "matches": [
+            "195-007486024_00022-t65",
+            "195-007486024_00025-t65",
+            "195-007486024_00020-t65"
+        ],
+        "gt": "18"
+    },
+    {
+        "pred": "(CROSS OUT ONE)",
+        "image": "ocr_crops_new/187-101044939_00013-t59.png",
+        "root image": "101044939_00013",
+        "text": true,
+        "matches": [
+            "187-101044939_00013-t59"
+        ],
+        "gt": "(CROSS OUT ONE)"
+    },
+    {
+        "pred": "INCHES.",
+        "image": "ocr_crops_new/35-100788105_00006-t26.png",
+        "root image": "100788105_00006",
+        "text": true,
+        "matches": [
+            "35-100788105_00006-t26",
+            "35-100788105_00008-t26"
+        ],
+        "gt": "INCHES."
+    },
+    {
+        "pred": "@",
+        "image": "ocr_crops_new/86-004191670_00010-t112.png",
+        "root image": "004191670_00010",
+        "text": true,
+        "matches": [
+            "86-004191670_00010-t112"
+        ],
+        "gt": "7"
+    },
+    {
+        "pred": "Occupation.",
+        "image": "ocr_crops_new/65-004832573_00044-t71.png",
+        "root image": "004832573_00044",
+        "text": true,
+        "matches": [
+            "65-004832573_00044-t71",
+            "65-004832573_00050-t71"
+        ],
+        "gt": "Occupation."
+    },
+    {
+        "pred": "5",
+        "image": "ocr_crops_new/62-004191670_00065-t41.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t41",
+            "62-004191670_00079-t194"
+        ],
+        "gt": "5"
+    },
+    {
+        "pred": "14",
+        "image": "ocr_crops_new/96-004955493_00029-t83.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t83",
+            "96-004955493_00030-t83"
+        ],
+        "gt": "14"
+    },
+    {
+        "pred": "Wages",
+        "image": "ocr_crops_new/39-007641649_00123-t13.png",
+        "root image": "007641649_00123",
+        "text": true,
+        "matches": [
+            "39-007641649_00123-t13",
+            "39-007641649_00124-t13"
+        ],
+        "gt": "Wages"
+    },
+    {
+        "pred": "bd end tobe",
+        "image": "ocr_crops_new/47-004857625_00042-t35.png",
+        "root image": "004857625_00042",
+        "text": true,
+        "matches": [
+            "47-004857625_00042-t35"
+        ],
+        "gt": "and bound to be"
+    },
+    {
+        "pred": "Where brought up,",
+        "image": "ocr_crops_new/210-004098525_00025-t51.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t51"
+        ],
+        "gt": "Where brought up,"
+    },
+    {
+        "pred": "130",
+        "image": "ocr_crops_new/113-100802226_00003-t152.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t152"
+        ],
+        "gt": "180"
+    },
+    {
+        "pred": "21630",
+        "image": "ocr_crops_new/90-007540939_00160-t22.png",
+        "root image": "007540939_00160",
+        "text": true,
+        "matches": [
+            "90-007540939_00160-t22"
+        ],
+        "gt": "2-1630"
+    },
+    {
+        "pred": "reverse side hereof, and regulations made thereunder:",
+        "image": "ocr_crops_new/55-100601668_00018-t16.png",
+        "root image": "100601668_00018",
+        "text": true,
+        "matches": [
+            "55-100601668_00018-t16",
+            "55-100601668_00032-t16"
+        ],
+        "gt": "reverse side hereof, and regulations made thereunder:"
+    },
+    {
+        "pred": "I acknowledge this reference to Section 36 of the Immigration Act of February 5, 1917, printed on the",
+        "image": "ocr_crops_new/52-007540939_00029-t26.png",
+        "root image": "007540939_00029",
+        "text": true,
+        "matches": [
+            "52-007540939_00029-t26",
+            "52-007540939_00042-t26"
+        ],
+        "gt": "I acknowledge this reference to Section 36 of the Immigration Act of February 5, 1917, printed on the"
+    },
+    {
+        "pred": "$n Teffmonp ohereaf, ws have hereunto ace my Mand, ano affixed my Seat N otarial, ae Charleston,",
+        "image": "ocr_crops_new/113-100802226_00003-t221.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t221"
+        ],
+        "gt": "In Testimony whereof, I have hereunto set my Hand, and affixed my Seal Notorial, at Charleston,"
+    },
+    {
+        "pred": "quarantine station, shall be inspected by the quarantine",
+        "image": "ocr_crops_new/198-101044939_00042-t19.png",
+        "root image": "101044939_00042",
+        "text": true,
+        "matches": [
+            "198-101044939_00042-t19"
+        ],
+        "gt": "quarantine station, shall be inspected by the quarantine"
+    },
+    {
+        "pred": "(wear, that I am the Perfon fet forth in the printed Agreement on the other sce,",
+        "image": "ocr_crops_new/113-100802226_00003-t146.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t146"
+        ],
+        "gt": "swear, that I am the Person set forth in the printed Agreement on the other side,"
+    },
+    {
+        "pred": "Vise of Collector",
+        "image": "ocr_crops_new/93-100176369_00006-t4.png",
+        "root image": "100176369_00006",
+        "text": true,
+        "matches": [
+            "93-100176369_00006-t4",
+            "93-100176369_00012-t4"
+        ],
+        "gt": "Vise of Collector"
+    },
+    {
+        "pred": "NO. OF PASSENGERS",
+        "image": "ocr_crops_new/187-101044939_00013-t1.png",
+        "root image": "101044939_00013",
+        "text": true,
+        "matches": [
+            "187-101044939_00013-t1"
+        ],
+        "gt": "NO. OF PASSENGERS"
+    },
+    {
+        "pred": "If all the improvements are owned by a person not a party to the application",
+        "image": "ocr_crops_new/20-007270209_00006-t183.png",
+        "root image": "007270209_00006",
+        "text": true,
+        "matches": [
+            "20-007270209_00006-t183",
+            "20-007270209_00002-t121"
+        ],
+        "gt": "If all the improvements are owned by a person not a party to the application"
+    },
+    {
+        "pred": "Have you a SandaySchool ?.",
+        "image": "ocr_crops_new/186-007675712_00119-t54.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t54"
+        ],
+        "gt": "Have you a Sanday-School?"
+    },
+    {
+        "pred": "That on or about the",
+        "image": "ocr_crops_new/185-100283146_00011-t48.png",
+        "root image": "100283146_00011",
+        "text": true,
+        "matches": [
+            "185-100283146_00004-t12",
+            "185-100283146_00008-t48",
+            "185-100283146_00011-t48"
+        ],
+        "gt": "That on or about the"
+    },
+    {
+        "pred": "Wife or Husband,",
+        "image": "ocr_crops_new/210-004098525_00025-t84.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t84"
+        ],
+        "gt": "Wife or Husband,"
+    },
+    {
+        "pred": "day of",
+        "image": "ocr_crops_new/99-100802224_00006-t42.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t42",
+            "99-100802224_00008-t42"
+        ],
+        "gt": "day of"
+    },
+    {
+        "pred": "Relative",
+        "image": "ocr_crops_new/166-101023522_00018-t26.png",
+        "root image": "101023522_00018",
+        "text": true,
+        "matches": [
+            "166-101023522_00018-t26",
+            "166-101023522_00024-t26",
+            "166-101023522_00026-t26"
+        ],
+        "gt": "Relative"
+    },
+    {
+        "pred": "NUMBER:",
+        "image": "ocr_crops_new/56-005240858_00010-t9.png",
+        "root image": "005240858_00010",
+        "text": true,
+        "matches": [
+            "56-005240858_00010-t9",
+            "56-005240858_00011-t9"
+        ],
+        "gt": "NUMBER:"
+    },
+    {
+        "pred": "Page No.",
+        "image": "ocr_crops_new/62-004191670_00065-t6.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t6",
+            "62-004191670_00079-t6"
+        ],
+        "gt": "Page No."
+    },
+    {
+        "pred": "No.",
+        "image": "ocr_crops_new/64-100423934_00056-t21.png",
+        "root image": "100423934_00056",
+        "text": true,
+        "matches": [
+            "64-100423934_00056-t21",
+            "64-100423934_00038-t21"
+        ],
+        "gt": "No."
+    },
+    {
+        "pred": "ot",
+        "image": "ocr_crops_new/180-100760033_00005-t13.png",
+        "root image": "100760033_00005",
+        "text": true,
+        "matches": [
+            "180-100760033_00005-t13",
+            "180-100760033_00011-t13",
+            "180-100760033_00015-t13"
+        ],
+        "gt": "of"
+    },
+    {
+        "pred": "U, @, GOVERNMENT PRINTING OFFICE: 1931",
+        "image": "ocr_crops_new/56-005240858_00011-t112.png",
+        "root image": "005240858_00011",
+        "text": true,
+        "matches": [
+            "56-005240858_00011-t112",
+            "56-005240858_00010-t83"
+        ],
+        "gt": "U. S. GOVERNMENT PRINTING OFFICE: 1931"
+    },
+    {
+        "pred": "that I,",
+        "image": "ocr_crops_new/50-007641631_00133-t5.png",
+        "root image": "007641631_00133",
+        "text": true,
+        "matches": [
+            "50-007641631_00133-t5",
+            "50-007641631_00137-t5"
+        ],
+        "gt": "that I,"
+    },
+    {
+        "pred": "customs official to an outgoing seaman, and to an",
+        "image": "ocr_crops_new/4-100283146_00038-t32.png",
+        "root image": "100283146_00038",
+        "text": true,
+        "matches": [
+            "4-100283146_00038-t32",
+            "4-100283146_00048-t37"
+        ],
+        "gt": "customs official to an outgoing seaman, and to an"
+    },
+    {
+        "pred": "persons",
+        "image": "ocr_crops_new/174-007641608_00208-t24.png",
+        "root image": "007641608_00208",
+        "text": true,
+        "matches": [
+            "174-007641608_00208-t24",
+            "174-007641608_00212-t24",
+            "174-007641608_00216-t59"
+        ],
+        "gt": "persons"
+    },
+    {
+        "pred": "8",
+        "image": "ocr_crops_new/62-004191670_00065-t44.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t44",
+            "62-004191670_00079-t44"
+        ],
+        "gt": "8"
+    },
+    {
+        "pred": "Election District -",
+        "image": "ocr_crops_new/96-004955493_00029-t2.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t2",
+            "96-004955493_00030-t2"
+        ],
+        "gt": "Election District"
+    },
+    {
+        "pred": "I. & C. 200.",
+        "image": "ocr_crops_new/60-100660788_00018-t8.png",
+        "root image": "100660788_00018",
+        "text": true,
+        "matches": [
+            "60-100660788_00018-t8"
+        ],
+        "gt": "I. & C. 200."
+    },
+    {
+        "pred": "of",
+        "image": "ocr_crops_new/6-007641608_00126-t73.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t73",
+            "6-007641608_00138-t73"
+        ],
+        "gt": "of"
+    },
+    {
+        "pred": "on laborers",
+        "image": "ocr_crops_new/174-007641608_00208-t39.png",
+        "root image": "007641608_00208",
+        "text": true,
+        "matches": [
+            "174-007641608_00208-t39",
+            "174-007641608_00212-t39",
+            "174-007641608_00216-t78"
+        ],
+        "gt": "on laborers"
+    },
+    {
+        "pred": "of the @initen States",
+        "image": "ocr_crops_new/99-100802224_00006-t28.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t28",
+            "99-100802224_00008-t28"
+        ],
+        "gt": "of the United States"
+    },
+    {
+        "pred": "(>",
+        "image": "ocr_crops_new/193-100101969_00067-t49.png",
+        "root image": "100101969_00067",
+        "text": true,
+        "matches": [
+            "193-100101969_00067-t49"
+        ],
+        "gt": "(8)"
+    },
+    {
+        "pred": "CODE",
+        "image": "ocr_crops_new/96-004955493_00029-t162.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t162",
+            "96-004955493_00030-t162"
+        ],
+        "gt": "CODE"
+    },
+    {
+        "pred": "| Sex.",
+        "image": "ocr_crops_new/62-004191670_00065-t144.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t144",
+            "62-004191670_00079-t144"
+        ],
+        "gt": "Sex."
+    },
+    {
+        "pred": "Primary.",
+        "image": "ocr_crops_new/17-007579716_00226-t78.png",
+        "root image": "007579716_00226",
+        "text": true,
+        "matches": [
+            "17-007579716_00226-t78",
+            "17-007579716_00230-t78",
+            "17-007579716_00232-t78"
+        ],
+        "gt": "Primary."
+    },
+    {
+        "pred": "26",
+        "image": "ocr_crops_new/62-004191670_00065-t104.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t104",
+            "62-004191670_00079-t104"
+        ],
+        "gt": "26"
+    },
+    {
+        "pred": "NUMBER:",
+        "image": "ocr_crops_new/56-005240858_00010-t105.png",
+        "root image": "005240858_00010",
+        "text": true,
+        "matches": [
+            "56-005240858_00010-t105",
+            "56-005240858_00011-t105"
+        ],
+        "gt": "NUMBER:"
+    },
+    {
+        "pred": "}",
+        "image": "ocr_crops_new/113-100802226_00003-t77.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t77"
+        ],
+        "gt": "I"
+    },
+    {
+        "pred": "19",
+        "image": "ocr_crops_new/20-007270209_00002-t177.png",
+        "root image": "007270209_00002",
+        "text": true,
+        "matches": [
+            "20-007270209_00002-t177"
+        ],
+        "gt": "19"
+    },
+    {
+        "pred": "in the CHEROKEE NATION to",
+        "image": "ocr_crops_new/8-004475379_00091-t1.png",
+        "root image": "004475379_00091",
+        "text": true,
+        "matches": [
+            "8-004475379_00091-t1",
+            "8-004475379_00184-t1"
+        ],
+        "gt": "in the CHEROKEE NATION to"
+    },
+    {
+        "pred": "IN marc Se",
+        "image": "ocr_crops_new/178-100283146_00047-t6.png",
+        "root image": "100283146_00047",
+        "text": true,
+        "matches": [
+            "178-100283146_00047-t6"
+        ],
+        "gt": "Nationality"
+    },
+    {
+        "pred": "evidence cf American citizenship, he is hereby",
+        "image": "ocr_crops_new/178-100283146_00037-t39.png",
+        "root image": "100283146_00037",
+        "text": true,
+        "matches": [
+            "178-100283146_00037-t39",
+            "178-100283146_00065-t39",
+            "178-100283146_00047-t41"
+        ],
+        "gt": "evidence cf American citizenship, he is hereby"
+    },
+    {
+        "pred": "(6)",
+        "image": "ocr_crops_new/193-100101969_00221-t52.png",
+        "root image": "100101969_00221",
+        "text": true,
+        "matches": [
+            "193-100101969_00221-t52",
+            "193-100901188_00075-t51"
+        ],
+        "gt": "(6)"
+    },
+    {
+        "pred": "18",
+        "image": "ocr_crops_new/193-100101969_00067-t71.png",
+        "root image": "100101969_00067",
+        "text": true,
+        "matches": [
+            "193-100101969_00067-t71"
+        ],
+        "gt": "18"
+    },
+    {
+        "pred": "2|",
+        "image": "ocr_crops_new/62-004191670_00079-t53.png",
+        "root image": "004191670_00079",
+        "text": true,
+        "matches": [
+            "62-004191670_00079-t53"
+        ],
+        "gt": "2"
+    },
+    {
+        "pred": "Number of Pupils enrolled at last Report,",
+        "image": "ocr_crops_new/186-007675712_00119-t19.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t19"
+        ],
+        "gt": "Number of Pupils enrolled at last Report,"
+    },
+    {
+        "pred": "This form is NOT a petition, but Is",
+        "image": "ocr_crops_new/48-100613486_00026-t6.png",
+        "root image": "100613486_00026",
+        "text": true,
+        "matches": [
+            "48-100613486_00026-t6",
+            "48-100587124_00356-t6"
+        ],
+        "gt": "This form is NOT a petition, but is"
+    },
+    {
+        "pred": "Clerk.",
+        "image": "ocr_crops_new/164-007372211_00002-t23.png",
+        "root image": "007372211_00002",
+        "text": true,
+        "matches": [
+            "164-007372211_00002-t23"
+        ],
+        "gt": "Clerk."
+    },
+    {
+        "pred": "and now resides at",
+        "image": "ocr_crops_new/181-100587124_00118-t73.png",
+        "root image": "100587124_00118",
+        "text": true,
+        "matches": [
+            "181-100587124_00118-t73",
+            "181-100587124_00040-t73"
+        ],
+        "gt": "and now resides at"
+    },
+    {
+        "pred": "are",
+        "image": "ocr_crops_new/99-100802224_00006-t51.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t51"
+        ],
+        "gt": "are"
+    },
+    {
+        "pred": "if",
+        "image": "ocr_crops_new/62-004191670_00079-t99.png",
+        "root image": "004191670_00079",
+        "text": true,
+        "matches": [
+            "62-004191670_00079-t99"
+        ],
+        "gt": "17"
+    },
+    {
+        "pred": "Form 1-259",
+        "image": "ocr_crops_new/83-100660792_00287-t0.png",
+        "root image": "100660792_00287",
+        "text": true,
+        "matches": [
+            "83-100660792_00287-t0",
+            "83-100660792_00291-t0"
+        ],
+        "gt": "Form I-259"
+    },
+    {
+        "pred": "16-67803-1 U S GOVERNMENT PRINTING OFFICE",
+        "image": "ocr_crops_new/83-100660792_00287-t39.png",
+        "root image": "100660792_00287",
+        "text": true,
+        "matches": [
+            "83-100660792_00287-t39",
+            "83-100660792_00291-t39"
+        ],
+        "gt": "16-67803-1 U S GOVERNMENT PRINTING OFFICE"
+    },
+    {
+        "pred": "person died.",
+        "image": "ocr_crops_new/62-004191670_00065-t29.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t29",
+            "62-004191670_00079-t29"
+        ],
+        "gt": "person died."
+    },
+    {
+        "pred": "Freedmen for the State of Louisiana, acting as guardian of",
+        "image": "ocr_crops_new/50-007641631_00133-t7.png",
+        "root image": "007641631_00133",
+        "text": true,
+        "matches": [
+            "50-007641631_00133-t7",
+            "50-007641631_00137-t7"
+        ],
+        "gt": "Freedmen for the State of Louisiana, acting as guardian of"
+    },
+    {
+        "pred": "~o. aes",
+        "image": "ocr_crops_new/47-004857625_00042-t9.png",
+        "root image": "004857625_00042",
+        "text": true,
+        "matches": [
+            "47-004857625_00042-t9",
+            "47-004857625_00045-t9"
+        ],
+        "gt": "S. S. line"
+    },
+    {
+        "pred": "or",
+        "image": "ocr_crops_new/96-004955493_00029-t45.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t45",
+            "96-004955493_00030-t45"
+        ],
+        "gt": "or"
+    },
+    {
+        "pred": "No, of married",
+        "image": "ocr_crops_new/86-004191670_00007-t173.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t173",
+            "86-004191670_00010-t173"
+        ],
+        "gt": "No. of married"
+    },
+    {
+        "pred": "Judge.",
+        "image": "ocr_crops_new/64-100423934_00038-t61.png",
+        "root image": "100423934_00038",
+        "text": true,
+        "matches": [
+            "64-100423934_00038-t61",
+            "64-100423934_00056-t61"
+        ],
+        "gt": "Judge."
+    },
+    {
+        "pred": "Female?",
+        "image": "ocr_crops_new/160-007675712_00021-t35.png",
+        "root image": "007675712_00021",
+        "text": true,
+        "matches": [
+            "160-007675712_00021-t35",
+            "160-007675712_00033-t35",
+            "160-007675712_00027-t32"
+        ],
+        "gt": "Female?"
+    },
+    {
+        "pred": "of such information as the Secretary of Labor shall by regulation",
+        "image": "ocr_crops_new/78-007540939_00028-t9.png",
+        "root image": "007540939_00028",
+        "text": true,
+        "matches": [
+            "78-007540939_00028-t9",
+            "78-007540939_00032-t9"
+        ],
+        "gt": "of such information as the Secretary of Labor shall by regulation"
+    },
+    {
+        "pred": "I?",
+        "image": "ocr_crops_new/62-004191670_00079-t236.png",
+        "root image": "004191670_00079",
+        "text": true,
+        "matches": [
+            "62-004191670_00079-t236"
+        ],
+        "gt": "13"
+    },
+    {
+        "pred": "Vessel:",
+        "image": "ocr_crops_new/207-100176364_x-t13.png",
+        "root image": "100176364_x",
+        "text": true,
+        "matches": [
+            "207-100176364_x-t13"
+        ],
+        "gt": "Vessel"
+    },
+    {
+        "pred": "; resides at",
+        "image": "ocr_crops_new/181-100587124_00040-t106.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t106",
+            "181-100587124_00118-t106"
+        ],
+        "gt": "; resides at"
+    },
+    {
+        "pred": "(106)",
+        "image": "ocr_crops_new/157-007270209_00020-t0.png",
+        "root image": "007270209_00020",
+        "text": true,
+        "matches": [
+            "157-007270209_00020-t0"
+        ],
+        "gt": "(106)"
+    },
+    {
+        "pred": "and true, and worthy of full faith and credit. We alfo declare,",
+        "image": "ocr_crops_new/99-100802224_00006-t53.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t53",
+            "99-100802224_00008-t53"
+        ],
+        "gt": "and true, and worthy of full faith and credit. We also declare,"
+    },
+    {
+        "pred": "2d,",
+        "image": "ocr_crops_new/186-007675712_00119-t37.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t37"
+        ],
+        "gt": "2d,"
+    },
+    {
+        "pred": "(City or town.)",
+        "image": "ocr_crops_new/48-100587124_00356-t71.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t71",
+            "48-100613486_00026-t71"
+        ],
+        "gt": "(City or town.)"
+    },
+    {
+        "pred": "or the United",
+        "image": "ocr_crops_new/96-004955493_00029-t114.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t114",
+            "96-004955493_00030-t114"
+        ],
+        "gt": "or the United"
+    },
+    {
+        "pred": "day of",
+        "image": "ocr_crops_new/99-100802224_00006-t35.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t35",
+            "99-100802224_00008-t35"
+        ],
+        "gt": "day of"
+    },
+    {
+        "pred": "14",
+        "image": "ocr_crops_new/60-100660788_00018-t35.png",
+        "root image": "100660788_00018",
+        "text": true,
+        "matches": [
+            "60-100660788_00018-t35",
+            "60-100660788_00064-t35"
+        ],
+        "gt": "14"
+    },
+    {
+        "pred": "U.S.C,",
+        "image": "ocr_crops_new/187-101044939_00013-t2.png",
+        "root image": "101044939_00013",
+        "text": true,
+        "matches": [
+            "187-101044939_00013-t2"
+        ],
+        "gt": "U.S.C."
+    },
+    {
+        "pred": "Sworn before me. this",
+        "image": "ocr_crops_new/113-100802226_00003-t190.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t190"
+        ],
+        "gt": "Sworn before me. this"
+    },
+    {
+        "pred": "How much per month 7",
+        "image": "ocr_crops_new/160-007675712_00027-t86.png",
+        "root image": "007675712_00027",
+        "text": true,
+        "matches": [
+            "160-007675712_00021-t29",
+            "160-007675712_00033-t29",
+            "160-007675712_00027-t86"
+        ],
+        "gt": "How much per month?"
+    },
+    {
+        "pred": "E tn | oun Ve",
+        "image": "ocr_crops_new/187-101044939_00020-t0.png",
+        "root image": "101044939_00020",
+        "text": true,
+        "matches": [
+            "187-101044939_00020-t0"
+        ],
+        "gt": "\\bad"
+    },
+    {
+        "pred": "Q. Are there any improvements on the land you have selected for:",
+        "image": "ocr_crops_new/20-007270209_00002-t148.png",
+        "root image": "007270209_00002",
+        "text": true,
+        "matches": [
+            "20-007270209_00002-t148",
+            "20-007270209_00006-t148"
+        ],
+        "gt": "Q. Are there any improvements on the land you have selected for"
+    },
+    {
+        "pred": "and Date of Delivery.",
+        "image": "ocr_crops_new/27-004173988_00047-t17.png",
+        "root image": "004173988_00047",
+        "text": true,
+        "matches": [
+            "27-004173988_00047-t17",
+            "27-004173988_00061-t17"
+        ],
+        "gt": "and Date of Delivery."
+    },
+    {
+        "pred": "NO.",
+        "image": "ocr_crops_new/8-004475379_00184-t5.png",
+        "root image": "004475379_00184",
+        "text": true,
+        "matches": [
+            "8-004475379_00184-t5"
+        ],
+        "gt": "NO."
+    },
+    {
+        "pred": "Subscribed and sworn to before me at.",
+        "image": "ocr_crops_new/199-007270209_00003-t41.png",
+        "root image": "007270209_00003",
+        "text": true,
+        "matches": [
+            "199-007270209_00003-t41",
+            "199-007270209_00007-t41"
+        ],
+        "gt": "Subscribed and sworn to before me at"
+    },
+    {
+        "pred": "OF WHAT COUNTRY",
+        "image": "ocr_crops_new/189-100760033_00014-t11.png",
+        "root image": "100760033_00014",
+        "text": true,
+        "matches": [
+            "189-100760033_00004-t11",
+            "189-100760033_00010-t11",
+            "189-100760033_00014-t11"
+        ],
+        "gt": "OF WHAT COUNTRY"
+    },
+    {
+        "pred": "Name of Petitioner",
+        "image": "ocr_crops_new/91-100423934_00003-t32.png",
+        "root image": "100423934_00003",
+        "text": true,
+        "matches": [
+            "91-100423934_00003-t32",
+            "91-100423934_00005-t32"
+        ],
+        "gt": "Name of Petitioner"
+    },
+    {
+        "pred": "27",
+        "image": "ocr_crops_new/62-004191670_00065-t103.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t103"
+        ],
+        "gt": "27"
+    },
+    {
+        "pred": "BR en a Sener",
+        "image": "ocr_crops_new/195-007486024_00020-t38.png",
+        "root image": "007486024_00020",
+        "text": true,
+        "matches": [
+            "195-007486024_00020-t38"
+        ],
+        "gt": "came from"
+    },
+    {
+        "pred": "NEAREST",
+        "image": "ocr_crops_new/204-005150587_00024-t61.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t61"
+        ],
+        "gt": "NEAREST"
+    },
+    {
+        "pred": "under the following heading:",
+        "image": "ocr_crops_new/211-007191975_00024-t4.png",
+        "root image": "007191975_00024",
+        "text": true,
+        "matches": [
+            "211-007191975_00024-t4"
+        ],
+        "gt": "under the following heading:"
+    },
+    {
+        "pred": "Spl, 7A",
+        "image": "ocr_crops_new/47-004857625_00045-t44.png",
+        "root image": "004857625_00045",
+        "text": true,
+        "matches": [
+            "47-004857625_00045-t44"
+        ],
+        "gt": "Spl. 187 A"
+    },
+    {
+        "pred": "Revised May 18, 1931",
+        "image": "ocr_crops_new/154-007182398_00028-t5.png",
+        "root image": "007182398_00028",
+        "text": true,
+        "matches": [
+            "154-007182398_00028-t5"
+        ],
+        "gt": "Revised May 18, 1931"
+    },
+    {
+        "pred": "(County.)",
+        "image": "ocr_crops_new/181-100587124_00040-t24.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t24",
+            "181-100587124_00118-t24"
+        ],
+        "gt": "(County.)"
+    },
+    {
+        "pred": "IMPORTANTCOMPLETE REVERSE SIDE",
+        "image": "ocr_crops_new/154-007182398_00039-t105.png",
+        "root image": "007182398_00039",
+        "text": true,
+        "matches": [
+            "154-007182398_00039-t105",
+            "154-007182398_00071-t104"
+        ],
+        "gt": "IMPORTANT-COMPLETE REVERSE SIDE"
+    },
+    {
+        "pred": "(Edition 2-1-44)",
+        "image": "ocr_crops_new/55-100601668_00018-t3.png",
+        "root image": "100601668_00018",
+        "text": true,
+        "matches": [
+            "55-100601668_00018-t3",
+            "55-100601668_00032-t3"
+        ],
+        "gt": "(Edition 2-1-44)"
+    },
+    {
+        "pred": "Name of owner or owners given in last answer.",
+        "image": "ocr_crops_new/20-007270209_00002-t146.png",
+        "root image": "007270209_00002",
+        "text": true,
+        "matches": [
+            "20-007270209_00002-t146",
+            "20-007270209_00006-t146"
+        ],
+        "gt": "Name of owner or owners given in last answer."
+    },
+    {
+        "pred": "5. State the public sentiment towards Colored Schools,",
+        "image": "ocr_crops_new/160-007675712_00021-t76.png",
+        "root image": "007675712_00021",
+        "text": true,
+        "matches": [
+            "160-007675712_00021-t76",
+            "160-007675712_00027-t76",
+            "160-007675712_00033-t76"
+        ],
+        "gt": "5. State the public sentiment towards Colored Schools,"
+    },
+    {
+        "pred": "4wear, ~kat lam the Perfon fet forth inthe printed Agreement on tig",
+        "image": "ocr_crops_new/113-100802226_00003-t36.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t36"
+        ],
+        "gt": "swear, that I am the Person set forth in the printed Agreement on th"
+    },
+    {
+        "pred": "STN",
+        "image": "ocr_crops_new/184-007499090_00008-t11.png",
+        "root image": "007499090_00008",
+        "text": true,
+        "matches": [
+            "184-007499090_00008-t11"
+        ],
+        "gt": "ADMINISTRATION"
+    },
+    {
+        "pred": "10. DATE PHOTOGRAPHED",
+        "image": "ocr_crops_new/37-100093596_00222-t13.png",
+        "root image": "100093596_00222",
+        "text": true,
+        "matches": [
+            "37-100093596_00222-t13"
+        ],
+        "gt": "10. DATE PHOTOGRAPHED"
+    },
+    {
+        "pred": "(Resiggnce address.)",
+        "image": "ocr_crops_new/181-100587124_00040-t149.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t149",
+            "181-100587124_00118-t149"
+        ],
+        "gt": "(Residence address.)"
+    },
+    {
+        "pred": "4 Loft thumb print.)",
+        "image": "ocr_crops_new/178-100283146_00037-t1.png",
+        "root image": "100283146_00037",
+        "text": true,
+        "matches": [
+            "178-100283146_00037-t1",
+            "178-100283146_00047-t1",
+            "178-100283146_00065-t1"
+        ],
+        "gt": "(Left thumb print.)"
+    },
+    {
+        "pred": "A868.",
+        "image": "ocr_crops_new/25-007641636_00290-t7.png",
+        "root image": "007641636_00290",
+        "text": true,
+        "matches": [
+            "25-007641636_00290-t7",
+            "25-007641636_00292-t7"
+        ],
+        "gt": "1868"
+    },
+    {
+        "pred": "THE PANAMA CANAL",
+        "image": "ocr_crops_new/9-100194510_00001-t1.png",
+        "root image": "100194510_00001",
+        "text": true,
+        "matches": [
+            "9-100194510_00001-t1",
+            "9-100194510_00003-t1"
+        ],
+        "gt": "THE PANAMA CANAL"
+    },
+    {
+        "pred": "AP Disik",
+        "image": "ocr_crops_new/195-007486024_00025-t15.png",
+        "root image": "007486024_00025",
+        "text": true,
+        "matches": [
+            "195-007486024_00025-t15"
+        ],
+        "gt": "A. D. 18"
+    },
+    {
+        "pred": "24",
+        "image": "ocr_crops_new/62-004191670_00065-t254.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t254",
+            "62-004191670_00079-t254"
+        ],
+        "gt": "24"
+    },
+    {
+        "pred": "Nationality.",
+        "image": "ocr_crops_new/52-007540939_00029-t19.png",
+        "root image": "007540939_00029",
+        "text": true,
+        "matches": [
+            "52-007540939_00029-t19",
+            "52-007540939_00042-t19"
+        ],
+        "gt": "Nationality."
+    },
+    {
+        "pred": "lie",
+        "image": "ocr_crops_new/47-004857625_00042-t109.png",
+        "root image": "004857625_00042",
+        "text": true,
+        "matches": [
+            "47-004857625_00042-t109"
+        ],
+        "gt": "Hair"
+    },
+    {
+        "pred": "If passenger list consists of more than one page, summarize on last page only.",
+        "image": "ocr_crops_new/187-101044939_00013-t45.png",
+        "root image": "101044939_00013",
+        "text": true,
+        "matches": [
+            "187-101044939_00013-t45"
+        ],
+        "gt": "If passenger list consists of more than one page, summarize on last page only."
+    },
+    {
+        "pred": "SB",
+        "image": "ocr_crops_new/96-004955493_00029-t63.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t63",
+            "96-004955493_00030-t63"
+        ],
+        "gt": "5"
+    },
+    {
+        "pred": "@)",
+        "image": "ocr_crops_new/193-100101969_00067-t45.png",
+        "root image": "100101969_00067",
+        "text": true,
+        "matches": [
+            "193-100101969_00067-t45",
+            "193-100101969_00259-t43"
+        ],
+        "gt": "(2)"
+    },
+    {
+        "pred": "Whether",
+        "image": "ocr_crops_new/60-100660788_00064-t105.png",
+        "root image": "100660788_00064",
+        "text": true,
+        "matches": [
+            "60-100660788_00064-t105"
+        ],
+        "gt": "Whether"
+    },
+    {
+        "pred": "as to petitions No.",
+        "image": "ocr_crops_new/91-100423934_00003-t27.png",
+        "root image": "100423934_00003",
+        "text": true,
+        "matches": [
+            "91-100423934_00003-t27",
+            "91-100423934_00005-t27"
+        ],
+        "gt": "as to petitions No."
+    },
+    {
+        "pred": "is the United Kiogdom of Great Britain and Traand: - +0 hata beets",
+        "image": "ocr_crops_new/195-007486024_00020-t39.png",
+        "root image": "007486024_00020",
+        "text": true,
+        "matches": [
+            "195-007486024_00020-t39",
+            "195-007486024_00022-t39",
+            "195-007486024_00025-t39"
+        ],
+        "gt": "in the United Kingdom of Great Britain and Ireland, as we have been"
+    },
+    {
+        "pred": "Cinsert name of institution, if any, and indicate the lines on which the entries are mace. See instructions)",
+        "image": "ocr_crops_new/96-004955493_00029-t5.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t5",
+            "96-004955493_00030-t5"
+        ],
+        "gt": "(Insert name of institution, if any, and indicate the lines on which the entries are made. See instructions)"
+    },
+    {
+        "pred": "and that lam of the Quality and Age fet againft my Name, and that lama",
+        "image": "ocr_crops_new/113-100802226_00003-t136.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t136"
+        ],
+        "gt": "and that I am of the Quality and Age set against my Name, and that I am a"
+    },
+    {
+        "pred": "Brothersjand Sisters,",
+        "image": "ocr_crops_new/210-004098525_00025-t34.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t34"
+        ],
+        "gt": "Brothers and Sisters,"
+    },
+    {
+        "pred": "BETIL DD BUFFALO",
+        "image": "ocr_crops_new/187-101044939_00018-t68.png",
+        "root image": "101044939_00018",
+        "text": true,
+        "matches": [
+            "187-101044939_00018-t68"
+        ],
+        "gt": "BETIL DD BUFFALO"
+    },
+    {
+        "pred": "Works for,",
+        "image": "ocr_crops_new/210-004098525_00025-t46.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t46"
+        ],
+        "gt": "Works for"
+    },
+    {
+        "pred": "of every. card issued will be retained and filed in the",
+        "image": "ocr_crops_new/4-100283146_00038-t39.png",
+        "root image": "100283146_00038",
+        "text": true,
+        "matches": [
+            "4-100283146_00038-t39",
+            "4-100283146_00048-t39"
+        ],
+        "gt": "of every. card issued will be retained and filed in the"
+    },
+    {
+        "pred": "T desire to petition for naturadiZation/~An the.",
+        "image": "ocr_crops_new/48-100587124_00356-t35.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t35",
+            "48-100613486_00026-t35"
+        ],
+        "gt": "I desire to petition for naturalization in the"
+    },
+    {
+        "pred": "., solemnly swear that I am a native (naturalized citizen) of the",
+        "image": "ocr_crops_new/38-100283147_00023-t20.png",
+        "root image": "100283147_00023",
+        "text": true,
+        "matches": [
+            "38-100283147_00023-t20",
+            "38-100283147_00038-t20"
+        ],
+        "gt": ", solemnly swear that I am a native (naturalized citizen) of the"
+    },
+    {
+        "pred": "19.",
+        "image": "ocr_crops_new/178-100283146_00037-t55.png",
+        "root image": "100283146_00037",
+        "text": true,
+        "matches": [
+            "178-100283146_00037-t55"
+        ],
+        "gt": "19"
+    },
+    {
+        "pred": "His, her or their.",
+        "image": "ocr_crops_new/20-007270209_00006-t188.png",
+        "root image": "007270209_00006",
+        "text": true,
+        "matches": [
+            "20-007270209_00006-t188",
+            "20-007270209_00002-t125"
+        ],
+        "gt": "His, her or their."
+    },
+    {
+        "pred": "Date of Loding",
+        "image": "ocr_crops_new/47-004857625_00042-t114.png",
+        "root image": "004857625_00042",
+        "text": true,
+        "matches": [
+            "47-004857625_00042-t114"
+        ],
+        "gt": "Date of landing"
+    },
+    {
+        "pred": "Sworn bethre me, this",
+        "image": "ocr_crops_new/113-100802226_00003-t39.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t39"
+        ],
+        "gt": "Sworn before me, this"
+    },
+    {
+        "pred": "Recorded and forwarded to applicant",
+        "image": "ocr_crops_new/9-100194510_00001-t67.png",
+        "root image": "100194510_00001",
+        "text": true,
+        "matches": [
+            "9-100194510_00001-t67",
+            "9-100194510_00003-t67"
+        ],
+        "gt": "Recorded and forwarded to applicant"
+    },
+    {
+        "pred": "and mother tongue (Columns 15, 16, 1/, 18))",
+        "image": "ocr_crops_new/96-004955493_00029-t182.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t182",
+            "96-004955493_00030-t182"
+        ],
+        "gt": "and mother tongue (Columns 15, 16, 17, 18)]"
+    },
+    {
+        "pred": "Children,",
+        "image": "ocr_crops_new/210-004098525_00025-t12.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t12"
+        ],
+        "gt": "Children,"
+    },
+    {
+        "pred": "19",
+        "image": "ocr_crops_new/62-004191670_00065-t82.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t82",
+            "62-004191670_00079-t82"
+        ],
+        "gt": "19"
+    },
+    {
+        "pred": "AGE",
+        "image": "ocr_crops_new/6-007641608_00126-t52.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t52",
+            "6-007641608_00138-t52"
+        ],
+        "gt": "AGE"
+    },
+    {
+        "pred": "irXthe matter of the Application for",
+        "image": "ocr_crops_new/20-007270209_00002-t87.png",
+        "root image": "007270209_00002",
+        "text": true,
+        "matches": [
+            "20-007270209_00002-t87",
+            "20-007270209_00006-t87"
+        ],
+        "gt": "in the matter of the Application for"
+    },
+    {
+        "pred": "CHOCTAWS AND CHICKASAWS.,",
+        "image": "ocr_crops_new/72-004284105_00007-t4.png",
+        "root image": "004284105_00007",
+        "text": true,
+        "matches": [
+            "72-004284105_00007-t4",
+            "72-004284105_00009-t4"
+        ],
+        "gt": "CHOCTAWS AND CHICKASAWS."
+    },
+    {
+        "pred": "Weight",
+        "image": "ocr_crops_new/9-100194510_00001-t46.png",
+        "root image": "100194510_00001",
+        "text": true,
+        "matches": [
+            "9-100194510_00001-t46",
+            "9-100194510_00003-t46"
+        ],
+        "gt": "Weight"
+    },
+    {
+        "pred": "DESCRIPTION.",
+        "image": "ocr_crops_new/62-004191670_00065-t12.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t12",
+            "62-004191670_00079-t12"
+        ],
+        "gt": "DESCRIPTION."
+    },
+    {
+        "pred": "Qw.t. STONE. S? WASH) ae |",
+        "image": "ocr_crops_new/189-100760033_00004-t20.png",
+        "root image": "100760033_00004",
+        "text": true,
+        "matches": [
+            "189-100760033_00004-t20",
+            "189-100760033_00010-t20",
+            "189-100760033_00014-t20"
+        ],
+        "gt": "W.I. STONE. Sc. WASHn."
+    },
+    {
+        "pred": "Stature:",
+        "image": "ocr_crops_new/209-100283150_00034-t7.png",
+        "root image": "100283150_00034",
+        "text": true,
+        "matches": [
+            "209-100283150_00034-t7"
+        ],
+        "gt": "Stature:"
+    },
+    {
+        "pred": "",
+        "image": "ocr_crops_new/96-004955493_00029-t173.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t173",
+            "96-004955493_00030-t173"
+        ],
+        "gt": "uie"
+    },
+    {
+        "pred": "20)",
+        "image": "ocr_crops_new/193-100101969_00093-t75.png",
+        "root image": "100101969_00093",
+        "text": true,
+        "matches": [
+            "193-100101969_00093-t75"
+        ],
+        "gt": "20"
+    },
+    {
+        "pred": "3",
+        "image": "ocr_crops_new/62-004191670_00065-t39.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t39",
+            "62-004191670_00079-t39"
+        ],
+        "gt": "3"
+    },
+    {
+        "pred": "direfed by lat/that he is a CITIZEN",
+        "image": "ocr_crops_new/209-100283150_00034-t15.png",
+        "root image": "100283150_00034",
+        "text": true,
+        "matches": [
+            "209-100283150_00034-t15"
+        ],
+        "gt": "directed by law, that he is a CITIZEN"
+    },
+    {
+        "pred": "day of.",
+        "image": "ocr_crops_new/199-007270209_00003-t44.png",
+        "root image": "007270209_00003",
+        "text": true,
+        "matches": [
+            "199-007270209_00003-t44",
+            "199-007270209_00007-t44"
+        ],
+        "gt": "day of"
+    },
+    {
+        "pred": "fill it In at his leisure,",
+        "image": "ocr_crops_new/48-100587124_00356-t19.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t19",
+            "48-100613486_00026-t19"
+        ],
+        "gt": "fill it in at his leisure."
+    },
+    {
+        "pred": "is at present Master. have produced to me proof in the manner",
+        "image": "ocr_crops_new/180-100760033_00015-t24.png",
+        "root image": "100760033_00015",
+        "text": true,
+        "matches": [
+            "180-100760033_00005-t24",
+            "180-100760033_00011-t24",
+            "180-100760033_00015-t24"
+        ],
+        "gt": "is at present Master, have produced to me proof in the manner"
+    },
+    {
+        "pred": "",
+        "image": "ocr_crops_new/62-004191670_00065-t70.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t70",
+            "62-004191670_00079-t70"
+        ],
+        "gt": "35"
+    },
+    {
+        "pred": "This Atteftation to be figned by the American Conful,",
+        "image": "ocr_crops_new/99-100802224_00006-t24.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t24",
+            "99-100802224_00008-t24"
+        ],
+        "gt": "This Attestation to be signed by the American Consul,"
+    },
+    {
+        "pred": "said certificate he will at once notify the said Collector of",
+        "image": "ocr_crops_new/185-100283146_00004-t18.png",
+        "root image": "100283146_00004",
+        "text": true,
+        "matches": [
+            "185-100283146_00004-t18",
+            "185-100283146_00011-t29",
+            "185-100283146_00008-t29"
+        ],
+        "gt": "said certificate he will at once notify the said Collector of"
+    },
+    {
+        "pred": "day of.",
+        "image": "ocr_crops_new/164-007372211_00002-t27.png",
+        "root image": "007372211_00002",
+        "text": true,
+        "matches": [
+            "164-007372211_00002-t27"
+        ],
+        "gt": "day of"
+    },
+    {
+        "pred": "; resides at",
+        "image": "ocr_crops_new/181-100587124_00040-t101.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t101",
+            "181-100587124_00118-t101"
+        ],
+        "gt": "; resides at"
+    },
+    {
+        "pred": "Tenses (ae",
+        "image": "ocr_crops_new/203-007540939_00287-t41.png",
+        "root image": "007540939_00287",
+        "text": true,
+        "matches": [
+            "203-007540939_00287-t41"
+        ],
+        "gt": "Immigrant Inspector"
+    },
+    {
+        "pred": "Immigration of Aliens into the United States, approved on March 3, 1903,",
+        "image": "ocr_crops_new/85-007372211_00001-t55.png",
+        "root image": "007372211_00001",
+        "text": true,
+        "matches": [
+            "85-007372211_00001-t55"
+        ],
+        "gt": "Immigration of Aliens into the United States,\" approved on March 3, 1903."
+    },
+    {
+        "pred": "26",
+        "image": "ocr_crops_new/62-004191670_00065-t79.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t79",
+            "62-004191670_00079-t79"
+        ],
+        "gt": "26"
+    },
+    {
+        "pred": "Dave you a Sabbath-School ?.",
+        "image": "ocr_crops_new/160-007675712_00033-t56.png",
+        "root image": "007675712_00033",
+        "text": true,
+        "matches": [
+            "160-007675712_00021-t56",
+            "160-007675712_00033-t56",
+            "160-007675712_00027-t53"
+        ],
+        "gt": "Have you a Sabbath-School?"
+    },
+    {
+        "pred": "4",
+        "image": "ocr_crops_new/62-004191670_00065-t227.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t227"
+        ],
+        "gt": "4"
+    },
+    {
+        "pred": "(13)",
+        "image": "ocr_crops_new/60-100660788_00064-t92.png",
+        "root image": "100660788_00064",
+        "text": true,
+        "matches": [
+            "60-100660788_00064-t92"
+        ],
+        "gt": "(13)"
+    },
+    {
+        "pred": "2. Whole number of Refugee or Freedmens Schools /n the District?",
+        "image": "ocr_crops_new/212-007641673_x-t7.png",
+        "root image": "007641673_x",
+        "text": true,
+        "matches": [
+            "212-007641673_x-t7"
+        ],
+        "gt": "2. Whole number of Refugee or Freedmen's Schools in the District?"
+    },
+    {
+        "pred": "Day",
+        "image": "ocr_crops_new/113-100802226_00003-t118.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t118"
+        ],
+        "gt": "Day"
+    },
+    {
+        "pred": "12",
+        "image": "ocr_crops_new/96-004955493_00029-t81.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t81",
+            "96-004955493_00030-t81"
+        ],
+        "gt": "12"
+    },
+    {
+        "pred": "NAME",
+        "image": "ocr_crops_new/55-100601668_00018-t32.png",
+        "root image": "100601668_00018",
+        "text": true,
+        "matches": [
+            "55-100601668_00018-t32",
+            "55-100601668_00032-t32"
+        ],
+        "gt": "NAME"
+    },
+    {
+        "pred": "PORT of",
+        "image": "ocr_crops_new/99-100802224_00006-t65.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t65",
+            "99-100802224_00008-t65"
+        ],
+        "gt": "PORT of"
+    },
+    {
+        "pred": "City of",
+        "image": "ocr_crops_new/164-007372211_00002-t33.png",
+        "root image": "007372211_00002",
+        "text": true,
+        "matches": [
+            "164-007372211_00002-t33"
+        ],
+        "gt": "City of"
+    },
+    {
+        "pred": "[ovER]",
+        "image": "ocr_crops_new/48-100587124_00356-t66.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t66",
+            "48-100613486_00026-t66"
+        ],
+        "gt": "[OVER]"
+    },
+    {
+        "pred": "8",
+        "image": "ocr_crops_new/62-004191670_00065-t59.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t59",
+            "62-004191670_00079-t59"
+        ],
+        "gt": "8"
+    },
+    {
+        "pred": "Flag:",
+        "image": "ocr_crops_new/207-100176364_x-t14.png",
+        "root image": "100176364_x",
+        "text": true,
+        "matches": [
+            "207-100176364_x-t14"
+        ],
+        "gt": "Flag"
+    },
+    {
+        "pred": "9",
+        "image": "ocr_crops_new/86-004191670_00007-t115.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t115",
+            "86-004191670_00010-t115"
+        ],
+        "gt": "9"
+    },
+    {
+        "pred": "NOTE ON",
+        "image": "ocr_crops_new/171-100423934_00135-t19.png",
+        "root image": "100423934_00135",
+        "text": true,
+        "matches": [
+            "171-100423934_00135-t19",
+            "171-100423934_00137-t19",
+            "171-100423934_00156-t19"
+        ],
+        "gt": "NOTE ON"
+    },
+    {
+        "pred": "Tew~-dJarkj",
+        "image": "ocr_crops_new/186-007675712_00119-t67.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t67"
+        ],
+        "gt": "New-York"
+    },
+    {
+        "pred": "land on which",
+        "image": "ocr_crops_new/20-007270209_00002-t154.png",
+        "root image": "007270209_00002",
+        "text": true,
+        "matches": [
+            "20-007270209_00002-t154",
+            "20-007270209_00006-t154"
+        ],
+        "gt": "land on which"
+    },
+    {
+        "pred": "TENURE",
+        "image": "ocr_crops_new/96-004955493_00029-t57.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t57",
+            "96-004955493_00030-t57"
+        ],
+        "gt": "TENURE"
+    },
+    {
+        "pred": "Located in or near",
+        "image": "ocr_crops_new/154-007182398_00039-t67.png",
+        "root image": "007182398_00039",
+        "text": true,
+        "matches": [
+            "154-007182398_00039-t67",
+            "154-007182398_00071-t66"
+        ],
+        "gt": "Located in or near-"
+    },
+    {
+        "pred": "dona fide lis intention to become a citizen of the United States of America, and 9. renounce forever all allegiance",
+        "image": "ocr_crops_new/36-007486024_00002-t16.png",
+        "root image": "007486024_00002",
+        "text": true,
+        "matches": [
+            "36-007486024_00002-t16",
+            "36-007486024_00012-t16"
+        ],
+        "gt": "bona fide his intention to become a citizen of the United States of America, and to renounce forever all allegiance"
+    },
+    {
+        "pred": "States of Himerica, now refiding at this place.",
+        "image": "ocr_crops_new/99-100802224_00006-t55.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t55",
+            "99-100802224_00008-t55"
+        ],
+        "gt": "States of America, now residing at this place."
+    },
+    {
+        "pred": "REMARRIED WIDOW.",
+        "image": "ocr_crops_new/56-005240858_00010-t0.png",
+        "root image": "005240858_00010",
+        "text": true,
+        "matches": [
+            "56-005240858_00010-t0",
+            "56-005240858_00011-t0"
+        ],
+        "gt": "REMARRIED WIDOW."
+    },
+    {
+        "pred": "34",
+        "image": "ocr_crops_new/86-004191670_00007-t101.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t101",
+            "86-004191670_00010-t101"
+        ],
+        "gt": "34"
+    },
+    {
+        "pred": "DESCRIPTION OF REGISTRANT",
+        "image": "ocr_crops_new/204-005150587_00024-t79.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t79"
+        ],
+        "gt": "DESCRIPTION OF REGISTRANT"
+    },
+    {
+        "pred": "2. My present occupation is.",
+        "image": "ocr_crops_new/48-100587124_00356-t52.png",
+        "root image": "100587124_00356",
+        "text": true,
+        "matches": [
+            "48-100587124_00356-t52",
+            "48-100613486_00026-t52"
+        ],
+        "gt": "2. My present occupation is"
+    },
+    {
+        "pred": "Wife or Husband,",
+        "image": "ocr_crops_new/210-004098525_00025-t45.png",
+        "root image": "004098525_00025",
+        "text": true,
+        "matches": [
+            "210-004098525_00025-t45"
+        ],
+        "gt": "Wife or Husband,"
+    },
+    {
+        "pred": "<",
+        "image": "ocr_crops_new/193-100901188_00075-t9.png",
+        "root image": "100901188_00075",
+        "text": true,
+        "matches": [
+            "193-100901188_00075-t9"
+        ],
+        "gt": "\\?rs"
+    },
+    {
+        "pred": "",
+        "image": "ocr_crops_new/99-100802224_00006-t27.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t27",
+            "99-100802224_00008-t27"
+        ],
+        "gt": "I"
+    },
+    {
+        "pred": "day of:",
+        "image": "ocr_crops_new/181-100587124_00040-t122.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t122",
+            "181-100587124_00118-t122"
+        ],
+        "gt": "day of"
+    },
+    {
+        "pred": "Wama",
+        "image": "ocr_crops_new/48-100613486_00026-t25.png",
+        "root image": "100613486_00026",
+        "text": true,
+        "matches": [
+            "48-100613486_00026-t25"
+        ],
+        "gt": "Name"
+    },
+    {
+        "pred": "Xome",
+        "image": "ocr_crops_new/166-101023522_00026-t5.png",
+        "root image": "101023522_00026",
+        "text": true,
+        "matches": [
+            "166-101023522_00026-t5"
+        ],
+        "gt": "Name"
+    },
+    {
+        "pred": "io",
+        "image": "ocr_crops_new/47-004857625_00042-t30.png",
+        "root image": "004857625_00042",
+        "text": true,
+        "matches": [
+            "47-004857625_00042-t30"
+        ],
+        "gt": "Class"
+    },
+    {
+        "pred": "Receipt of the above notice is hereby acknowledged",
+        "image": "ocr_crops_new/83-100660792_00287-t28.png",
+        "root image": "100660792_00287",
+        "text": true,
+        "matches": [
+            "83-100660792_00287-t28",
+            "83-100660792_00291-t28"
+        ],
+        "gt": "Receipt of the above notice is hereby acknowledged"
+    },
+    {
+        "pred": "PLACES OF RESIDENCE,",
+        "image": "ocr_crops_new/35-100788105_00006-t19.png",
+        "root image": "100788105_00006",
+        "text": true,
+        "matches": [
+            "35-100788105_00006-t19",
+            "35-100788105_00008-t19"
+        ],
+        "gt": "PLACES OF RESIDENCE."
+    },
+    {
+        "pred": "19.",
+        "image": "ocr_crops_new/55-100601668_00018-t21.png",
+        "root image": "100601668_00018",
+        "text": true,
+        "matches": [
+            "55-100601668_00018-t21",
+            "55-100601668_00032-t21"
+        ],
+        "gt": "19"
+    },
+    {
+        "pred": "",
+        "image": "ocr_crops_new/154-007182398_00071-t59.png",
+        "root image": "007182398_00071",
+        "text": true,
+        "matches": [
+            "154-007182398_00071-t59"
+        ],
+        "gt": "Name"
+    },
+    {
+        "pred": "Name.",
+        "image": "ocr_crops_new/52-007540939_00029-t17.png",
+        "root image": "007540939_00029",
+        "text": true,
+        "matches": [
+            "52-007540939_00029-t17",
+            "52-007540939_00042-t17"
+        ],
+        "gt": "Name."
+    },
+    {
+        "pred": "only",
+        "image": "ocr_crops_new/209-100283150_00034-t19.png",
+        "root image": "100283150_00034",
+        "text": true,
+        "matches": [
+            "209-100283150_00034-t19"
+        ],
+        "gt": "only"
+    },
+    {
+        "pred": "OF WHAT COUNTRY",
+        "image": "ocr_crops_new/35-100788105_00006-t20.png",
+        "root image": "100788105_00006",
+        "text": true,
+        "matches": [
+            "35-100788105_00006-t20",
+            "35-100788105_00008-t20"
+        ],
+        "gt": "OF WHAT COUNTRY"
+    },
+    {
+        "pred": "of America,",
+        "image": "ocr_crops_new/35-100788105_00006-t2.png",
+        "root image": "100788105_00006",
+        "text": true,
+        "matches": [
+            "35-100788105_00006-t2",
+            "35-100788105_00008-t2"
+        ],
+        "gt": "of America."
+    },
+    {
+        "pred": "This avvlication is for a headstone or marker for the UNMARKED grave of a",
+        "image": "ocr_crops_new/154-007182398_00071-t92.png",
+        "root image": "007182398_00071",
+        "text": true,
+        "matches": [
+            "154-007182398_00039-t82",
+            "154-007182398_00071-t92",
+            "154-007182398_00028-t29"
+        ],
+        "gt": "This application is for a headstone or marker for the UNMARKED grave of a"
+    },
+    {
+        "pred": "said County, this",
+        "image": "ocr_crops_new/150-100572410_00028-t27.png",
+        "root image": "100572410_00028",
+        "text": true,
+        "matches": [
+            "150-100572410_00028-t27"
+        ],
+        "gt": "said County, this"
+    },
+    {
+        "pred": "$4 ATA di",
+        "image": "ocr_crops_new/23-100283146_00001-t15.png",
+        "root image": "100283146_00001",
+        "text": true,
+        "matches": [
+            "23-100283146_00001-t15"
+        ],
+        "gt": "inches,"
+    },
+    {
+        "pred": "NAME,",
+        "image": "ocr_crops_new/61-007641596_00274-t8.png",
+        "root image": "007641596_00274",
+        "text": true,
+        "matches": [
+            "61-007641596_00274-t8",
+            "61-007641596_00275-t8"
+        ],
+        "gt": "NAME."
+    },
+    {
+        "pred": "iwhich this case is",
+        "image": "ocr_crops_new/17-007579716_00226-t64.png",
+        "root image": "007579716_00226",
+        "text": true,
+        "matches": [
+            "17-007579716_00226-t64",
+            "17-007579716_00230-t64"
+        ],
+        "gt": "which this case is"
+    },
+    {
+        "pred": "25",
+        "image": "ocr_crops_new/86-004191670_00007-t83.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t83",
+            "86-004191670_00010-t83"
+        ],
+        "gt": "25"
+    },
+    {
+        "pred": "HARBOR AND COASTWISE CRAFT Form E.",
+        "image": "ocr_crops_new/208-100214276_x-t1.png",
+        "root image": "100214276_x",
+        "text": true,
+        "matches": [
+            "208-100214276_x-t1"
+        ],
+        "gt": "HARBOR AND COASTWISE CRAFT.-Form E."
+    },
+    {
+        "pred": "do solemnly swear that all",
+        "image": "ocr_crops_new/187-101044939_00013-t30.png",
+        "root image": "101044939_00013",
+        "text": true,
+        "matches": [
+            "187-101044939_00013-t30",
+            "187-101044939_00018-t30",
+            "187-101044939_00020-t30"
+        ],
+        "gt": "do solemnly swear that all"
+    },
+    {
+        "pred": "(See instructions attached)",
+        "image": "ocr_crops_new/154-007182398_00039-t46.png",
+        "root image": "007182398_00039",
+        "text": true,
+        "matches": [
+            "154-007182398_00039-t46",
+            "154-007182398_00071-t49"
+        ],
+        "gt": "(See instructions attached)"
+    },
+    {
+        "pred": "Department",
+        "image": "ocr_crops_new/46-100251356_00001-t8.png",
+        "root image": "100251356_00001",
+        "text": true,
+        "matches": [
+            "46-100251356_00001-t8",
+            "46-100251356_00025-t8"
+        ],
+        "gt": "Department"
+    },
+    {
+        "pred": "fvear, Phat Iam the Perfon fet forth.in the printed Agreement on the cthe!",
+        "image": "ocr_crops_new/113-100802226_00003-t69.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t69"
+        ],
+        "gt": "swear, that I am the Person set forth in the printed Agreement on the other"
+    },
+    {
+        "pred": "19",
+        "image": "ocr_crops_new/86-004191670_00007-t69.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t69",
+            "86-004191670_00010-t69"
+        ],
+        "gt": "19"
+    },
+    {
+        "pred": "officer at a place to be designated by him, and shall not make",
+        "image": "ocr_crops_new/198-101044939_00042-t20.png",
+        "root image": "101044939_00042",
+        "text": true,
+        "matches": [
+            "198-101044939_00042-t20"
+        ],
+        "gt": "officer at a place to be designated by him, and shall not make"
+    },
+    {
+        "pred": "Notary-Public.",
+        "image": "ocr_crops_new/113-100802226_00003-t131.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t131"
+        ],
+        "gt": "Notary-Public."
+    },
+    {
+        "pred": "MUSKOGEE,",
+        "image": "ocr_crops_new/27-004173988_00047-t14.png",
+        "root image": "004173988_00047",
+        "text": true,
+        "matches": [
+            "27-004173988_00047-t14",
+            "27-004173988_00061-t14"
+        ],
+        "gt": "MUSKOGEE,"
+    },
+    {
+        "pred": "this",
+        "image": "ocr_crops_new/23-100283146_00001-t26.png",
+        "root image": "100283146_00001",
+        "text": true,
+        "matches": [
+            "23-100283146_00001-t26",
+            "23-100283146_00041-t26"
+        ],
+        "gt": "this"
+    },
+    {
+        "pred": "Lami ssi,",
+        "image": "ocr_crops_new/186-007675712_00119-t70.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t70"
+        ],
+        "gt": "Commission."
+    },
+    {
+        "pred": "Appraised",
+        "image": "ocr_crops_new/72-004284105_00007-t38.png",
+        "root image": "004284105_00007",
+        "text": true,
+        "matches": [
+            "72-004284105_00007-t38",
+            "72-004284105_00009-t38"
+        ],
+        "gt": "Appraised"
+    },
+    {
+        "pred": "Bare you w Class in Sumdar-School ?",
+        "image": "ocr_crops_new/186-007675712_00119-t57.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t57"
+        ],
+        "gt": "Have you a Class in Sunday-School?"
+    },
+    {
+        "pred": ". also known as",
+        "image": "ocr_crops_new/181-100587124_00040-t17.png",
+        "root image": "100587124_00040",
+        "text": true,
+        "matches": [
+            "181-100587124_00040-t17",
+            "181-100587124_00118-t17"
+        ],
+        "gt": ", also known as"
+    },
+    {
+        "pred": "Cammpicticn",
+        "image": "ocr_crops_new/47-004857625_00045-t133.png",
+        "root image": "004857625_00045",
+        "text": true,
+        "matches": [
+            "47-004857625_00045-t133"
+        ],
+        "gt": "Complexion"
+    },
+    {
+        "pred": "GIVEN NAME",
+        "image": "ocr_crops_new/193-100101969_00067-t19.png",
+        "root image": "100101969_00067",
+        "text": true,
+        "matches": [
+            "193-100101969_00067-t19",
+            "193-100101969_00093-t20",
+            "193-100101969_00221-t46",
+            "193-100901188_00075-t45"
+        ],
+        "gt": "GIVEN NAME"
+    },
+    {
+        "pred": "COLOR KD PHRSON SS.",
+        "image": "ocr_crops_new/39-007641649_00123-t3.png",
+        "root image": "007641649_00123",
+        "text": true,
+        "matches": [
+            "39-007641649_00123-t3",
+            "39-007641649_00124-t3"
+        ],
+        "gt": "COLORED PERSONS."
+    },
+    {
+        "pred": "Number always present,",
+        "image": "ocr_crops_new/186-007675712_00119-t22.png",
+        "root image": "007675712_00119",
+        "text": true,
+        "matches": [
+            "186-007675712_00119-t22"
+        ],
+        "gt": "Number always present,"
+    },
+    {
+        "pred": "merchant , and dated the",
+        "image": "ocr_crops_new/99-100802224_00006-t34.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t34",
+            "99-100802224_00008-t34"
+        ],
+        "gt": "merchant , and dated the"
+    },
+    {
+        "pred": "Sine aforesaid, he has behaved us a man of good moral character, attached to the principles of the Constitution of",
+        "image": "ocr_crops_new/36-007486024_00002-t21.png",
+        "root image": "007486024_00002",
+        "text": true,
+        "matches": [
+            "36-007486024_00002-t21",
+            "36-007486024_00012-t21"
+        ],
+        "gt": "time aforesaid, he has behaved as a man of good moral character, attached to the principles of the Constitution of"
+    },
+    {
+        "pred": "sNe Searey FS PRA orca:",
+        "image": "ocr_crops_new/50-007641631_00137-t14.png",
+        "root image": "007641631_00137",
+        "text": true,
+        "matches": [
+            "50-007641631_00137-t14"
+        ],
+        "gt": "as servant to the said"
+    },
+    {
+        "pred": "Place of D/A",
+        "image": "ocr_crops_new/47-004857625_00042-t112.png",
+        "root image": "004857625_00042",
+        "text": true,
+        "matches": [
+            "47-004857625_00042-t112"
+        ],
+        "gt": "Place of birth"
+    },
+    {
+        "pred": "| Port",
+        "image": "ocr_crops_new/203-007540939_00106-t68.png",
+        "root image": "007540939_00106",
+        "text": true,
+        "matches": [
+            "203-007540939_00106-t68",
+            "203-007540939_00287-t68"
+        ],
+        "gt": "Port"
+    },
+    {
+        "pred": "ss",
+        "image": "ocr_crops_new/62-004191670_00079-t73.png",
+        "root image": "004191670_00079",
+        "text": true,
+        "matches": [
+            "62-004191670_00079-t73"
+        ],
+        "gt": "32"
+    },
+    {
+        "pred": "See also",
+        "image": "ocr_crops_new/7-005077644_00014-t4.png",
+        "root image": "005077644_00014",
+        "text": true,
+        "matches": [
+            "7-005077644_00014-t4",
+            "7-005077644_00017-t4"
+        ],
+        "gt": "See also"
+    },
+    {
+        "pred": "EE of Sas Con MOBS He",
+        "image": "ocr_crops_new/189-100760033_00004-t2.png",
+        "root image": "100760033_00004",
+        "text": true,
+        "matches": [
+            "189-100760033_00004-t2",
+            "189-100760033_00010-t2"
+        ],
+        "gt": "List of Persons Composing the Crew of the"
+    },
+    {
+        "pred": "Continue on reverse",
+        "image": "ocr_crops_new/171-100423934_00137-t23.png",
+        "root image": "100423934_00137",
+        "text": true,
+        "matches": [
+            "171-100423934_00135-t23",
+            "171-100423934_00137-t23",
+            "171-100423934_00156-t23"
+        ],
+        "gt": "Continue on reverse"
+    },
+    {
+        "pred": "No. of white females",
+        "image": "ocr_crops_new/86-004191670_00007-t166.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t166",
+            "86-004191670_00010-t166"
+        ],
+        "gt": "No. of white females"
+    },
+    {
+        "pred": "or Country.",
+        "image": "ocr_crops_new/62-004191670_00065-t27.png",
+        "root image": "004191670_00065",
+        "text": true,
+        "matches": [
+            "62-004191670_00065-t27",
+            "62-004191670_00079-t27"
+        ],
+        "gt": "or Country."
+    },
+    {
+        "pred": "Notary-Public.",
+        "image": "ocr_crops_new/113-100802226_00003-t142.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t142"
+        ],
+        "gt": "Notary-Public."
+    },
+    {
+        "pred": "14",
+        "image": "ocr_crops_new/86-004191670_00007-t125.png",
+        "root image": "004191670_00007",
+        "text": true,
+        "matches": [
+            "86-004191670_00007-t125",
+            "86-004191670_00010-t125"
+        ],
+        "gt": "14"
+    },
+    {
+        "pred": "and",
+        "image": "ocr_crops_new/164-007372211_00002-t34.png",
+        "root image": "007372211_00002",
+        "text": true,
+        "matches": [
+            "164-007372211_00002-t34"
+        ],
+        "gt": "and"
+    },
+    {
+        "pred": "Destination",
+        "image": "ocr_crops_new/166-101023522_00024-t17.png",
+        "root image": "101023522_00024",
+        "text": true,
+        "matches": [
+            "166-101023522_00018-t17",
+            "166-101023522_00024-t17",
+            "166-101023522_00026-t17"
+        ],
+        "gt": "Destination"
+    },
+    {
+        "pred": "and entitely renounce and abjure all allegiance and fidelity to any foreign Prince, Potentate, State or Sovereignty what-",
+        "image": "ocr_crops_new/195-007486024_00022-t56.png",
+        "root image": "007486024_00022",
+        "text": true,
+        "matches": [
+            "195-007486024_00020-t56",
+            "195-007486024_00022-t56",
+            "195-007486024_00025-t56"
+        ],
+        "gt": "and entitely renounce and abjure all allegiance and fidelity to any foreign Prince, Potentate, State or Sovereignty what-"
+    },
+    {
+        "pred": "SEX.",
+        "image": "ocr_crops_new/6-007641608_00126-t70.png",
+        "root image": "007641608_00126",
+        "text": true,
+        "matches": [
+            "6-007641608_00126-t70",
+            "6-007641608_00138-t70"
+        ],
+        "gt": "SEX."
+    },
+    {
+        "pred": "U. S. CITIZEN",
+        "image": "ocr_crops_new/204-005150587_00024-t44.png",
+        "root image": "005150587_00024",
+        "text": true,
+        "matches": [
+            "204-005150587_00024-t44"
+        ],
+        "gt": "U. S. CITIZEN"
+    },
+    {
+        "pred": "erm Gs a",
+        "image": "ocr_crops_new/47-004857625_00045-t14.png",
+        "root image": "004857625_00045",
+        "text": true,
+        "matches": [
+            "47-004857625_00045-t14"
+        ],
+        "gt": "Form 524 No."
+    },
+    {
+        "pred": "County -",
+        "image": "ocr_crops_new/96-004955493_00029-t0.png",
+        "root image": "004955493_00029",
+        "text": true,
+        "matches": [
+            "96-004955493_00029-t0",
+            "96-004955493_00030-t0"
+        ],
+        "gt": "County"
+    },
+    {
+        "pred": "Reason for Continuance",
+        "image": "ocr_crops_new/64-100423934_00038-t24.png",
+        "root image": "100423934_00038",
+        "text": true,
+        "matches": [
+            "64-100423934_00038-t24",
+            "64-100423934_00056-t24"
+        ],
+        "gt": "Reason for Continuance"
+    },
+    {
+        "pred": "feces",
+        "image": "ocr_crops_new/20-007270209_00006-t108.png",
+        "root image": "007270209_00006",
+        "text": true,
+        "matches": [
+            "20-007270209_00006-t108"
+        ],
+        "gt": "? A."
+    },
+    {
+        "pred": "SIGNED, SEALED AND DELIVERED IN PRESENCE oF",
+        "image": "ocr_crops_new/50-007641631_00133-t29.png",
+        "root image": "007641631_00133",
+        "text": true,
+        "matches": [
+            "50-007641631_00133-t29",
+            "50-007641631_00137-t29"
+        ],
+        "gt": "SIGNED, SEALED AND DELIVERED IN PRESENCE OF"
+    },
+    {
+        "pred": "SUBSEQUENT DEPARTURES FROM THE UNITED STATES",
+        "image": "ocr_crops_new/203-007540939_00106-t60.png",
+        "root image": "007540939_00106",
+        "text": true,
+        "matches": [
+            "203-007540939_00106-t60",
+            "203-007540939_00287-t60"
+        ],
+        "gt": "SUBSEQUENT DEPARTURES FROM THE UNITED STATES"
+    },
+    {
+        "pred": "latelv aro cereal the nort of",
+        "image": "ocr_crops_new/99-100802224_00006-t4.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t4",
+            "99-100802224_00008-t4"
+        ],
+        "gt": "lately arrived from the port of"
+    },
+    {
+        "pred": "and also for divers and good causes, hath bound and put the said",
+        "image": "ocr_crops_new/50-007641631_00133-t13.png",
+        "root image": "007641631_00133",
+        "text": true,
+        "matches": [
+            "50-007641631_00133-t13",
+            "50-007641631_00137-t13"
+        ],
+        "gt": "and also for divers and good causes, hath bound and put the said"
+    },
+    {
+        "pred": "merchant ., were actually deli:",
+        "image": "ocr_crops_new/99-100802224_00006-t14.png",
+        "root image": "100802224_00006",
+        "text": true,
+        "matches": [
+            "99-100802224_00006-t14",
+            "99-100802224_00008-t14"
+        ],
+        "gt": "merchant , were actually deli-"
+    },
+    {
+        "pred": "Al",
+        "image": "ocr_crops_new/181-100587124_00118-t132.png",
+        "root image": "100587124_00118",
+        "text": true,
+        "matches": [
+            "181-100587124_00118-t132"
+        ],
+        "gt": ", 1"
+    },
+    {
+        "pred": "{wear, tart am the Peytan fet forth : in the printed Agreement on the other  ae",
+        "image": "ocr_crops_new/113-100802226_00003-t80.png",
+        "root image": "100802226_00003",
+        "text": true,
+        "matches": [
+            "113-100802226_00003-t80"
+        ],
+        "gt": "swear that I am the Person set forth in the printed Agreement on the other side,"
+    },
+    {
+        "pred": "Date of birth",
+        "image": "ocr_crops_new/9-100194510_00001-t30.png",
+        "root image": "100194510_00001",
+        "text": true,
+        "matches": [
+            "9-100194510_00001-t30",
+            "9-100194510_00003-t30"
+        ],
+        "gt": "Date of birth"
     }
 ]
