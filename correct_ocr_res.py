@@ -1,4 +1,9 @@
-import cv2
+try:
+    import cv2
+    CV=True
+except:
+    import img_f as cv2
+    CV=False
 import json
 import sys, random, os
 import numpy as np
@@ -18,7 +23,7 @@ if len(sys.argv)>3:
 else:
     remove = None
 
-save_every=20
+save_every=10
 
 with open(resultFile) as f:
     results = json.load(f)
@@ -51,11 +56,11 @@ for i,r in enumerate(undone):
     im = cv2.imread(r['image'])
     cv2.imshow('im',im)
 
-    if first:
+    if first and CV:
         print('press key...')
         key = cv2.waitKey()
         first=False
-    else:
+    elif CV:
         key = cv2.waitKey(1)
     #readline.insert_text(r['pred'])
     #readline.redisplay()
