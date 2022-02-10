@@ -11,8 +11,8 @@ if len(sys.argv)>2:
     resultFile = sys.argv[1]
     outFile = sys.argv[2]
 else:
-    resultFile = 'ocr_test_valid.json'
-    outFile = 'corrected_test_valid.json'
+    resultFile = 'ocr_train_inaccurate.json'
+    outFile = 'corrected_train_inaccurate.json'
 if len(sys.argv)>3:
     remove = abs(int(sys.argv[3]))
 else:
@@ -46,7 +46,7 @@ first=True
 times=[]
 #clipboard = gtk.clipboard_get()
 for i,r in enumerate(undone):
-    print('{}  {}/{} \t\t[qqq: quit, UNDO:redo last]'.format(r['image'],i+len(out),len(undone)+len(out)))
+    print('{}  {}/{} \t\t[qqq: quit, UNDO:redo last, FULL: show document]'.format(r['image'],i+len(out),len(undone)+len(out)))
     print(': {}'.format(r['pred']))
     im = cv2.imread(r['image'])
     cv2.imshow('im',im)

@@ -1,0 +1,32 @@
+[
+    {
+        "pred": "bound ce",
+        "image": "ocr_crops_new/35_1-100788105_00016-t14.png",
+        "root image": "100788105_00016",
+        "text": true,
+        "matches": [
+            "35_1-100788105_00016-t14"
+        ],
+        "gt": "bound for"
+    },
+    {
+        "pred": "y LIL",
+        "image": "ocr_crops_new/161_3-007540885_00283-t18.png",
+        "root image": "007540885_00283",
+        "text": true,
+        "matches": [
+            "161_3-007540885_00283-t18"
+        ],
+        "gt": "191"
+    },
+    {
+        "pred": ", 186",
+        "image": "ocr_crops_new/115-007110330_00043-t8.png",
+        "root image": "007110330_00043",
+        "text": true,
+        "matches": [
+            "115-007110330_00043-t8"
+        ],
+        "gt": ", 186"
+    }
+]

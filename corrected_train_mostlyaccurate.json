@@ -1,0 +1,1608 @@
+[
+    {
+        "pred": "to reship on board any other vessel bound to any foreign port or place, he ahall be allowed to land for the purpose of so",
+        "image": "ocr_crops_new/191-007540885_00106-t20.png",
+        "root image": "007540885_00106",
+        "text": true,
+        "matches": [
+            "191-007540885_00012-t20",
+            "191-007540885_00106-t20",
+            "191-007540885_00132-t20"
+        ],
+        "gt": "to reship on board any other vessel bound to any foreign port or place, he shall be allowed to land for the purpose of so"
+    },
+    {
+        "pred": "(Enter name of any unincorporated place having approximately 500 inhabitants or more. See instructions.)",
+        "image": "ocr_crops_new/134-004950232_00007-t10.png",
+        "root image": "004950232_00007",
+        "text": true,
+        "matches": [
+            "134-004950232_00007-t10",
+            "134-004950232_00009-t10",
+            "134-004950232_00013-t10",
+            "134-004950232_00125-t10",
+            "134-004950232_00008-t10"
+        ],
+        "gt": "(Enter name of any unincorporated place having approximately 500 inhabitants or more. See instructions.)"
+    },
+    {
+        "pred": "\" {Insert proper name and, also, name of class, as township, town, precinct, district, hundred, beat, etc, Seo instructions.j",
+        "image": "ocr_crops_new/42-004966385_00014-t7.png",
+        "root image": "004966385_00014",
+        "text": true,
+        "matches": [
+            "42-004966385_00014-t7",
+            "42-004966385_00023-t7"
+        ],
+        "gt": "[Insert proper name and, also, name of class, as township, town, precinct, district, hundred, beat, etc, See instructions.]"
+    },
+    {
+        "pred": "To the Honorable the Justices of our Saeprermeladiete! Court.",
+        "image": "ocr_crops_new/177-007372205_00064-t2.png",
+        "root image": "007372205_00064",
+        "text": true,
+        "matches": [
+            "177-007372205_00064-t2",
+            "177-007372205_00067-t2",
+            "177-007372205_00070-t2"
+        ],
+        "gt": "To the Honorable the Justices of our \\s[Supreme Judicial] Court,"
+    },
+    {
+        "pred": "SCHEDULE 5.Persons who Drep during the Year endine May 31, 1880, enumerated by me int",
+        "image": "ocr_crops_new/172-007579716_00030-t4.png",
+        "root image": "007579716_00030",
+        "text": true,
+        "matches": [
+            "172-007579716_00014-t4",
+            "172-007579716_00029-t4",
+            "172-007579716_00030-t4"
+        ],
+        "gt": "SCHEDULE 5.-Persons who DIED during the Year endine May 31, 1880, enumerated by me in"
+    },
+    {
+        "pred": ". Fhe Object of this Supplemental Bohedule is to furnish material not only for a complete enumeration or deaf-mutes, but for an account of their condition. It is important that every inquiry respecting each case be",
+        "image": "ocr_crops_new/125_2-004191670_00344-t2.png",
+        "root image": "004191670_00344",
+        "text": true,
+        "matches": [
+            "125_2-004191670_00341-t2",
+            "125_2-004191670_00325-t2",
+            "125_2-004191670_00334-t2",
+            "125_2-004191670_00344-t2",
+            "125_2-004191670_00343-t2"
+        ],
+        "gt": "The object of this Supplemental Schedule is to furnish material not only for a complete enumeration or deaf-mutes, but for an account of their condition. It is important that every inquiry respecting each case be"
+    },
+    {
+        "pred": "aad subscribed the foregoing Oath in open Court.",
+        "image": "ocr_crops_new/118-007494634_00035-t18.png",
+        "root image": "007494634_00035",
+        "text": true,
+        "matches": [
+            "118-007494634_00006-t18",
+            "118-007494634_00012-t18",
+            "118-007494634_00020-t18",
+            "118-007494634_00026-t18",
+            "118-007494634_00035-t18"
+        ],
+        "gt": "and subscribed the foregoing Oath in open Court."
+    },
+    {
+        "pred": "of restdence are AS Follows:",
+        "image": "ocr_crops_new/181_2-100572410_00019-t73.png",
+        "root image": "100572410_00019",
+        "text": true,
+        "matches": [
+            "181_2-100572410_00019-t73"
+        ],
+        "gt": "of residence are as follows:"
+    },
+    {
+        "pred": "NAME (Last, Birst, Middle Initial)",
+        "image": "ocr_crops_new/1_1-007182398_00037-t19.png",
+        "root image": "007182398_00037",
+        "text": true,
+        "matches": [
+            "1_1-007182398_00037-t19",
+            "1_1-007182398_00045-t19"
+        ],
+        "gt": "NAME (Last, First, Middle Initial)"
+    },
+    {
+        "pred": "Required under Act of Congress of February 5, 1917, to be delivered to the United States immigration officer by the representatives of any vessel having such aliens",
+        "image": "ocr_crops_new/110-007540885_00019-t3.png",
+        "root image": "007540885_00019",
+        "text": true,
+        "matches": [
+            "110-007540885_00019-t3",
+            "110-007540885_00034-t3",
+            "110-007540885_00038-t3",
+            "110-007540885_00045-t3",
+            "110-007540885_00051-t3"
+        ],
+        "gt": "Required under Act of Congress of February 5, 1917, to be delivered to the United States immigration officer by the representatives of any vessel having such aliens"
+    },
+    {
+        "pred": "the said parties do hereby mntually agree that Circular No 29, Headquarters Bureau",
+        "image": "ocr_crops_new/6_1-007641608_00228-t17.png",
+        "root image": "007641608_00228",
+        "text": true,
+        "matches": [
+            "6_1-007641608_00228-t17",
+            "6_1-007641608_00232-t17"
+        ],
+        "gt": "the said parties do hereby mntually agree that Circular No 29, Headquarters Bureau"
+    },
+    {
+        "pred": "and the semi-blind see Note 5; it is of the greatest importance to note this distinction with care, by making the proper entry in columns 10 or 11,",
+        "image": "ocr_crops_new/125_1-004191670_00332-t376.png",
+        "root image": "004191670_00332",
+        "text": true,
+        "matches": [
+            "125_1-004191670_00332-t376",
+            "125_1-004191670_00348-t376"
+        ],
+        "gt": "and the semi-blind see Note E; it is of the greatest importance to note this distinction with care, by making the proper entry in columns 10 or 11,"
+    },
+    {
+        "pred": "asa man OF good moral character, attached tofue Constitution of the United States, and well disposed to the",
+        "image": "ocr_crops_new/85_2-007372205_00076-t28.png",
+        "root image": "007372205_00076",
+        "text": true,
+        "matches": [
+            "85_2-007372205_00076-t28",
+            "85_2-007372205_00077-t28"
+        ],
+        "gt": "as a man of good moral character, attached to the Constitution of the United States, and well disposed to the"
+    },
+    {
+        "pred": "se Peete eUUHY, m whet me Inatitution is situated tany not te eharzed with more than ite die proportion of the blind,",
+        "image": "ocr_crops_new/125_2-004191670_00325-t204.png",
+        "root image": "004191670_00325",
+        "text": true,
+        "matches": [
+            "125_2-004191670_00325-t204",
+            "125_2-004191670_00341-t204"
+        ],
+        "gt": "and that the county in which the institution is situated may not be charged with more than its due proportion of the blind,"
+    },
+    {
+        "pred": "This is to Certify That the above-described person has this day been examined and is",
+        "image": "ocr_crops_new/161_2-007540885_00324-t1016.png",
+        "root image": "007540885_00324",
+        "text": true,
+        "matches": [
+            "161_2-007540885_00324-t1016",
+            "161_2-007540885_00397-t1016",
+            "161_2-007540885_00398-t1016",
+            "161_2-007540885_00360-t1016"
+        ],
+        "gt": "This is to Certify That the above-described person has this day been examined and is"
+    },
+    {
+        "pred": "Place of birth of each person enumerated and of his or her parents. If bornin",
+        "image": "ocr_crops_new/134-004950232_00007-t147.png",
+        "root image": "004950232_00007",
+        "text": true,
+        "matches": [
+            "134-004950232_00007-t147",
+            "134-004950232_00008-t147",
+            "134-004950232_00009-t147",
+            "134-004950232_00013-t147",
+            "134-004950232_00125-t147"
+        ],
+        "gt": "Place of birth of each person enumerated and of his or her parents. If born in"
+    },
+    {
+        "pred": "MENT DURING THE WEEK.",
+        "image": "ocr_crops_new/159-007641611_00133-t13.png",
+        "root image": "007641611_00133",
+        "text": true,
+        "matches": [
+            "159-007641611_00129-t13",
+            "159-007641611_00133-t13",
+            "159-007641611_00136-t13",
+            "159-007641611_00139-t13",
+            "159-007641611_00144-t13"
+        ],
+        "gt": "MENT DURING THE WEEK."
+    },
+    {
+        "pred": "Im: ~ Be on",
+        "image": "ocr_crops_new/111_1-101044939_00015-t50.png",
+        "root image": "101044939_00015",
+        "text": true,
+        "matches": [
+            "111_1-101044939_00015-t50"
+        ],
+        "gt": "Im\\?\\?\\?\\? Be on"
+    },
+    {
+        "pred": "the remaining one-half together with such portion of the one-twenticth set apart for Schools as may not have been demanded and paid over previously, at the end of the year. Said:",
+        "image": "ocr_crops_new/6_1-007641608_00228-t23.png",
+        "root image": "007641608_00228",
+        "text": true,
+        "matches": [
+            "6_1-007641608_00228-t23",
+            "6_1-007641608_00232-t23"
+        ],
+        "gt": "the remaining one-half together with such portion of the one-twentieth set apart for Schools as may not have been demanded and paid over previously, at the end of the year. Said"
+    },
+    {
+        "pred": "fied in the said Certificate,",
+        "image": "ocr_crops_new/101_1-100802224_00016-t15.png",
+        "root image": "100802224_00016",
+        "text": true,
+        "matches": [
+            "101_1-100802224_00016-t15",
+            "101_1-100802224_00172-t15",
+            "101_1-100802224_00170-t15"
+        ],
+        "gt": "fied in the said Certificate."
+    },
+    {
+        "pred": "Mnited States of America,",
+        "image": "ocr_crops_new/150_2-100587124_00011-t0.png",
+        "root image": "100587124_00011",
+        "text": true,
+        "matches": [
+            "150_2-100587124_00011-t0",
+            "150_2-100587124_00014-t0"
+        ],
+        "gt": "United States of America,"
+    },
+    {
+        "pred": "Pisce and date of issue",
+        "image": "ocr_crops_new/97-007543935_00078-t31.png",
+        "root image": "007543935_00078",
+        "text": true,
+        "matches": [
+            "97-007543935_00078-t31",
+            "97-007543935_00114-t31"
+        ],
+        "gt": "Place and date of issue"
+    },
+    {
+        "pred": "any Port in the United States of Americam THAT in confideration of the monthly or other wages again each refpef&ive Seaman or Mariners? Name, hefeunder",
+        "image": "ocr_crops_new/144-100802226_00002-t6.png",
+        "root image": "100802226_00002",
+        "text": true,
+        "matches": [
+            "144-100802226_00002-t6"
+        ],
+        "gt": "any Port in the United States of America - THAT in consideration of the monthly or other wages again each respective Seaman or Mariners' Name, hereunder"
+    },
+    {
+        "pred": "14. Stores for expendituresuch as Iron, Steel, Horse-shoes,",
+        "image": "ocr_crops_new/137_1-007641633_00151-t29.png",
+        "root image": "007641633_00151",
+        "text": true,
+        "matches": [
+            "137_1-007641633_00151-t29",
+            "137_1-007641633_00158-t29",
+            "137_1-007641633_00163-t29",
+            "137_1-007641633_00168-t29",
+            "137_1-007641633_00173-t29"
+        ],
+        "gt": "14. Stores for expenditure-such as Iron, Steel, Horse-shoes,"
+    },
+    {
+        "pred": "T6-?uEe COMMISSIONER OF IMMIGRATION.",
+        "image": "ocr_crops_new/161_1-007540885_00285-t2012.png",
+        "root image": "007540885_00285",
+        "text": true,
+        "matches": [
+            "161_1-007540885_00284-t2012",
+            "161_1-007540885_00285-t2012",
+            "161_1-007540885_00008-t2012"
+        ],
+        "gt": "TO THE COMMISSIONER OF IMMIGRATION."
+    },
+    {
+        "pred": "who has produced proof, inthe manner",
+        "image": "ocr_crops_new/49-100283155_00002-t14.png",
+        "root image": "100283155_00002",
+        "text": true,
+        "matches": [
+            "49-100283155_00002-t14",
+            "49-100283155_00003-t14"
+        ],
+        "gt": "who has produced proof, in the manner"
+    },
+    {
+        "pred": "Great aesistance may be derived from questions addressed to deaf-mutes themselves: Do you know any deaf-mutes in this neighborhood? The class feeling of the deaf and dumb, arising from their isolated state, is so",
+        "image": "ocr_crops_new/125_1-004191670_00381-t349.png",
+        "root image": "004191670_00381",
+        "text": true,
+        "matches": [
+            "125_1-004191670_00330-t349",
+            "125_1-004191670_00332-t349",
+            "125_1-004191670_00348-t349",
+            "125_1-004191670_00377-t349",
+            "125_1-004191670_00381-t349"
+        ],
+        "gt": "Great assistance may be derived from questions addressed to deaf-mutes themselves: Do you know any deaf-mutes in this neighborhood? The class feeling of the deaf and dumb, arising from their isolated state, is so"
+    },
+    {
+        "pred": "case of Divorced persons, column 8. when the letter D is ta he nsed",
+        "image": "ocr_crops_new/172-007579716_00030-t14.png",
+        "root image": "007579716_00030",
+        "text": true,
+        "matches": [
+            "172-007579716_00014-t14",
+            "172-007579716_00029-t14",
+            "172-007579716_00030-t14"
+        ],
+        "gt": "case of Divorced persons, column 8. when the letter \"D\" is to be used"
+    },
+    {
+        "pred": "14. Stores for expenditure such as Iron, Steel, [lorse shoes,",
+        "image": "ocr_crops_new/137-007641633_00123-t26.png",
+        "root image": "007641633_00123",
+        "text": true,
+        "matches": [
+            "137-007641633_00123-t26",
+            "137-007641633_00130-t26",
+            "137-007641633_00135-t26",
+            "137-007641633_00140-t26",
+            "137-007641633_00146-t26"
+        ],
+        "gt": "14. Stores for expenditure--such as Iron, Steel, Horse shoes,"
+    },
+    {
+        "pred": "(To be delivered to Canadian Immigration Officer as required by section 52 Canadian Immiration Act)",
+        "image": "ocr_crops_new/60_2-100660788_00032-t3.png",
+        "root image": "100660788_00032",
+        "text": true,
+        "matches": [
+            "60_2-100660788_00032-t3",
+            "60_2-100660788_00036-t3"
+        ],
+        "gt": "(To be delivered to Canadian Immigration Officer as required by section 52 Canadian Immigration Act)"
+    },
+    {
+        "pred": "have been paid off or discharged, and of those, if any, who have deserted or landed at that port. or (2) in the discretion of",
+        "image": "ocr_crops_new/127-100101969_00040-t31.png",
+        "root image": "100101969_00040",
+        "text": true,
+        "matches": [
+            "127-100101969_00028-t31",
+            "127-100101969_00040-t31",
+            "127-100101969_00048-t31",
+            "127-100101969_00054-t31",
+            "127-100101969_00065-t31"
+        ],
+        "gt": "have been paid off or discharged, and of those, if any, who have deserted or landed at that port, or (2) in the discretion of"
+    },
+    {
+        "pred": "then be completed by a customs official or an immi-",
+        "image": "ocr_crops_new/4_2-007540939_00108-t63.png",
+        "root image": "007540939_00108",
+        "text": true,
+        "matches": [
+            "4_2-007540939_00108-t63",
+            "4_2-007540939_00290-t63"
+        ],
+        "gt": "then be completed by a customs official or an immi-"
+    },
+    {
+        "pred": "Note.Failure to furnish full or correct information in columns (2), (5), (6),",
+        "image": "ocr_crops_new/60_3-100660788_00097-t68.png",
+        "root image": "100660788_00097",
+        "text": true,
+        "matches": [
+            "60_3-100660788_00097-t68",
+            "60_3-100660788_00066-t68"
+        ],
+        "gt": "Note.-Failure to furnish full or correct information in columns (2), (5), (6),"
+    },
+    {
+        "pred": "tax collected Tap schook",
+        "image": "ocr_crops_new/89_1-007641634_00370-t31.png",
+        "root image": "007641634_00370",
+        "text": true,
+        "matches": [
+            "89_1-007641634_00370-t31",
+            "89_1-007641634_00372-t31"
+        ],
+        "gt": "tax collected for school"
+    },
+    {
+        "pred": "(4) Iam a native and loyal citizen of the United States, having been born at-.",
+        "image": "ocr_crops_new/28_1-100283153_00009-t15.png",
+        "root image": "100283153_00009",
+        "text": true,
+        "matches": [
+            "28_1-100283153_00009-t15",
+            "28_1-100283153_00014-t15"
+        ],
+        "gt": "(1) I am a native and loyal citizen of the United States, having been born at"
+    },
+    {
+        "pred": "(U. 8. or Conf), or widow of",
+        "image": "ocr_crops_new/200-005157148_00168-t78.png",
+        "root image": "005157148_00168",
+        "text": true,
+        "matches": [
+            "200-005157148_00102-t78",
+            "200-005157148_00150-t78",
+            "200-005157148_00168-t78",
+            "200-005157148_00214-t44",
+            "200-005157148_00261-t44"
+        ],
+        "gt": "(U. S. or Conf.), or widow of"
+    },
+    {
+        "pred": "take charge of the cargo in the lighters, and go with it to the lawful quay, and there de-_",
+        "image": "ocr_crops_new/146-100802226_00173-t71.png",
+        "root image": "100802226_00173",
+        "text": true,
+        "matches": [
+            "146-100802226_00173-t71"
+        ],
+        "gt": "take charge of the cargo in the lighters, and go with it to the lawful quay, and there de-"
+    },
+    {
+        "pred": "Nove MoT eolfaupportion, any yong! ie partly welfenpportiow, nay \"partly! HE not, may ne! Tidloate all inmates of netitutions who are malitalied or treated at thelr personal expense (not at the expense of any town, county, or State, nor of the Inatitution) by the word  Pay.",
+        "image": "ocr_crops_new/125-004191670_00347-t449.png",
+        "root image": "004191670_00347",
+        "text": true,
+        "matches": [
+            "125-004191670_00331-t449",
+            "125-004191670_00333-t449",
+            "125-004191670_00339-t449",
+            "125-004191670_00347-t449",
+            "125-004191670_00349-t449"
+        ],
+        "gt": "Note B.-If self-supporting, say \"yes;\" if partly self-supporting, say \"partly;\" if not, say \"no.\" Indicate all inmates of institutions who are maintained or treated at their personal expense (not at the expense of any town, county, or State, nor of the institution) by the word \"Pay.\""
+    },
+    {
+        "pred": "as the mafter fhall think neceffary to order for the prefervation of the above. And whereas it often happens that part of the cargo is embezzled after being fafely",
+        "image": "ocr_crops_new/144-100802226_00002-t35.png",
+        "root image": "100802226_00002",
+        "text": true,
+        "matches": [
+            "144-100802226_00002-t35"
+        ],
+        "gt": "as the master shall think necessary to order for the preservation of the above. And whereas it often happens that part of the cargo is embezzled after being safely"
+    },
+    {
+        "pred": "Nore A.An insane person may be found either at his own home or away from it in some institution, such as a hospital, asylum, or poor-house, In the latter case, Lis residence when at home must be stated, in order that he may be accredited to the State or county to which he properly belongs,",
+        "image": "ocr_crops_new/125_2-004191670_00343-t337.png",
+        "root image": "004191670_00343",
+        "text": true,
+        "matches": [
+            "125_2-004191670_00325-t337",
+            "125_2-004191670_00334-t337",
+            "125_2-004191670_00341-t337",
+            "125_2-004191670_00343-t337",
+            "125_2-004191670_00344-t337"
+        ],
+        "gt": "Note A.-An insane person may be found either at his own home or away from it in some institution, such as a hospital, asylum, or poor-house, In the latter case, his residence when at home must be stated, in order that he may be accredited to the State or county to which he properly belongs,"
+    },
+    {
+        "pred": "petitionery for naturalization and thy",
+        "image": "ocr_crops_new/84-100423934_00026-t16.png",
+        "root image": "100423934_00026",
+        "text": true,
+        "matches": [
+            "84-100423934_00026-t16",
+            "84-100423934_00077-t16"
+        ],
+        "gt": "petitioner\\s[s] for naturalization and \\s[their]"
+    },
+    {
+        "pred": "Tnited States port or to sail in a vessel from any",
+        "image": "ocr_crops_new/4_2-007540939_00108-t56.png",
+        "root image": "007540939_00108",
+        "text": true,
+        "matches": [
+            "4_2-007540939_00108-t56",
+            "4_2-007540939_00290-t56"
+        ],
+        "gt": "United States port or to sail in a vessel from any"
+    },
+    {
+        "pred": "ALPHABETIOAL LIST of Persons in Division No.",
+        "image": "ocr_crops_new/115-007110330_00018-t0.png",
+        "root image": "007110330_00018",
+        "text": true,
+        "matches": [
+            "115-007110330_00018-t0",
+            "115-007110330_00021-t0",
+            "115-007110330_00026-t0",
+            "115-007110330_00038-t0",
+            "115-007110330_00043-t0"
+        ],
+        "gt": "ALPHABETICAL LIST of Persons in Division No."
+    },
+    {
+        "pred": "(This card to beissued. upon production of satisfactory evidence of",
+        "image": "ocr_crops_new/92_1-100214274_00019-t4.png",
+        "root image": "100214274_00019",
+        "text": true,
+        "matches": [
+            "92_1-100214274_00019-t4",
+            "92_1-100214274_00021-t4"
+        ],
+        "gt": "(This card to be issued, upon production of satisfactory evidence of"
+    },
+    {
+        "pred": "One-half of the wages agreed upon, which will remain after deducting the one-twentieth sct apart for school purposes, to be punctuathy paid to the esr durin cach and every month, reckoning from the day when this Contract commences as aforesaid ; and",
+        "image": "ocr_crops_new/6_1-007641608_00228-t2.png",
+        "root image": "007641608_00228",
+        "text": true,
+        "matches": [
+            "6_1-007641608_00228-t2",
+            "6_1-007641608_00232-t2"
+        ],
+        "gt": "One-half of the wages agreed upon, which will remain after deducting the one-twentieth srt apart for school purposes, to be punctuathy paid to the laborers during each and every month, reckoning from the day when this Contract commences as aforesaid ; and"
+    },
+    {
+        "pred": "labor. And no shipment of products shall be made until the duly authorized Agent shall certify that all dues to/laborers axe paid or satisfactorily arranged",
+        "image": "ocr_crops_new/6_1-007641608_00228-t49.png",
+        "root image": "007641608_00228",
+        "text": true,
+        "matches": [
+            "6_1-007641608_00228-t49",
+            "6_1-007641608_00232-t49"
+        ],
+        "gt": "labor. And no shipment of products shall be made until the duly authorized Agent shall certify that all dues to laborers are paid or satisfactorily arranged"
+    },
+    {
+        "pred": "This isto certify that.",
+        "image": "ocr_crops_new/119-007540885_00187-t7.png",
+        "root image": "007540885_00187",
+        "text": true,
+        "matches": [
+            "119-007540885_00175-t7",
+            "119-007540885_00187-t7",
+            "119-007540885_00192-t7",
+            "119-007540885_00208-t7",
+            "119-007540885_00211-t7"
+        ],
+        "gt": "This is to certify that"
+    },
+    {
+        "pred": "eompanv, when and where they were respectively shipped or engaged, and specifying those to be paid off and discharged",
+        "image": "ocr_crops_new/127_1-100660790_00053-t22.png",
+        "root image": "100660790_00053",
+        "text": true,
+        "matches": [
+            "127_1-100660790_00053-t22",
+            "127_1-100660790_00083-t22"
+        ],
+        "gt": "company, when and where they were respectively shipped or engaged, and specifying those to be paid off and discharged"
+    },
+    {
+        "pred": "THE ASLOTMENT OF THE LANDS OF THE CHOCTAWS AND CHICKASAWS",
+        "image": "ocr_crops_new/16-004173988_00077-t11.png",
+        "root image": "004173988_00077",
+        "text": true,
+        "matches": [
+            "16-004173988_00027-t11",
+            "16-004173988_00051-t11",
+            "16-004173988_00065-t11",
+            "16-004173988_00077-t11",
+            "16-004173988_00034-t11"
+        ],
+        "gt": "THE ALLOTMENT OF THE LANDS OF THE CHOCTAWS AND CHICKASAWS"
+    },
+    {
+        "pred": "and properly place sgme at decedents grave.",
+        "image": "ocr_crops_new/80_1-004831974_00064-t38.png",
+        "root image": "004831974_00064",
+        "text": true,
+        "matches": [
+            "80_1-004831974_00064-t38",
+            "80_1-004831974_00191-t38"
+        ],
+        "gt": "and properly place same at decedent's grave."
+    },
+    {
+        "pred": "an outgoing seaman by a customs oficial. it will",
+        "image": "ocr_crops_new/4_2-007540939_00108-t62.png",
+        "root image": "007540939_00108",
+        "text": true,
+        "matches": [
+            "4_2-007540939_00108-t62",
+            "4_2-007540939_00290-t62"
+        ],
+        "gt": "an outgoing seaman by a customs oficial. It will"
+    },
+    {
+        "pred": "9. Number and names of places, now destitute, in which Day-Schools might be organized?",
+        "image": "ocr_crops_new/73-007675709_00019-t16.png",
+        "root image": "007675709_00019",
+        "text": true,
+        "matches": [
+            "73-007675709_00019-t16",
+            "73-007675709_00030-t16"
+        ],
+        "gt": "9. Number and names of places, now destitute, in which Day-Schools might be organized?"
+    },
+    {
+        "pred": "elsewhere in the United-States sufficiently long to complete a continnous residence therein of five years, you may establish your entire residence within the State by two witnesses. citizens of the United States, and your residence elsewhere in the",
+        "image": "ocr_crops_new/181_2-100572410_00019-t163.png",
+        "root image": "100572410_00019",
+        "text": true,
+        "matches": [
+            "181_2-100572410_00019-t163"
+        ],
+        "gt": "elsewhere in the United States sufficiently long to complete a continnous residence therein of five years, you may establish your entire residence within the State by two witnesses, citizens of the United States, and your residence elsewhere in the"
+    },
+    {
+        "pred": "and that, should any additional changes in crew occur before departure from this port. I wil] report such",
+        "image": "ocr_crops_new/127-100101969_00054-t23.png",
+        "root image": "100101969_00054",
+        "text": true,
+        "matches": [
+            "127-100101969_00028-t23",
+            "127-100101969_00040-t23",
+            "127-100101969_00048-t23",
+            "127-100101969_00054-t23",
+            "127-100101969_00065-t23"
+        ],
+        "gt": "and that, should any additional changes in crew occur before departure from this port. I will report such"
+    },
+    {
+        "pred": "(Ou hand from last",
+        "image": "ocr_crops_new/89_1-007641634_00370-t36.png",
+        "root image": "007641634_00370",
+        "text": true,
+        "matches": [
+            "89_1-007641634_00370-t36",
+            "89_1-007641634_00372-t36"
+        ],
+        "gt": "On hand from last"
+    },
+    {
+        "pred": "past: that during that Gime he has behaved as aman of good moral character, attached to the principles of the constitution",
+        "image": "ocr_crops_new/168-007486033_00009-t25.png",
+        "root image": "007486033_00009",
+        "text": true,
+        "matches": [
+            "168-007486033_00009-t25",
+            "168-007486033_00016-t25",
+            "168-007486033_00029-t91"
+        ],
+        "gt": "past: that during that time he has behaved as a man of good moral character, attached to the principles of the constitution"
+    },
+    {
+        "pred": "the company of the faid",
+        "image": "ocr_crops_new/129_1-100698583_00042-t4.png",
+        "root image": "100698583_00042",
+        "text": true,
+        "matches": [
+            "129_1-100698583_00042-t4",
+            "129_1-100698583_00062-t4",
+            "129_1-100698583_00079-t4",
+            "129_1-100698583_00157-t4"
+        ],
+        "gt": "the company of the said"
+    },
+    {
+        "pred": "IMMIGRATION AND NATURALIZATION SPVICE",
+        "image": "ocr_crops_new/84_3-100423934_00021-t68.png",
+        "root image": "100423934_00021",
+        "text": true,
+        "matches": [
+            "84_3-100423934_00021-t68",
+            "84_3-100423934_00009-t68"
+        ],
+        "gt": "IMMIGRATION AND NATURALIZATION SERVICE"
+    },
+    {
+        "pred": "Schedule No. 1 to this Special Schedule, and proceed to ask the additional questions indicated in the headings of the several columns.",
+        "image": "ocr_crops_new/125_2-004191670_00325-t181.png",
+        "root image": "004191670_00325",
+        "text": true,
+        "matches": [
+            "125_2-004191670_00325-t181",
+            "125_2-004191670_00341-t181"
+        ],
+        "gt": "Schedule No. 1 to this Special Schedule, and proceed to ask the additional questions indicated in the headings of the several columns."
+    },
+    {
+        "pred": "Bupposed cause of idiocy (If",
+        "image": "ocr_crops_new/125_2-004191670_00325-t368.png",
+        "root image": "004191670_00325",
+        "text": true,
+        "matches": [
+            "125_2-004191670_00325-t368",
+            "125_2-004191670_00334-t368",
+            "125_2-004191670_00341-t368",
+            "125_2-004191670_00343-t368",
+            "125_2-004191670_00344-t368"
+        ],
+        "gt": "Supposed cause of idiocy (if"
+    },
+    {
+        "pred": "apparel, furniture and stores each of them may receivt into their charge belongiug to",
+        "image": "ocr_crops_new/146_1-100802226_00146-t65.png",
+        "root image": "100802226_00146",
+        "text": true,
+        "matches": [
+            "146_1-100802226_00146-t65",
+            "146_1-100802226_00288-t65"
+        ],
+        "gt": "apparel, furniture and stores each of them may receive into their charge belonging to"
+    },
+    {
+        "pred": "your ood character, andymust appear with you for examination",
+        "image": "ocr_crops_new/152-100613486_00037-t107.png",
+        "root image": "100613486_00037",
+        "text": true,
+        "matches": [
+            "152-100587124_00357-t107",
+            "152-100587124_00359-t107",
+            "152-100613486_00037-t107",
+            "152-100613486_00027-t107",
+            "152-100613486_00060-t107"
+        ],
+        "gt": "your good character, and must appear with you for examination"
+    },
+    {
+        "pred": "were actually delivered in this Port from.on board the said Ship or Vessel, within the time speci-",
+        "image": "ocr_crops_new/101_1-100802224_00016-t14.png",
+        "root image": "100802224_00016",
+        "text": true,
+        "matches": [
+            "101_1-100802224_00016-t14",
+            "101_1-100802224_00170-t14",
+            "101_1-100802224_00172-t14"
+        ],
+        "gt": "were actually delivered in this Port from on board the said Ship or Vessel, within the time speci-"
+    },
+    {
+        "pred": "the departure of any such vessel it shall be the duty of such owner, agent, consignee, or master to deliver to such immigra-",
+        "image": "ocr_crops_new/127_1-100101969_00081-t27.png",
+        "root image": "100101969_00081",
+        "text": true,
+        "matches": [
+            "127_1-100101969_00075-t27",
+            "127_1-100101969_00081-t27",
+            "127_1-100101969_00083-t27"
+        ],
+        "gt": "the departure of any such vessel it shall be the duty of such owner, agent, consignee, or master to deliver to such immigra-"
+    },
+    {
+        "pred": "charge of the vessel is required by section 36 of the Immigration Act of 1917.",
+        "image": "ocr_crops_new/139-100601668_00061-t15.png",
+        "root image": "100601668_00061",
+        "text": true,
+        "matches": [
+            "139-100601668_00061-t15",
+            "139-100601668_00065-t15",
+            "139-100601668_00101-t15",
+            "139-100601668_00118-t15",
+            "139-100601668_00043-t15"
+        ],
+        "gt": "charge of the vessel is required by section 36 of the Immigration Act of 1917."
+    },
+    {
+        "pred": "the United States for the term of fiye years and more, and within this State at least one year before this",
+        "image": "ocr_crops_new/31_1-007372205_00009-t10.png",
+        "root image": "007372205_00009",
+        "text": true,
+        "matches": [
+            "31_1-007372205_00009-t10",
+            "31_1-007372205_00014-t10"
+        ],
+        "gt": "the United States for the term of five years and more, and within this State at least one year before this"
+    },
+    {
+        "pred": "If less than 1 year, state months In",
+        "image": "ocr_crops_new/172-007579716_00014-t67.png",
+        "root image": "007579716_00014",
+        "text": true,
+        "matches": [
+            "172-007579716_00014-t67",
+            "172-007579716_00030-t67",
+            "172-007579716_00029-t67"
+        ],
+        "gt": "If less than 1 year, state months in"
+    },
+    {
+        "pred": "Bollowine is a detailed and accurate statement of all changes in crew:",
+        "image": "ocr_crops_new/127_1-100660790_00053-t69.png",
+        "root image": "100660790_00053",
+        "text": true,
+        "matches": [
+            "127_1-100660790_00053-t69",
+            "127_1-100660790_00083-t69"
+        ],
+        "gt": "Following is a detailed and accurate statement of all changes in crew:"
+    },
+    {
+        "pred": "Received of t4 GOMMISSTONER TOUFHE, FIVE CIVILIZED TRIBES the following",
+        "image": "ocr_crops_new/57-004475379_00123-t4.png",
+        "root image": "004475379_00123",
+        "text": true,
+        "matches": [
+            "57-004475379_00123-t4",
+            "57-004475379_00215-t4"
+        ],
+        "gt": "Received of the COMMISSTONER TO THE FIVE CIVILIZED TRIBES the following"
+    },
+    {
+        "pred": "moreover shall be liable to pav to him or them all damages which: he or they mav sus-",
+        "image": "ocr_crops_new/146-100802226_00173-t46.png",
+        "root image": "100802226_00173",
+        "text": true,
+        "matches": [
+            "146-100802226_00173-t46"
+        ],
+        "gt": "moreover shall be liable to pay to him or them all damages which: he or they mav sus-"
+    },
+    {
+        "pred": "Phis application is for the UNMARKED* grave of at",
+        "image": "ocr_crops_new/80_1-004831974_00064-t40.png",
+        "root image": "004831974_00064",
+        "text": true,
+        "matches": [
+            "80_1-004831974_00064-t40",
+            "80_1-004831974_00191-t40"
+        ],
+        "gt": "This application is for the UNMARKED* grave of a\u2020"
+    },
+    {
+        "pred": "QUESTION LWhat fs the total number of persons who have been imprisoned in the",
+        "image": "ocr_crops_new/125_1-004191670_00348-t315.png",
+        "root image": "004191670_00348",
+        "text": true,
+        "matches": [
+            "125_1-004191670_00330-t315",
+            "125_1-004191670_00332-t315",
+            "125_1-004191670_00348-t315",
+            "125_1-004191670_00377-t315",
+            "125_1-004191670_00381-t315"
+        ],
+        "gt": "QUESTION 1.-What is the total number of persons who have been imprisoned in the"
+    },
+    {
+        "pred": "trom the vessel, giving a description of such alien, together with any information likely to",
+        "image": "ocr_crops_new/148-007540885_00014-t23.png",
+        "root image": "007540885_00014",
+        "text": true,
+        "matches": [
+            "148-007540885_00014-t23",
+            "148-007540885_00018-t23",
+            "148-007540885_00020-t23",
+            "148-007540885_00027-t23",
+            "148-007540885_00033-t23"
+        ],
+        "gt": "from the vessel, giving a description of such alien, together with any information likely to"
+    },
+    {
+        "pred": "b Of thirty-six and !",
+        "image": "ocr_crops_new/197-005155894_00177-t39.png",
+        "root image": "005155894_00177",
+        "text": true,
+        "matches": [
+            "197-005155894_00048-t39",
+            "197-005155894_00177-t39",
+            "197-005155894_00193-t39",
+            "197-005155894_00265-t60",
+            "197-005155894_00298-t50"
+        ],
+        "gt": "Of thirty-six and"
+    },
+    {
+        "pred": "fine of $10 for each change in crew not reported by me. I certify on honor that the foregoing is a com-",
+        "image": "ocr_crops_new/127_1-100101969_00075-t16.png",
+        "root image": "100101969_00075",
+        "text": true,
+        "matches": [
+            "127_1-100101969_00075-t16",
+            "127_1-100101969_00081-t16",
+            "127_1-100101969_00083-t16"
+        ],
+        "gt": "fine of $10 for each change in crew not reported by me. I certify on honor that the foregoing is a com-"
+    },
+    {
+        "pred": "office of the immicration official in charee at the",
+        "image": "ocr_crops_new/4_1-100283146_00043-t49.png",
+        "root image": "100283146_00043",
+        "text": true,
+        "matches": [
+            "4_1-100283146_00043-t49",
+            "4_1-100283146_00046-t49"
+        ],
+        "gt": "office of the immigration official in charge at the"
+    },
+    {
+        "pred": "statoment is impossible, as when an age can only be estimated, or a",
+        "image": "ocr_crops_new/172-007579716_00030-t177.png",
+        "root image": "007579716_00030",
+        "text": true,
+        "matches": [
+            "172-007579716_00014-t177",
+            "172-007579716_00029-t177",
+            "172-007579716_00030-t177"
+        ],
+        "gt": "statoment is impossible, as when an age can only be estimated, or a"
+    },
+    {
+        "pred": "\" A School under the distinet control of one Poacher! or a Teacher with one penises is to be reported one School.",
+        "image": "ocr_crops_new/34_1-007641636_00151-t1.png",
+        "root image": "007641636_00151",
+        "text": true,
+        "matches": [
+            "34_1-007641636_00151-t1",
+            "34_1-007641636_00153-t1"
+        ],
+        "gt": "A School under the distinet control of one Teacher, or a Teacher with one assistant, is to be reported as one School."
+    },
+    {
+        "pred": "and thereaiter will be visaed by an immigration offi-",
+        "image": "ocr_crops_new/4_2-007540939_00108-t65.png",
+        "root image": "007540939_00108",
+        "text": true,
+        "matches": [
+            "4_2-007540939_00108-t65",
+            "4_2-007540939_00290-t65"
+        ],
+        "gt": "and thereaiter will be visaed by an immigration offi-"
+    },
+    {
+        "pred": "fNore.tn alternatives a, b, use one, cancel the cther.]",
+        "image": "ocr_crops_new/192-100283147_00015-t24.png",
+        "root image": "100283147_00015",
+        "text": true,
+        "matches": [
+            "192-100283147_00015-t24"
+        ],
+        "gt": "[Note.-In alternatives a, b, use one, cancel the other.]"
+    },
+    {
+        "pred": "(Name of vessel or airerait!",
+        "image": "ocr_crops_new/127-100101969_00028-t60.png",
+        "root image": "100101969_00028",
+        "text": true,
+        "matches": [
+            "127-100101969_00028-t60",
+            "127-100101969_00040-t60",
+            "127-100101969_00054-t60",
+            "127-100101969_00065-t60"
+        ],
+        "gt": "(Name of vessel or aircraft)"
+    },
+    {
+        "pred": "of the united States of America, at the City of Hamburgh, do declare. That ee",
+        "image": "ocr_crops_new/26-100802224_00020-t1.png",
+        "root image": "100802224_00020",
+        "text": true,
+        "matches": [
+            "26-100802224_00020-t1"
+        ],
+        "gt": "of the united States of America, at the City of Hamburgh, do declare. That the"
+    },
+    {
+        "pred": "{contixva> on NEAT Pace)",
+        "image": "ocr_crops_new/71-100101969_00029-t21.png",
+        "root image": "100101969_00029",
+        "text": true,
+        "matches": [
+            "71-100101969_00029-t21",
+            "71-100101969_00041-t21"
+        ],
+        "gt": "[CONTINUED ON NEXT PAGE]"
+    },
+    {
+        "pred": "Brthe perfon or perfons difobeying, forfeiting his or their whole wages or hire, together with every thing belonging to him or them, on board the faid",
+        "image": "ocr_crops_new/144-100802226_00002-t31.png",
+        "root image": "100802226_00002",
+        "text": true,
+        "matches": [
+            "144-100802226_00002-t31"
+        ],
+        "gt": "of the person or persons disobeying, forfeiting his or their whole wages or hire, together with every thing belonging to him or them, on board the said"
+    },
+    {
+        "pred": "the Company of the above-mentioned",
+        "image": "ocr_crops_new/100-100760033_00003-t21.png",
+        "root image": "100760033_00003",
+        "text": true,
+        "matches": [
+            "100-100760033_00003-t21",
+            "100-100760033_00009-t21",
+            "100-100760033_00013-t21",
+            "100-100760033_00023-t21",
+            "100-100760033_00031-t21",
+            "100-100760033_00035-t21",
+            "100-100760033_00033-t20",
+            "100-100760033_00047-t21"
+        ],
+        "gt": "the Company of the above-mentioned"
+    },
+    {
+        "pred": "eliyerine, to so on fhore each night to fleep, greatly to the prejudice of fuch veffel and freighters; Be it further agreed by the faid parties, that neither offi-",
+        "image": "ocr_crops_new/144-100802226_00002-t34.png",
+        "root image": "100802226_00002",
+        "text": true,
+        "matches": [
+            "144-100802226_00002-t34"
+        ],
+        "gt": "elivering, to so on shore each night to sleep, greatly to the prejudice of such vessel and freighters; Be it further agreed by the said parties, that neither offi-"
+    },
+    {
+        "pred": "* respegtfully represents that he is wh alien, and has resided in",
+        "image": "ocr_crops_new/31_1-007372205_00009-t9.png",
+        "root image": "007372205_00009",
+        "text": true,
+        "matches": [
+            "31_1-007372205_00009-t9",
+            "31_1-007372205_00014-t9"
+        ],
+        "gt": ", respectfully represents that he is an alien, and has resided in"
+    },
+    {
+        "pred": "body of persons teaching disbelief tn organized government, Lam nota polygamist nor a believer in the practice of",
+        "image": "ocr_crops_new/181_2-100572410_00019-t110.png",
+        "root image": "100572410_00019",
+        "text": true,
+        "matches": [
+            "181_2-100572410_00019-t110",
+            "181_2-100572410_00058-t110"
+        ],
+        "gt": "body of persons teaching disbelief tn organized government, I am not a polygamist nor a believer in the practice of"
+    },
+    {
+        "pred": "erg yr epeah peter",
+        "image": "ocr_crops_new/89_2-007641634_00357-t23.png",
+        "root image": "007641634_00357",
+        "text": true,
+        "matches": [
+            "89_2-007641634_00357-t23"
+        ],
+        "gt": "\\bad"
+    },
+    {
+        "pred": "the headctone or marker at destination. remove it. and properly nlace it at",
+        "image": "ocr_crops_new/154_2-007182398_00129-t58.png",
+        "root image": "007182398_00129",
+        "text": true,
+        "matches": [
+            "154_2-007182398_00129-t58"
+        ],
+        "gt": "the headstone or marker at destination, remove it, and properly nlace it at"
+    },
+    {
+        "pred": "of an institution for deafmutes?:",
+        "image": "ocr_crops_new/125_2-004191670_00325-t166.png",
+        "root image": "004191670_00325",
+        "text": true,
+        "matches": [
+            "125_2-004191670_00325-t166",
+            "125_2-004191670_00334-t166",
+            "125_2-004191670_00341-t166",
+            "125_2-004191670_00343-t166",
+            "125_2-004191670_00344-t166"
+        ],
+        "gt": "of an institution for deaf-mutes?"
+    },
+    {
+        "pred": "ACTION BY DEBARTMENT (i)",
+        "image": "ocr_crops_new/124-100093596_00233-t102.png",
+        "root image": "100093596_00233",
+        "text": true,
+        "matches": [
+            "124-100093596_00226-t102",
+            "124-100093596_00229-t103",
+            "124-100093596_00231-t103",
+            "124-100093596_00233-t102"
+        ],
+        "gt": "ACTION BY DEPARTMENT (k)"
+    },
+    {
+        "pred": "belongs, and that the county in whieh the institution is situated may not be charged with more than ite due proportion of insane,",
+        "image": "ocr_crops_new/125-004191670_00339-t411.png",
+        "root image": "004191670_00339",
+        "text": true,
+        "matches": [
+            "125-004191670_00339-t411",
+            "125-004191670_00349-t411"
+        ],
+        "gt": "belongs, and that the county in which the institution is situated may not be charged with more than ite due proportion of insane,"
+    },
+    {
+        "pred": "At the Superior Court bequn and holden at Augusta, within and for the County of Kennebec, on the",
+        "image": "ocr_crops_new/31_1-007372205_00009-t3.png",
+        "root image": "007372205_00009",
+        "text": true,
+        "matches": [
+            "31_1-007372205_00009-t3",
+            "31_1-007372205_00014-t3"
+        ],
+        "gt": "At the Superior Court begun and holden at Augusta, within and for the County of Kennebec, on the"
+    },
+    {
+        "pred": "and the semi -blind see Note 5; it is of the greatest importance to note this distinction with care, by making the proper entry in columns 10 or 11.",
+        "image": "ocr_crops_new/125_2-004191670_00343-t183.png",
+        "root image": "004191670_00343",
+        "text": true,
+        "matches": [
+            "125_2-004191670_00334-t183",
+            "125_2-004191670_00343-t183",
+            "125_2-004191670_00344-t183"
+        ],
+        "gt": "and the semi-blind see Note E; it is of the greatest importance to note this distinction with care, by making the proper entry in columns 10 or 11."
+    },
+    {
+        "pred": "ROOM 105 CUSTOM HOUSE",
+        "image": "ocr_crops_new/11-100283146_00025-t2.png",
+        "root image": "100283146_00025",
+        "text": true,
+        "matches": [
+            "11-100283146_00025-t2",
+            "11-100283153_00221-t2"
+        ],
+        "gt": "ROOM 105 CUSTOM HOUSE"
+    },
+    {
+        "pred": "18. What nore can this Bureau do for educating the children of Refugees (or Pdr Whites)",
+        "image": "ocr_crops_new/73-007675709_00030-t25.png",
+        "root image": "007675709_00030",
+        "text": true,
+        "matches": [
+            "73-007675709_00030-t25",
+            "73-007675709_00019-t25"
+        ],
+        "gt": "18. What more can this Bureau do for educating the children of Refugees (or Poor Whites)"
+    },
+    {
+        "pred": "on the vessels return home, in the harbour, and whust her cargo is delivering, to go on",
+        "image": "ocr_crops_new/146-100802226_00012-t58.png",
+        "root image": "100802226_00012",
+        "text": true,
+        "matches": [
+            "146-100802226_00005-t58",
+            "146-100802226_00012-t58",
+            "146-100802226_00017-t58"
+        ],
+        "gt": "on the vessel's return home, in the harbour, and whilst her cargo is delivering, to go on"
+    },
+    {
+        "pred": "have been landed in this city, betveen the",
+        "image": "ocr_crops_new/109_1-100802224_00003-t2.png",
+        "root image": "100802224_00003",
+        "text": true,
+        "matches": [
+            "109_1-100802224_00003-t2",
+            "109_1-100802224_00005-t2",
+            "109_1-100802224_00024-t2",
+            "109_1-100802224_00088-t2",
+            "109_1-100802224_00090-t2"
+        ],
+        "gt": "have been landed in this city, betveen the"
+    },
+    {
+        "pred": "fon mill, dry- goods store",
+        "image": "ocr_crops_new/134-004950232_00013-t69.png",
+        "root image": "004950232_00013",
+        "text": true,
+        "matches": [
+            "134-004950232_00007-t69",
+            "134-004950232_00008-t69",
+            "134-004950232_00009-t69",
+            "134-004950232_00013-t69",
+            "134-004950232_00125-t69"
+        ],
+        "gt": "ton mill, dry-goods store"
+    },
+    {
+        "pred": "U. 8, DEPARTMENT OF JUSTICE",
+        "image": "ocr_crops_new/127_1-100101969_00081-t41.png",
+        "root image": "100101969_00081",
+        "text": true,
+        "matches": [
+            "127_1-100101969_00081-t41",
+            "127_1-100101969_00083-t41",
+            "127_1-100101969_00075-t40",
+            "127_1-100660790_00053-t40",
+            "127_1-100660790_00083-t41"
+        ],
+        "gt": "U. S. DEPARTMENT OF JUSTICE"
+    },
+    {
+        "pred": "Is he (or she) a @eatanste? /",
+        "image": "ocr_crops_new/125_1-004191670_00381-t157.png",
+        "root image": "004191670_00381",
+        "text": true,
+        "matches": [
+            "125_1-004191670_00330-t157",
+            "125_1-004191670_00332-t157",
+            "125_1-004191670_00348-t157",
+            "125_1-004191670_00377-t157",
+            "125_1-004191670_00381-t157"
+        ],
+        "gt": "Is he (or she) a deaf-mute?"
+    },
+    {
+        "pred": "granted, and therefore recommends that such petitiong be denied.",
+        "image": "ocr_crops_new/84-100423934_00026-t18.png",
+        "root image": "100423934_00026",
+        "text": true,
+        "matches": [
+            "84-100423934_00026-t18",
+            "84-100423934_00077-t18"
+        ],
+        "gt": "granted, and therefore recommends that such petitions be denied."
+    },
+    {
+        "pred": "' yn the order of",
+        "image": "ocr_crops_new/5-005165573_00007-t15.png",
+        "root image": "005165573_00007",
+        "text": true,
+        "matches": [
+            "5-005165573_00007-t15",
+            "5-005165573_00008-t15"
+        ],
+        "gt": "in the order of"
+    },
+    {
+        "pred": "U. 8. Public Health Service.",
+        "image": "ocr_crops_new/167-007540939_00064-t22.png",
+        "root image": "007540939_00064",
+        "text": true,
+        "matches": [
+            "167-007540939_00064-t22",
+            "167-007540939_00066-t22",
+            "167-007540939_00114-t22"
+        ],
+        "gt": "U. S. Public Health Service."
+    },
+    {
+        "pred": "Whe are Deaf and Dumb, of the",
+        "image": "ocr_crops_new/197-005155894_00193-t102.png",
+        "root image": "005155894_00193",
+        "text": true,
+        "matches": [
+            "197-005155894_00048-t102",
+            "197-005155894_00177-t102",
+            "197-005155894_00193-t102",
+            "197-005155894_00265-t11"
+        ],
+        "gt": "Who are Deaf and Dumb, of the"
+    },
+    {
+        "pred": "Required under Act of Congress of February 5, 1917, to be delivered to the United States immigration officer by the representatives of any vessel having such aliens on board upon arrival at a",
+        "image": "ocr_crops_new/131-100101969_00399-t4.png",
+        "root image": "100101969_00399",
+        "text": true,
+        "matches": [
+            "131-100101969_00399-t4",
+            "131-100651536_00018-t4",
+            "131-100651536_00020-t4",
+            "131-100651536_00022-t4",
+            "131-100651536_00024-t4",
+            "131-100651536_00034-t4",
+            "131-100660788_00363-t5",
+            "131-101023529_00047-t5",
+            "131-101023529_00081-t6",
+            "131-101023529_00159-t5"
+        ],
+        "gt": "Required under Act of Congress of February 5, 1917, to be delivered to the United States immigration officer by the representatives of any vessel having such aliens on board upon arrival at a"
+    },
+    {
+        "pred": "Norr.Failure to furnish full or correct information in columns (2), (3), (4), and (5) is punishable by a fine of ten dollars for each alien, See other side.",
+        "image": "ocr_crops_new/110_1-007540939_00230-t59.png",
+        "root image": "007540939_00230",
+        "text": true,
+        "matches": [
+            "110_1-007540939_00022-t66",
+            "110_1-007540939_00148-t66",
+            "110_1-007540939_00037-t66",
+            "110_1-007540939_00230-t59"
+        ],
+        "gt": "Note.-Failure to furnish full or correct information in columns (2), (3), (4), and (5) is punishable by a fine of ten dollars for each alien. See other side."
+    },
+    {
+        "pred": "Question 2.Of thie total number, how many have been imprisoned in the said prison to serve out sentences impoed for crimes and misdemeanors! Total",
+        "image": "ocr_crops_new/125_1-004191670_00332-t320.png",
+        "root image": "004191670_00332",
+        "text": true,
+        "matches": [
+            "125_1-004191670_00330-t320",
+            "125_1-004191670_00332-t320",
+            "125_1-004191670_00348-t320",
+            "125_1-004191670_00377-t320",
+            "125_1-004191670_00381-t320"
+        ],
+        "gt": "Question 2.-Of thie total number, how many have been imprisoned in the said prison to serve out sentences imposed for crimes and misdemeanors? Total"
+    },
+    {
+        "pred": "District in the Indian Territory, been appointed Suardian",
+        "image": "ocr_crops_new/10_1-004475436_00032-t3.png",
+        "root image": "004475436_00032",
+        "text": true,
+        "matches": [
+            "10_1-004284105_00216-t36",
+            "10_1-004475436_00032-t3",
+            "10_1-004475436_00336-t5",
+            "10_1-004475436_00018-t5"
+        ],
+        "gt": "District in the Indian Territory, been appointed guardian"
+    },
+    {
+        "pred": "Department of Commerce and Dabor",
+        "image": "ocr_crops_new/181_2-100572410_00019-t1.png",
+        "root image": "100572410_00019",
+        "text": true,
+        "matches": [
+            "181_2-100572410_00019-t1",
+            "181_2-100572410_00058-t1"
+        ],
+        "gt": "Department of Commerce and Labor"
+    },
+    {
+        "pred": "that every inquiry respecting each case be answered as fully as possible. Bnumerators will, therofore, after making the proper entries mpan the Papeiahine Gehedale",
+        "image": "ocr_crops_new/125-004191670_00339-t373.png",
+        "root image": "004191670_00339",
+        "text": true,
+        "matches": [
+            "125-004191670_00331-t373",
+            "125-004191670_00333-t373",
+            "125-004191670_00347-t373",
+            "125-004191670_00339-t373",
+            "125-004191670_00349-t373"
+        ],
+        "gt": "that every inquiry respecting each case be answered as fully as possible. Enumerators will, therefore, after making the proper entries upon the Population Schedule"
+    },
+    {
+        "pred": "In column (7), if none, state None.",
+        "image": "ocr_crops_new/139-100601668_00043-t28.png",
+        "root image": "100601668_00043",
+        "text": true,
+        "matches": [
+            "139-100601668_00043-t28",
+            "139-100601668_00101-t28"
+        ],
+        "gt": "In column (7), if none, state \"None.\""
+    },
+    {
+        "pred": "CH The enumerator in each district will also aacertain, if possible, and state the name (",
+        "image": "ocr_crops_new/125-004191670_00333-t172.png",
+        "root image": "004191670_00333",
+        "text": true,
+        "matches": [
+            "125-004191670_00331-t172",
+            "125-004191670_00339-t172",
+            "125-004191670_00333-t172",
+            "125-004191670_00347-t172",
+            "125-004191670_00349-t172"
+        ],
+        "gt": "The enumerator in each district will also ascertain, if possible, and state the name ("
+    },
+    {
+        "pred": "fad veflel at the abovementioned port of difcharge, and her cargo delivered. And it 1s hereby farther agreed between the mafter and officers of the",
+        "image": "ocr_crops_new/144-100802226_00002-t32.png",
+        "root image": "100802226_00002",
+        "text": true,
+        "matches": [
+            "144-100802226_00002-t32"
+        ],
+        "gt": "sd vessel at the abovementioned port of discharge, and her cargo delivered. And it is hereby further agreed between the master and officers of the"
+    },
+    {
+        "pred": "member of a family which resided June 1, 1880, in the enumeration",
+        "image": "ocr_crops_new/172-007579716_00014-t173.png",
+        "root image": "007579716_00014",
+        "text": true,
+        "matches": [
+            "172-007579716_00014-t173",
+            "172-007579716_00029-t173",
+            "172-007579716_00030-t173"
+        ],
+        "gt": "member of a family which resided June 1, 1880, in the enumeration"
+    },
+    {
+        "pred": "of arrival is located the sum of $10 for each alien concerning whom correct lists are not deliv-",
+        "image": "ocr_crops_new/148-007540885_00014-t36.png",
+        "root image": "007540885_00014",
+        "text": true,
+        "matches": [
+            "148-007540885_00018-t36",
+            "148-007540885_00014-t36",
+            "148-007540885_00020-t36",
+            "148-007540885_00027-t36",
+            "148-007540885_00033-t36"
+        ],
+        "gt": "of arrival is located the sum of $10 for each alien concerning whom correct lists are not deliv-"
+    },
+    {
+        "pred": "REGISTRATION CARD(Men born on or after January 1, 1922 and on or before June 30, 1924)",
+        "image": "ocr_crops_new/44_2-005025348_00116-t0.png",
+        "root image": "005025348_00116",
+        "text": true,
+        "matches": [
+            "44_2-005025348_00116-t0",
+            "44_2-005025348_00232-t0"
+        ],
+        "gt": "REGISTRATION CARD-(Men born on or after January 1, 1922 and on or before June 30, 1924)"
+    },
+    {
+        "pred": "Located in or nvar",
+        "image": "ocr_crops_new/80_1-004831974_00064-t16.png",
+        "root image": "004831974_00064",
+        "text": true,
+        "matches": [
+            "80_1-004831974_00064-t16",
+            "80_1-004831974_00191-t16"
+        ],
+        "gt": "Located in or near-"
+    },
+    {
+        "pred": "Mm said county, who",
+        "image": "ocr_crops_new/168-007486033_00009-t36.png",
+        "root image": "007486033_00009",
+        "text": true,
+        "matches": [
+            "168-007486033_00029-t103",
+            "168-007486033_00009-t36",
+            "168-007486033_00016-t36"
+        ],
+        "gt": "in said county, who"
+    },
+    {
+        "pred": "e. g., Nonresident (or resident) card, 12-10-45, Detroit; or describe any passport, e. g., Canadian passport",
+        "image": "ocr_crops_new/139-100601668_00043-t30.png",
+        "root image": "100601668_00043",
+        "text": true,
+        "matches": [
+            "139-100601668_00043-t30",
+            "139-100601668_00101-t30"
+        ],
+        "gt": "e. g., \"Nonresident (or resident) card, 12-10-45, Detroit\"; or describe any passport, e. g., \"Canadian passport"
+    },
+    {
+        "pred": "no; but if locked at night and not by day, say night. In column 12, 1 usually ur often mechanically restrained, state the mode of restraint, thus: strait-jacket, camisvle, muff, strap, band-caffe, ball and chain, crib-bed, &c. If, instead of mechanical restraint, the patient has",
+        "image": "ocr_crops_new/125-004191670_00331-t416.png",
+        "root image": "004191670_00331",
+        "text": true,
+        "matches": [
+            "125-004191670_00331-t416",
+            "125-004191670_00333-t416",
+            "125-004191670_00339-t416",
+            "125-004191670_00347-t416",
+            "125-004191670_00349-t416"
+        ],
+        "gt": "\"no;\" but if locked at night and not by day, say \"night.\" In column 12, if usually or often mechanically restrained, state the mode of restraint, thus: strait-jacket, camisole, muff, strap, hand-cuffs, ball and chain, crib-bed, &c. If, instead of mechanical restraint, the patient has"
+    },
+    {
+        "pred": "Age at which frst attack occurred.",
+        "image": "ocr_crops_new/125-004191670_00331-t202.png",
+        "root image": "004191670_00331",
+        "text": true,
+        "matches": [
+            "125-004191670_00333-t202",
+            "125-004191670_00339-t202",
+            "125-004191670_00347-t202",
+            "125-004191670_00331-t202",
+            "125-004191670_00349-t202"
+        ],
+        "gt": "Age at which frst attack occurred."
+    },
+    {
+        "pred": "NOTE TO CLERK OF couRT.The two lines indicated by the * contain information which is provided for by blanks on the latest",
+        "image": "ocr_crops_new/112-100613486_00008-t42.png",
+        "root image": "100613486_00008",
+        "text": true,
+        "matches": [
+            "112-100613486_00002-t42",
+            "112-100613486_00008-t42",
+            "112-100613486_00011-t42",
+            "112-100613486_00014-t42",
+            "112-100613486_00020-t42"
+        ],
+        "gt": "NOTE TO CLERK OF COURT.-The two lines indicated by the * contain information which is provided for by blanks on the latest"
+    },
+    {
+        "pred": "This is to Wertify That the above-described person has this day been examined and is",
+        "image": "ocr_crops_new/167-007540939_00064-t16.png",
+        "root image": "007540939_00064",
+        "text": true,
+        "matches": [
+            "167-007540939_00064-t16",
+            "167-007540939_00066-t16",
+            "167-007540939_00114-t16"
+        ],
+        "gt": "This is to Certify That the above-described person has this day been examined and is"
+    },
+    {
+        "pred": "QO. What is your post office address? A.",
+        "image": "ocr_crops_new/72_1-004284105_00077-t15.png",
+        "root image": "004284105_00077",
+        "text": true,
+        "matches": [
+            "72_1-004284105_00077-t15"
+        ],
+        "gt": "Q. What is your post office address? A."
+    },
+    {
+        "pred": "And it is further agreed on that no Officer or Seamm belonging to the said vessel,",
+        "image": "ocr_crops_new/146_1-100802226_00146-t60.png",
+        "root image": "100802226_00146",
+        "text": true,
+        "matches": [
+            "146_1-100802226_00146-t60",
+            "146_1-100802226_00288-t60"
+        ],
+        "gt": "And it is further agreed on that no Officer or Seamm belonging to the said vessel,"
+    },
+    {
+        "pred": "Nore C.If a deaf-mute from birth, say B;\" if not, state the age at which deafness occurred. Special pains should be taken to indicate all deaf-mutes from birth.",
+        "image": "ocr_crops_new/125_1-004191670_00332-t368.png",
+        "root image": "004191670_00332",
+        "text": true,
+        "matches": [
+            "125_1-004191670_00330-t368",
+            "125_1-004191670_00332-t368",
+            "125_1-004191670_00348-t368",
+            "125_1-004191670_00377-t368",
+            "125_1-004191670_00381-t368"
+        ],
+        "gt": "Nore C.-If a deaf-mute from birth, say \"B;\" if not, state the age at which deafness occurred. Special pains should be taken to indicate all deaf-mutes from birth."
+    },
+    {
+        "pred": "tection of American Seamen; and pursuant to the said Act, and to the Act sup-",
+        "image": "ocr_crops_new/126_2-100698583_00189-t8.png",
+        "root image": "100698583_00189",
+        "text": true,
+        "matches": [
+            "126_2-100698583_00189-t8",
+            "126_2-100698583_00315-t8"
+        ],
+        "gt": "tection of American Seamen; and pursuant to the said Act, and to the Act sup-"
+    },
+    {
+        "pred": "umn of the same line, shall",
+        "image": "ocr_crops_new/146_1-100802226_00146-t97.png",
+        "root image": "100802226_00146",
+        "text": true,
+        "matches": [
+            "146_1-100802226_00146-t97",
+            "146_1-100802226_00288-t97"
+        ],
+        "gt": "umn of the same line, shall"
+    },
+    {
+        "pred": "denied for the following reasows",
+        "image": "ocr_crops_new/182_2-100572410_00022-t134.png",
+        "root image": "100572410_00022",
+        "text": true,
+        "matches": [
+            "182_2-100572410_00022-t134",
+            "182_2-100572410_00346-t134",
+            "182_2-100572410_00246-t134"
+        ],
+        "gt": "denied for the following reasons:"
+    },
+    {
+        "pred": "month (Jan., Peb., &e.)",
+        "image": "ocr_crops_new/14-004263357_00005-t44.png",
+        "root image": "004263357_00005",
+        "text": true,
+        "matches": [
+            "14-004263357_00005-t44",
+            "14-004263357_00011-t44",
+            "14-004263357_00019-t44",
+            "14-004263357_00025-t44",
+            "14-004263357_00021-t44"
+        ],
+        "gt": "month (Jan., Feb., &c.)"
+    },
+    {
+        "pred": "oifice where the article is registered.",
+        "image": "ocr_crops_new/21_1-004284105_00028-t1.png",
+        "root image": "004284105_00028",
+        "text": true,
+        "matches": [
+            "21_1-004284105_00028-t1",
+            "21_1-004284105_00214-t1"
+        ],
+        "gt": "qq"
+    }
+]
