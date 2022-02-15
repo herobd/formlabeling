@@ -1530,7 +1530,7 @@ class Control:
         if self.mode=='trans':
             color = (.15,.2,.03)
         else:
-            color = (.15,.2,.03,0.2)
+            color = (.15,.2,.03,0.3)
         for id in self.transcriptions:
             if 'f' == id[0]:
                 bb=self.fieldBBs[int(id[1:])]
@@ -1553,7 +1553,8 @@ class Control:
                 self.transText[id].set_y(y)
                 self.transText[id].set_color(color)
             else:
-                self.transText[id]=self.ax_im.text(x,y,self.transcriptions[id],color=color)
+                self.transText[id]=self.ax_im.text(x,y,'['+id+']'+self.transcriptions[id],color=color)
+                #self.transText[id]=self.ax_im.text(x,y,self.transcriptions[id],color=color)
         self.typed()
         self.ax_im.figure.canvas.draw()
 

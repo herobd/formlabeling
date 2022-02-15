@@ -101,6 +101,9 @@ else:
     startHereImage=None
     goingImage=True
 
+if startHereImage is not None:
+    print('searching for {} {}'.format(startHere,startHereImage))
+
 skipHLinks=False
 applyTemplate=False
 if len(sys.argv)>4:
@@ -272,7 +275,7 @@ for groupName in sorted(groupNames):
                 if countInGroup>NUM_PER_GROUP and (startHereImage is None or goingImage) and not checking and not autochecking:
                     break
                 if not goingImage:
-                    print('{} == {}'.format(f,startHereImage))
+                    #print('{} == {}'.format(f,startHereImage))
                     if f==startHereImage:
                         goingImage=True
                     else:
